@@ -1,2 +1,2 @@
-# phdthesis
-Repository of my PhD thesis
+# My PhD Thesis
+Repository of my PhD Thesis
