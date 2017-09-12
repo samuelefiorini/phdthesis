@@ -1,6 +1,21 @@
 \chapter{State of the art} \label{chap:state-of-the-art}
 
 \section{Basic notation and definitions} \label{sec:notation}
+%% the number of variables
+%\todo{bold vectors, capital matrices}
+In this thesis, the data are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
+The $i$-th row of $X$ is a $d$-dimensional data point $\bm{x}_{i}$ belonging to the input space $\mathcal{X}\subseteq\mathds{R}^d$. The corresponding outputs $\bm{y}_{i}$ belong to the output space $\mathcal{Y}$.
+
+The nature of the output space defines the problem as {\sl binary classification} if  $\mathcal{Y} = \{-1,+1\}$, {\sl multi-category classification} if $\mathcal{Y} = \{1,2,\dots,k\}$, {\sl regression} if $\mathcal{Y}\subseteq\mathds{R}$ and {\sl vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+
+Predictive models are functions $f: \mathcal{X} \rightarrow \mathcal{Y}$.
+The number of relevant variables is $d^*$.
+In feature selection tasks, the number of selected features is $\tilde d$.
+
+A kernel function acting on the elements of the input space is defined as $\mathcal{K}(\bm{x}_{i},\bm{x}_{j})=\langle \phi(\bm{x}_{i}), \phi(\bm{x}_{j})\rangle$, where $\phi(\bm{x})$ is a {\em feature map} from $\mathds{R}^d \rightarrow \mathds{R}^{d'}$.
+Feature learning algorithms project the data into a $p$-dimensional space.
+%The number of atoms in Dictionary Learning is $p$.
+
 \section{Machine learning} \label{sec:machine_learning}
 % rubare da BIB
   \subsection{Supervised learning} \label{subsec:supervised_learning}
