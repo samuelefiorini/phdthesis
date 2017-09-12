@@ -1,0 +1,88 @@
+% Abbreviations
+\usepackage{xspace}
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+
+% MS stuff
+\newcommand*{\RR}{{\em RR}\@\xspace}
+\newcommand*{\SP}{{\em SP}\@\xspace}
+\newcommand*{\PP}{{\em PP}\@\xspace}
+\newcommand*{\PR}{{\em PR}\@\xspace}
+\newcommand*{\CIS}{{\em CIS}\@\xspace}
+\newcommand*{\PCOs}{{PCOs}\@\xspace}
+\newcommand*{\PCO}{{\em PCO}\@\xspace}
+
+% Math stuff
+\usepackage{amsmath}
+\newcommand{\dataset}{{\cal D}}
+\newcommand{\fracpartial}[2]{\frac{\partial #1}{\partial  #2}}
+\newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{min}}\;}
+\newcommand{\argmax}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{max}}\;}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% Notes
+\usepackage{xcolor}
+\newcommand\todo[1]{\textcolor{red}{{\bf \{#1\}}}} %TODO
+\newcommand{\me}[0]{Samuele Fiorini}
+%\newcommand{\longtitle}[0]{Understanding time-evolving \\ biomedical data with machine learning}
+%\newcommand{\longtitle}[0]{From biological questions to ...\\ }
+\newcommand{\longtitle}[0]{Challenges in biomedical data science:\\data-driven solutions to clinical questions}
+
+%from biological questions to computational solutions}
+\newcommand{\runningtitle}[0]{Machine Learning 4 healthcare}
+
+% Code snippets
+\usepackage{listings}
+
+% Additional handy packages
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage[inline]{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{automata,arrows,positioning,calc}
+
+
+% %% Edit the Part appearance
+\usepackage{xpatch}
+\makeatletter
+\xpatchcmd{\@part}{\huge\bfseries \partname\nobreakspace\thepart}{}{}{}
+\makeatother
+
+
+% ---------- Corradi stuff ------------------ %
+\usepackage{titlesec}
+\usepackage{imakeidx}
+\usepackage{microtype}
+\usepackage{currfile}
+
+% For really empty page before chapter
+\let\origdoublepage\cleardoublepage
+\newcommand{\clearemptydoublepage}{%
+  \clearpage
+  {\pagestyle{empty}\origdoublepage}%
+}
+\let\cleardoublepage\clearemptydoublepage
+
+\renewcommand{\chaptername}{}
+
+\titleformat{\chapter}
+  {\normalfont\LARGE\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+\usepackage{ifpdf}
+\usepackage[pdftex,pagebackref]{hyperref}
+
+% hyperref backref
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{[{\footnotesize%
+\ifcase #1 Not cited.%
+\or Cited on page~#2.%
+\else Cited on pages #2.%
+\fi%
+}]}
+% ---------- end Corradi stuff ------------------ %

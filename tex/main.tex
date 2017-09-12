@@ -1,0 +1,142 @@
+\documentclass{disithesis}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{pdflscape}
+%DIF PREAMBLE EXTENSION ADDED BY LATEXDIFF
+%DIF UNDERLINE PREAMBLE %DIF PREAMBLE
+\RequirePackage[normalem]{ulem} %DIF PREAMBLE
+\RequirePackage{color}\definecolor{RED}{rgb}{1,0,0}\definecolor{BLUE}{rgb}{0,0,1} %DIF PREAMBLE
+\providecommand{\DIFadd}[1]{{\protect\color{blue}\uwave{#1}}} %DIF PREAMBLE
+\providecommand{\DIFdel}[1]{{\protect\color{red}\sout{#1}}}                      %DIF PREAMBLE
+%DIF SAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddbegin}{} %DIF PREAMBLE
+\providecommand{\DIFaddend}{} %DIF PREAMBLE
+\providecommand{\DIFdelbegin}{} %DIF PREAMBLE
+\providecommand{\DIFdelend}{} %DIF PREAMBLE
+%DIF FLOATSAFE PREAMBLE %DIF PREAMBLE
+\providecommand{\DIFaddFL}[1]{\DIFadd{#1}} %DIF PREAMBLE
+\providecommand{\DIFdelFL}[1]{\DIFdel{#1}} %DIF PREAMBLE
+\providecommand{\DIFaddbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFaddendFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelbeginFL}{} %DIF PREAMBLE
+\providecommand{\DIFdelendFL}{} %DIF PREAMBLE
+%DIF END PREAMBLE EXTENSION ADDED BY LATEXDIFF
+
+\input{more_stuff}
+
+
+\begin{document}
+
+\title{\longtitle}
+
+\author{\me}
+
+%%%% If month and year are not the current ones
+%%%% \submityear{1997}
+%%%% \submitmonth{December}
+
+\technumber{XX}
+
+\maketitle
+
+\begin{addresspage}
+{\bf
+Dottorato di Ricerca in Informatica ed Ingegneria dei Sistemi\\
+Indirizzo Informatica\\
+Dipartimento di Informatica, Bioingegneria, Robotica ed Ingegneria dei Sistemi \\
+Universit\`a degli Studi di Genova\\[2ex]}
+
+DIBRIS, Univ. di Genova\\
+Via Opera Pia, 13\\
+I-16145 Genova, Italy\\
+{\tt http://www.dibris.unige.it/}\\[2ex]
+
+{\bf
+Ph.D. Thesis in Computer Science and Systems Engineering\\
+Computer Science Curriculum}\\
+(S.S.D. INF/01)\\[2ex]
+
+Submitted by \me\\
+DIBRIS, Univ. di Genova\\
+{\tt ....}\\[2ex]
+
+Date of submission:
+\today\\[2ex]
+
+Title:
+\runningtitle.\\[2ex]
+
+Advisor: %relatore/relatori della tesi (possono essere esterni al DISI)
+Annalisa Barla\\
+Dipartimento di Informatica, Bioingegneria, Robotica ed Ingegneria dei Sistemi\\
+Universit\`a di Genova\\
+{\tt ...}\\[2ex]
+
+Ext. Reviewers:\\
+Lo Scopriremo\\
+Lo Scopriremo\\
+Lo Scopriremo
+\end{addresspage}
+
+\chapter*{\centering \begin{normalsize}Abstract\end{normalsize}}
+\begin{quotation}
+\noindent
+Abstract
+\end{quotation}
+\clearpage
+
+
+%\dedication{?}
+
+%\begin{citetext}{?}
+%?
+%\end{citetext}
+
+%\begin{acknowledgements}
+%I want to thank .......
+%\end{acknowledgements}
+
+% babel package reset it somewhere
+\renewcommand{\chaptername}{}
+
+\setcounter{tocdepth}{4}
+
+\tableofcontents
+
+\cleardoublepage
+
+% \pagenumbering{arabic}
+% \setcounter{chapter}{1}
+
+
+\input{intro}
+
+\part*{Part I} \label{part:I}
+\addcontentsline{toc}{part}{\nameref{part:I}}
+\input{part1/init}
+
+\part*{Part II}
+\label{part:II}
+\addcontentsline{toc}{part}{\nameref{part:II}}
+\input{part2/init}
+
+\input{conclusions}
+
+
+\appendix
+
+% \bibliographystyle{alpha}   % <-- default
+\bibliographystyle{apalike} % <-- but I like this one more
+% \bibliographystyle{plain}     % <-- good for draft
+\bibliography{biblio}
+
+
+\end{document}
