@@ -1,7 +1,7 @@
 \chapter{Background} \label{chap:background}
-% from regularization in machine learning BIB (chlo�)
 
-\section{What is data science and why we should care}
+
+\section{What is data science and why should we care?}
 % data science vasta: gestione (data engineering) -> data exploration -> machine learning -> data viz
 % DIKW pyramid
 \todo{\begin{itemize}
@@ -13,6 +13,37 @@
 
 \section{Challenges in biomedical data science}
 % pochi sparsi rumorosi bucati
+% this next section needs to be better rewritten
+Scientific progress has always been achieved by systematic observation of natural phenomena followed by experiments, measurements and consequently model formulation.
+The process of modeling complex systems often implies collecting large amount of data in the field of life science, where large, multivariate and noisy measurements are typically acquired with the aim of describing multifactorial diseases.
+
+In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data. This process can be very hard as many unwanted and concurrent factors may mislead it resulting in a model with poor predictive power.  For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples may be small with respect to the number of observed variables which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
+Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect.
+\todo{maybe we should not introduce noise in such a broad way (see next)}
+
+In the field of machine learning, a common strategy to build predictive models out of noisy data is the \textit{regularization}.
+In its broader definition this refers to the process of introducing additional information in order to solve a possibly ill-posed
+problem \cite{tikhonov1963solution, evgeniou2000regularization}. The obtained result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In machine learning, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
+
+In the era of personalized medicine, biospecimen collection and biological data management is still a challenging and expensive task~\cite{toga2015sharing}. Only few large-scale research enterprises, such as ENCODE~\cite{encode2004encode},  ADNI~\cite{jack2008alzheimer},  MOPED~\cite{kolker2012moped} or TCGA~\footnote{\href{https://cancergenome.nih.gov}{\texttt{ \small https://cancergenome.nih.gov}}}, have sufficient financial and human resources to manage, share and distribute access of heterogeneous types of biological data. To date, many biomedical studies still rely on a small number of collected samples~\cite{mcneish2016effect, button2013power, yu2013shrinkage}. This effect is even worse in case of rare diseases~\cite{Garg2016ABM} or in high-throughput molecular data (\eg genomics and proteomics) where the dimensionality of the problem can be in the order of hundreds of thousands.
+%
+The setting where the number of measured variables heavily outnumbers the amount of collected samples is usually referred to as \textit{large p small n} scenario, or simply $n \ll p$. In this case, the main goal of the learning step is often to identify a meaningful subset of relevant variables that are the most representative of the observed phenomenon. In machine learning, this is known as variable/feature selection and several techniques addressing this task were presented so far~\cite{guyon2002gene}. Variable selection not only increases the prediction power of the learning machine, but it also promotes model interpretability, that is crucial in biology~\cite{altmann2010permutation}.
+%
+Regardless~\citep{okser2014regularized} of the learning machine, regularization can be introduced in several ways and it is of fundamental use in order to achieve the following desired properties:
+%
+\begin{itemize}
+	\item identify models with good generalization properties, even with a limited amount of collected samples;
+	\item achieve solutions that are robust to noise;
+	\item learn the data structure when unknown;
+	\item exploit prior knowledge on the data structure;
+	\item promote interpretability performing variable selection;
+	\item reduce the feasible set in order to help solving inverse problems. %\todo{this is for grown-ups :)}
+\end{itemize}
+%
+%
+% %when dealing with biological studies
+In this paper we illustrate how regularization impacts in finding robust and meaningful models and we clarify how to choose the most suitable regularization scheme according to the biological context. The remainder of the paper is organized as follows: ....
+
 
 \section{From clinical questions to learning task}
 In applied life science, the biological question at hand usually drives the data collection and therefore the statistical challenge to be solved. In order to achieve meaningful results, thorough data analysis protocol must be followed (see Section~\ref{subsec:model_selection}).
@@ -21,7 +52,7 @@ In this section, my goal is to illustrate some of the most recurrent biological 
 
 
 \subsection{How to predict phenotypes from observed data?} % supervised learning
-Starting from a collection of input measures that are likely to be related with some known target phenotype, the final goal here is to learn a model that represents the relationship between input and output. Several researches fall in this class, for instance in molecular (\eg lab tests, gene expression, proteomics, sequencing)~\cite{angermueller2016deep, okser2014regularized, abraham2013performance} or radiomics/imaging studies (\eg MRI, PET/SPECT, microscopy)~\cite{min2016deep, helmstaedter2013connectomic}. Biological questions of this class are usually tackled by \textit{supervised learning} models. In particular, when the observed clinical outcome is expressed as a one-dimensional continuous value, as in survival analysis, a \textit{single-output regression} problem is posed. Moreover, if the outcome is vector-valued, as in the case of multiple genetic trait prediction \cite{he2016novel}, the problem can be cast in a \textit{multiple-output regression }framework \cite{argyriou2008convex, baldassarre2012multi}. Biological studies involving categorical outcomes translate into \textit{classification} problems. In particular, if the clinical outcome assumes only two values, as in the \textit{case}-\textit{control} scenario, the classification problem is said to be \textit{binary}, whilst, if multiple classes are observed, the classification task becomes \textit{multi-class}.
+Starting from a collection of input measures that are likely to be related with some known target phenotype, the final goal here is to learn a model that represents the relationship between input and output. Several researches fall in this class, for instance in molecular (\eg lab tests, gene expression, proteomics, sequencing) \cite{angermueller2016deep, okser2014regularized, abraham2013performance} or radiomics/imaging studies (\eg MRI, PET/SPECT, microscopy) \cite{min2016deep, helmstaedter2013connectomic}. Biological questions of this class are usually tackled by \textit{supervised learning} models. In particular, when the observed clinical outcome is expressed as a one-dimensional continuous value, as in survival analysis, a \textit{single-output regression} problem is posed. Moreover, if the outcome is vector-valued, as in the case of multiple genetic trait prediction \cite{he2016novel}, the problem can be cast in a \textit{multiple-output regression }framework \cite{argyriou2008convex, baldassarre2012multi}. Biological studies involving categorical outcomes translate into \textit{classification} problems. In particular, if the clinical outcome assumes only two values, as in the \textit{case}-\textit{control} scenario, the classification problem is said to be \textit{binary}, whilst, if multiple classes are observed, the classification task becomes \textit{multi-class}.
 
 \subsection{Which variables are the most significant?} % variable/feature selection
 In the above case, a complementary question revolves around the interpretability of the predictive model. In particular, if dealing with high-throughput data, the main goal is to identify a relevant subset of meaningful variables for the observed phenomenon. This problem can be cast into a variable/feature selection problem \cite{guyon2002gene}. %To identify a model that uses only a reduced number of variables is of fundamental use in biology as it enhances its interpretability.
