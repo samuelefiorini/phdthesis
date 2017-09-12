@@ -286,15 +286,15 @@
    {\begin{quote}\singlespace\textsl}
    {\end{quote}}
 
-\newcommand{\citationname}{}
-\newenvironment{citetext}[1]
-   {\thispagestyle{empty}
-    \renewcommand{\citationname}{#1}
-    \begin{quote}\singlespace
-    \textsl}
-   {
-    \hspace*{\fill}\nolinebreak[1]\hspace*{\fill}
-    \rm (\citationname)\end{quote}}
+% \newcommand{\citationname}{}
+% \newenvironment{citetext}[1]
+%    {\thispagestyle{empty}
+%     \renewcommand{\citationname}{#1}
+%     \begin{quote}\singlespace
+%     \textsl}
+%    {
+%     \hspace*{\fill}\nolinebreak[1]\hspace*{\fill}
+%     \rm (\citationname)\end{quote}}
 
 %%
 %% Let's have a dedication page so I can thank my mummy.
