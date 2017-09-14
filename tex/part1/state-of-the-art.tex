@@ -20,6 +20,15 @@ Feature learning algorithms project the data into a $p$-dimensional space.
 
 \section{Machine learning} \label{sec:machine_learning}
 % rubare da BIB
+In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data. This process can be very hard as many unwanted and concurrent factors may mislead it resulting in a model with poor predictive power.  For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples may be small with respect to the number of observed variables which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
+Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect.
+\todo{maybe we should not introduce noise in such a broad way (see next)}
+
+
+In the field of machine learning, a common strategy to build predictive models out of noisy data is the \textit{regularization}.
+In its broader definition this refers to the process of introducing additional information in order to solve a possibly ill-posed
+problem \cite{tikhonov1963solution, evgeniou2000regularization}. The obtained result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In machine learning, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
+
   \subsection{Supervised learning} \label{subsec:supervised_learning}
     \subsubsection{Regularization methods}
     \subsubsection{Ensemble methods}

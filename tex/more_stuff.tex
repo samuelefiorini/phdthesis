@@ -1,3 +1,5 @@
+% !TEX root = ./main.tex
+
 % Abbreviations
 \usepackage{xspace}
 \newcommand*{\eg}{e.g.\@\xspace}
@@ -28,12 +30,13 @@
 %\newcommand{\longtitle}[0]{Understanding time-evolving \\ biomedical data with machine learning}
 %\newcommand{\longtitle}[0]{From biological questions to ...\\ }
 \newcommand{\longtitle}[0]{Challenges in biomedical data science:\\data-driven solutions to clinical questions}
-
-%from biological questions to computational solutions}
 \newcommand{\runningtitle}[0]{Machine Learning 4 healthcare}
 
 % Code snippets
 \usepackage{listings}
+
+% Images root
+\graphicspath{{../images/}}
 
 % Additional handy packages
 \usepackage[T1]{fontenc}
@@ -60,7 +63,6 @@
 \renewcommand\cite{\citep}
 \setcitestyle{square}
 
-
 % ---------- Corradi stuff ------------------ %
 \usepackage{titlesec}
 \usepackage{imakeidx}
@@ -82,7 +84,8 @@
 \titlespacing*{\chapter}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 
 \usepackage{ifpdf}
-\usepackage[pdftex,pagebackref]{hyperref}
+
+\usepackage[pdftex,pagebackref,hidelinks]{hyperref}
 
 % hyperref backref
 \renewcommand*{\backref}[1]{}
@@ -93,3 +96,14 @@
 \fi%
 }]}
 % ---------- end Corradi stuff ------------------ %
+
+
+% url appeareance
+% \usepackage{url}
+\usepackage{breakurl}
+\DeclareUrlCommand\ULurl{%
+  \renewcommand\UrlFont{\small\ttfamily\color{blue}}%
+  \renewcommand\UrlLeft{\uline\bgroup}%
+  \renewcommand\UrlRight{\egroup}}
+
+\renewcommand\url[1]{\href{#1}{\ULurl{#1}}}
