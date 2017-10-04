@@ -15,6 +15,21 @@
 \newcommand*{\PCOs}{{PCOs}\@\xspace}
 \newcommand*{\PCO}{{\em PCO}\@\xspace}
 
+% GENE SYMBOL
+\newcommand{\apc}{{\sc apc}\@\xspace}
+\newcommand{\kras}{{\sc kras}\@\xspace}
+\newcommand{\ctnnb}{{\sc ctnnb{\footnotesize 1}}\@\xspace}
+\newcommand{\tp}{{\sc tp{\footnotesize 53}}\@\xspace}
+\newcommand{\msh}{{\sc msh{\footnotesize 2}}\@\xspace}
+\newcommand{\mlh}{{\sc mlh{\footnotesize 1}}\@\xspace}
+\newcommand{\pms}{{\sc pms{\footnotesize 2}}\@\xspace}
+\newcommand{\pten}{{\sc pten}\@\xspace}
+\newcommand{\smad}{{\sc smad{\footnotesize 4}}\@\xspace}
+\newcommand{\stk}{{\sc stk{\footnotesize 11}}\@\xspace}
+\newcommand{\gsk}{{\sc gsk{\footnotesize 3}b}\@\xspace}
+\newcommand{\axin}{{\sc axin{\footnotesize 2}}\@\xspace}
+
+
 % Math stuff
 \usepackage{amsmath,amsfonts,dsfont,mathrsfs,mathtools,amssymb}
 \usepackage{bm}
@@ -33,8 +48,11 @@
 \newcommand{\longtitle}[0]{Challenges in biomedical data science:\\data-driven solutions to clinical questions}
 \newcommand{\runningtitle}[0]{Machine Learning 4 healthcare}
 
-% Code snippets
+% Code snippets and quotations
 \usepackage{listings}
+\usepackage{csquotes}
+\usepackage{algorithm, algpseudocode}
+
 
 % Images root
 \graphicspath{{../images/}}
@@ -45,9 +63,10 @@
 \usepackage{booktabs}
 \usepackage[inline]{enumitem}
 \usepackage{caption}
-\usepackage{subcaption}
+% \usepackage{subcaption}
 \usepackage{longtable}
 \usepackage{graphicx}
+\usepackage{subfig}
 \usepackage{tikz}
 \usetikzlibrary{automata,arrows,positioning,calc}
 
