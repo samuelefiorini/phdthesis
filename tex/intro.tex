@@ -6,7 +6,7 @@
 % qui no soluzioni ma problemi: domande + esempi
 Understanding the underlying mechanisms of biological systems can be a challenging task. Different domains can be involved and their interactions can be unknown.
 
-Nowadays, most of the life science research relies upon the extraction of meaningful information from heterogeneous sources of biological data. Thanks to the remarkable technological progresses of the last decades, the dimensions of such data collections is increasing everyday. 
+Nowadays, most of the life science research relies upon the extraction of meaningful information from heterogeneous sources of biological data. Thanks to the remarkable technological progresses of the last decades, the dimensions of such data collections is increasing everyday.
 
 
 % large collections of complex and heterogeneous data is not a trivial task.
@@ -27,3 +27,19 @@ This part is organized as follows:
 Chapter~\ref{chap:adenine} introduces \ade, an open-source Python framework for large-scale data exploration I developed during my PhD. \todo{Chapter~\ref{chap:frassoni} describes a work I developed in collaboration with Gaslini hospital on biological age estimation from blood samples}.
 Chapter~\ref{chap:aism} describes the development of a temporal model that aims at following the evolution of multiple sclerosis patients exploiting the use of patient-friendly and inexpensive measures such as patient centered outcomes.
 Chapter~\ref{chap:diabete} describes a machine learning time-series forecasting approach for glucose sensor data collected by type I and type II diabetic patients.
+
+\chapter{Basic notation and definitions} \label{sec:notation}
+%% the number of variables
+%\todo{bold vectors, capital matrices}
+In this thesis, the data are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
+The $i$-th row of $X$ is a $d$-dimensional data point $\bm{x}_{i}$ belonging to the input space $\mathcal{X}\subseteq\mathds{R}^d$. The corresponding outputs $\bm{y}_{i}$ belong to the output space $\mathcal{Y}$.
+
+The nature of the output space defines the problem as {\sl binary classification} if  $\mathcal{Y} = \{-1,+1\}$, {\sl multi-category classification} if $\mathcal{Y} = \{1,2,\dots,k\}$, {\sl regression} if $\mathcal{Y}\subseteq\mathds{R}$ and {\sl vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+
+Predictive models are functions $f: \mathcal{X} \rightarrow \mathcal{Y}$.
+The number of relevant variables is $d^*$.
+In feature selection tasks, the number of selected features is $\tilde d$.
+
+A kernel function acting on the elements of the input space is defined as $\mathcal{K}(\bm{x}_{i},\bm{x}_{j})=\langle \phi(\bm{x}_{i}), \phi(\bm{x}_{j})\rangle$, where $\phi(\bm{x})$ is a {\em feature map} from $\mathds{R}^d \rightarrow \mathds{R}^{d'}$.
+Feature learning algorithms project the data into a $p$-dimensional space.
+%The number of atoms in Dictionary Learning is $p$.

@@ -2,45 +2,75 @@
 
 \chapter{State of the art} \label{chap:state-of-the-art}
 
-\section{Basic notation and definitions} \label{sec:notation}
-%% the number of variables
-%\todo{bold vectors, capital matrices}
-In this thesis, the data are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
-The $i$-th row of $X$ is a $d$-dimensional data point $\bm{x}_{i}$ belonging to the input space $\mathcal{X}\subseteq\mathds{R}^d$. The corresponding outputs $\bm{y}_{i}$ belong to the output space $\mathcal{Y}$.
-
-The nature of the output space defines the problem as {\sl binary classification} if  $\mathcal{Y} = \{-1,+1\}$, {\sl multi-category classification} if $\mathcal{Y} = \{1,2,\dots,k\}$, {\sl regression} if $\mathcal{Y}\subseteq\mathds{R}$ and {\sl vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
-
-Predictive models are functions $f: \mathcal{X} \rightarrow \mathcal{Y}$.
-The number of relevant variables is $d^*$.
-In feature selection tasks, the number of selected features is $\tilde d$.
-
-A kernel function acting on the elements of the input space is defined as $\mathcal{K}(\bm{x}_{i},\bm{x}_{j})=\langle \phi(\bm{x}_{i}), \phi(\bm{x}_{j})\rangle$, where $\phi(\bm{x})$ is a {\em feature map} from $\mathds{R}^d \rightarrow \mathds{R}^{d'}$.
-Feature learning algorithms project the data into a $p$-dimensional space.
-%The number of atoms in Dictionary Learning is $p$.
+This chapter defines the concept of machine learning and presents a comprehensive overview of the most relevant algorithms and models.
 
 \section{Machine learning} \label{sec:machine_learning}
 
-The term \textit{machine learning} is becoming an ubiquitous buzzword used in a broad number of contexts spanning from computer science, to behavioral science, to philosophy. Figure~\ref{fig:google_trend_ML} shows a A simple visual inspection of the term popularity trend Google Trends\footnote{\url{https://trends.google.com}}, its popularity is still rising
 
-\begin{figure}
+The term \textit{Machine learning} (ML) first appeared in the late 50's in the field of computer science and now it is becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
+With a quick search on Google Trends\footnote{\url{https://trends.google.com}} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward the terms \textit{machine learning} and \textit{data science} are growing, with the first consistently superior to the second.
+
+\begin{figure}[h!]
   \centering
     \includegraphics[width=0.8\textwidth]{part1/google_trends_MLDS.png}
-  \caption{The web popularity over the last five years of two terms: \textit{data science} and \textit{machine learning} (source: Google Trends).} \label{fig:google_trend_ML}
+  \caption{The Internet popularity over the past five years of two terms: \textit{data science} and \textit{machine learning}. The vertical axis represents a normalized measure of the number of Google search query of an input term. The trend is normalized with respect to its maximum (source: Google Trends).} \label{fig:google_trend_ML}
 \end{figure}
 
+A possible explanation to this phenomenon can be found in a recent article published on Science~\cite{appenzeller2017revolution} in which the authors describe a new \textit{scientific revolution} lead by an explosion in the modern data collection abilities.
+Such massive amounts of data have long overwhelmed human analysis and insights potential and this makes ML a key element for scientists trying to make sense of large-scale observations.
 
-% rubare da BIB
-In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data. This process can be very hard as many unwanted and concurrent factors may mislead it resulting in a model with poor predictive power.  For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples may be small with respect to the number of observed variables which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
-Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect.
-\todo{maybe we should not introduce noise in such a broad way (see next)}
+But, what is \textit{machine learning}? And how does it differ from statistics?
 
+A unique answer to this question may not be easy to provide. In fact, ML can be defined in different ways and from several standpoints. Let's see three remarkable examples.
 
-In the field of machine learning, a common strategy to build predictive models out of noisy data is the \textit{regularization}.
-In its broader definition this refers to the process of introducing additional information in order to solve a possibly ill-posed
-problem \cite{tikhonov1963solution, evgeniou2000regularization}. The obtained result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In machine learning, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
+\begin{enumerate}
+  \item Kevin P. Murphy in its \emph{Machine Learning - A Probabilistic Perspective}~\cite{murphy2012machine} defines machine learning as follows.
+
+  \begin{displayquote}
+  "[...] \emph{a set of methods that can automatically detect patterns in data, and then use the uncovered patterns to predict future data, or to perform other kinds of decision making under uncertainty} [...]"
+  \end{displayquote}
+
+  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU}).}, held in October 2015 at the Stanford University, gave the following three definitions.
+
+  \begin{displayquote}
+    \begin{itemize}
+      \item[] \emph{{\bf Machine Learning} constructs algorithms that can learn from data.}
+      \item[] \emph{{\bf Statistical Learning}  is a branch of applied statistics that emerged in response to machine learning, emphasizing statistical models and assessment of uncertainty.}
+      \item[] \emph{{\bf Data Science}  is the extraction of knowledge from data, using ideas from mathematics, statistics, machine learning, computer science, engineering...}
+    \end{itemize}
+  \end{displayquote}
+
+  \item Carl E. Rasmussen in the preface of its \emph{Gaussian Processes for Machine Learning}~\cite{rasmussen2006gaussian} introduces the difference between statistics and ML as follows.
+
+  \begin{displayquote}
+    "\emph{in statistics a prime focus is often in understanding the data and relationships in terms of models giving approximate summaries such as linear relations or independencies. In contrast, the goals in machine learning are primarily to make predictions as accurately as possible and to understand the behaviour of learning algorithms}"
+  \end{displayquote}
+
+\end{enumerate}
+
+It looks like each author, according to his background, expertise and experiences, provides a slightly different definition of ML. Trying to summarize these three standpoints, we can say that \emph{ML is an interdisciplinary field that borrows the concept of data-driven model from statistics in order to devise algorithms that can exploit hidden patterns in current data and make accurate predictions on future data}.
+
+As of today ML is the workhorse of data science.
+
 
   \subsection{Supervised learning} \label{subsec:supervised_learning}
+
+  Humans are remarkably good at \emph{learning by examples}. When a kid is taught what a pencil looks like, he will be capable of understanding the concept of pencil from a limited number of guided observations. Similarly, when future radiologists are trained to distinguish between healthy tissues from tumors in MRI scans, they will be provided with several annotated biomedical images from which they will be able to generalize.
+  This learning paradigm is characterized by the presence of two key objects: \textit{data} and \textit{labels}.
+
+  Supervised learning is the branch of ML, in which predictive models are trained on labeled samples. In the ML jargon, the collected data are commonly referred to as \textit{predictors} or \textit{features} and they are used as \textit{input} in a training algorithm which has labels as \textit{otput}.
+
+
+
     \subsubsection{Regularization methods}
+    % rubare da BIB
+    % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
+    The process of learning a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples may be small with respect to the number of observed variables which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
+    Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect.
+
+    In the field of ML, a common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this Thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm introduced in this chapter, particular emphasis will be put on the relevant regularization strategies.
+
+    In its broader definition regularization is the process of introducing additional information in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. The obtained result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In machine learning, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
     \subsubsection{Ensemble methods}
     \subsubsection{Deep learning}
 
