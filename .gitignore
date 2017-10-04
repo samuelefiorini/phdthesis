@@ -1,6 +1,8 @@
 ## OSX meaningless files
 **/*.DS_Store
 
+## Materials that I rather have local
+materials
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
