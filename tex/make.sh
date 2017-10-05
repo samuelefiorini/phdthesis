@@ -6,3 +6,4 @@ pdflatex -output-directory=./_build main.tex
 pdflatex -output-directory=./_build main.tex
 pdflatex -output-directory=./_build main.tex
 pdflatex -output-directory=./_build main.tex
+mv ./_build/main.pdf .
