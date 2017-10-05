@@ -34,7 +34,14 @@ Chapter~\ref{chap:diabete} describes a machine learning time-series forecasting 
 In this thesis, the data are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
 The $i$-th row of $X$ is a $d$-dimensional data point $\bm{x}_{i}$ belonging to the input space $\mathcal{X}\subseteq\mathds{R}^d$. The corresponding outputs $\bm{y}_{i}$ belong to the output space $\mathcal{Y}$.
 
-The nature of the output space defines the problem as {\sl binary classification} if  $\mathcal{Y} = \{-1,+1\}$, {\sl multi-category classification} if $\mathcal{Y} = \{1,2,\dots,k\}$, {\sl regression} if $\mathcal{Y}\subseteq\mathds{R}$ and {\sl vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+The nature of the output space defines the problem as \textit{binary classification} if  $\mathcal{Y} = \{a,b\}$ (with $a\neq b$), \textit{multiclass classification} if
+$\mathcal{Y} = \{\alpha,\beta,\dots,\omega\}$
+(with $\alpha \neq \beta \neq \dots \neq \omega)$),
+% \textit{multi-label classification} if $\mathcal{Y} \in \mathbb{N}^k$,
+\textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ and
+\textit{vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+For binary classification problems common choices for the label encoding are $a=1, b=-1$ or $a=0, b=1$.
+For multiclass classification problems classes are usually encoded as natural numbers, \ie $\alpha, \beta, \dots, \omega \in \mathbb{N}$.
 
 Predictive models are functions $f: \mathcal{X} \rightarrow \mathcal{Y}$.
 The number of relevant variables is $d^*$.
