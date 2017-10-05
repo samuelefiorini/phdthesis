@@ -7,8 +7,8 @@ This chapter defines the concept of machine learning and presents a comprehensiv
 \section{Machine learning} \label{sec:machine_learning}
 
 
-The term \textit{Machine learning} (ML) first appeared in the late 50's in the field of computer science and now it is becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
-With a quick search on Google Trends\footnote{\url{https://trends.google.com}} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward the terms \textit{machine learning} and \textit{data science} are growing, with the first consistently superior to the second.
+The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and now it is becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
+With a simple search on Google Trends\footnote{\url{https://trends.google.com}} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward both the terms \textit{machine learning} and \textit{data science} are growing, with the first consistently superior to the second.
 
 \begin{figure}[h!]
   \centering
@@ -56,21 +56,73 @@ As of today ML is the workhorse of data science.
   \subsection{Supervised learning} \label{subsec:supervised_learning}
 
   Humans are remarkably good at \emph{learning by examples}. When a kid is taught what a pencil looks like, he will be capable of understanding the concept of pencil from a limited number of guided observations. Similarly, when future radiologists are trained to distinguish between healthy tissues from tumors in MRI scans, they will be provided with several annotated biomedical images from which they will be able to generalize.
-  This learning paradigm is characterized by the presence of two key objects: \textit{data} and \textit{labels}.
+  This learning paradigm is characterized by the presence of two key objects: \textit{data} and \textit{labels}. In the last example, we will consider the MRI scans as data, and their annotations (\eg tumor vs healthy tissue) as labels.
 
-  Supervised learning is the branch of ML, in which predictive models are trained on labeled samples. In the ML jargon, the collected data are commonly referred to as \textit{predictors} or \textit{features} and they are used as \textit{input} in a training algorithm which has labels as \textit{otput}.
+  Supervised learning is the branch of ML, in which predictive models are trained on labeled data. In the ML jargon, and in this thesis, one usually refers to data as collections of \textit{samples} described by an arbitrarily large number of \textit{predictors} (or \textit{features}) that are used as \textit{input} in the training process having labels as its \textit{otput}.
 
+  In general, input samples $x$ throughout this thesis are represented as $d$-dimensional vectors in an input space $\mathcal{X}$, where $\mathcal{X}\subseteq\mathbb{R}^d$, while the labels $y\in\mathcal{Y}$. The nature of the output space $\mathcal{Y}$ defines the learning task as \textit{binary classification} if  $\mathcal{Y} = \{-1,+1\}$, \textit{multiclass classification} if $\mathcal{Y} = \{1,2,\dots,k\}$,
+  \textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ and
+  \textit{vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+  Each one of these learning problems will be faced in the second part of the thesis and for each problem a possible data-driven solution will be proposed. The remainder of this section describes the methods that are most relevant with the adopted models and pipelines.
 
 
     \subsubsection{Regularization methods}
     % rubare da BIB
     % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
-    The process of learning a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples may be small with respect to the number of observed variables which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
+    The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples $n$ may be small with respect to the number of observed variables $d$ which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
     Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect.
 
-    In the field of ML, a common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this Thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm introduced in this chapter, particular emphasis will be put on the relevant regularization strategies.
+    In the field of ML, a common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this Thesis (see Section~\ref{sec:challenges_biomedical}), on each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
 
-    In its broader definition regularization is the process of introducing additional information in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. The obtained result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In machine learning, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
+    In its broader definition regularization is the process of introducing additional information in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. In ML, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.
+
+    Given a set of input-output pairs $\{X, Y\}$, the main objective of {\em supervised learning} is to find a function of the inputs $f(X)$ that approximates the outputs $Y$. This translates into the minimization problem defined in Equation~\eqref{eq:losspen}.
+
+    \begin{equation}\label{eq:losspen}
+    	\min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) + \lambda R(f)
+    \end{equation}
+
+    The loss function $V(\cdot,\cdot)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss function for regression and classification problems were proposed; in Table~\ref{tab:losses} we define the most commonly adopted in biomedical studies and their visual representation is presented in Figure~\ref{fig:loss}. The regularization penalty $R(\cdot)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}.
+
+    \begin{figure}[!ht]
+        \centering
+        \subfloat[]{%
+            \includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
+            \label{fig:regression}%
+        }%
+        % \hfill%
+        \subfloat[]{%
+        \includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
+        }%
+        \caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
+    \end{figure}
+
+
+    \begin{table}[]
+      \centering
+      \caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
+      \begin{tabular}{@{}ll@{}ll@{}}
+        \toprule
+        Loss function & $V(f(\bm{x}),y)$  & Learning problem           \\ \midrule
+        Square                   & $(y - f(\bm{x}))^2$ & regression \\
+        Absolute                 & $|y - f(\bm{x})|$ & regression   \\
+        $\epsilon$-insensitive   & $\begin{cases}
+            0 & \text{if } |y-f(\bm{x})| < \epsilon\\
+            |y-f(\bm{x})| - \epsilon & \text{otherwise}
+        \end{cases} $        & regression                 \\
+        \midrule
+        Zero-one               & $\begin{cases}
+            0 & \text{if } y = f(\bm{x})\\
+            1 & \text{otherwise}
+        		\end{cases}$ & classification \\
+        Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
+        Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
+        Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+
+
     \subsubsection{Ensemble methods}
     \subsubsection{Deep learning}
 
