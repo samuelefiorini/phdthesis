@@ -565,3 +565,27 @@ Dipartimento di Informatica, Bioingegneria,\\%[-8pt]
 %%
 %% EOF: disithesis.cls
 %%
+
+\makeatletter
+
+\newcommand\frontmatter{%
+	\cleardoublepage
+	%\@mainmatterfalse
+	\pagenumbering{roman}}
+
+\newcommand\mainmatter{%
+	\cleardoublepage
+	% \@mainmattertrue
+	\pagenumbering{arabic}}
+
+\newcommand\backmatter{%
+	\if@openright
+	\cleardoublepage
+	\else
+	\clearpage
+	\fi
+%	 \@mainmatterfalse
+    \pagenumbering{gobble}
+}
+
+\makeatother
