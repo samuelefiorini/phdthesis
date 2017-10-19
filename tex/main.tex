@@ -34,7 +34,6 @@
 
 
 \begin{document}
-
 \title{\longtitle}
 
 \author{\me}
@@ -86,6 +85,7 @@ Lo Scopriremo\\
 Lo Scopriremo
 \end{addresspage}
 
+\frontmatter
 \chapter*{\centering \begin{normalsize}Abstract\end{normalsize}}
 \begin{quotation}
 \noindent
@@ -107,6 +107,7 @@ Abstract
 % babel package reset it somewhere
 \renewcommand{\chaptername}{}
 
+
 \setcounter{tocdepth}{4}
 
 \tableofcontents
@@ -116,7 +117,7 @@ Abstract
 % \pagenumbering{arabic}
 % \setcounter{chapter}{1}
 
-
+\mainmatter
 \input{intro}
 
 \part*{Part I}
@@ -131,9 +132,21 @@ Abstract
 
 \input{conclusions}
 
-
+% Appendices
 \appendix
+\input{appendices}
 
+% LIST OF STUFF
+\backmatter
+\listoffigures
+\listoftables
+\newpage
+\printacronyms[include-classes=abbrev,name=List of Abbreviations]
+%\newpage
+%\printacronyms[include-classes=nomencl,name=Nomenclature]
+\newpage
+
+\cleardoublepage
 % \bibliographystyle{alpha}   % <-- default
 \bibliographystyle{apalike} % <-- but I like this one more
 % \bibliographystyle{plain}     % <-- good for draft

@@ -1,0 +1,21 @@
+% documentclass[letter,10pt]{article}
+% \usepackage{amsmath}
+% \begin{document}
+
+\begin{figure}[b]
+  \centering
+  \begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.3cm]
+    \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum height=1.2cm]
+    \node[state]    (xit)                     {$\bm{x}_i^t$};
+    \node[state]    (yit)[below of=xit]       {$y_i^t$};
+    \node[state]    (xit1)[right of=xit]      {$\bm{x}_i^{t+1}$};
+    \node[state]    (yit1)[below of=xit1]     {$y_i^{t+1}$};
+    \path
+    (xit)  edge node{$f$} (yit)
+    (xit)  edge node{$g$} (xit1)
+    (xit1) edge node{$f$} (yit1)
+    (xit)  edge node{$f\circ g$} (yit1);
+  \end{tikzpicture}
+  \caption{A visual representation of the temporal structure assumed in the collected data. When the two functions $f$ (\F) and $g$ (\G) are learned, the \FOG model $f\circ g$ is able to predict the evolution of the disease course for future time points $y_i^{t+1}$.}\label{fig:pipeline}
+\end{figure}
+% \end{document}

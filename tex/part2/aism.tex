@@ -2,3 +2,260 @@
 
 \chapter{Temporal model for multiple sclerosis evolution} \label{chap:aism}
 % AISM
+
+
+Multiple Sclerosis (MS) is a neurodegenerative and chronic disease of the central nervous system characterized by damages to the myelin sheaths, resulting in a wide range of symptoms, such as fatigue, numbness, visual disturbances, bladder problems, mobility issues and cognitive deficits.
+
+% \todo{In clinical practice, accurate patient evaluation and clinical judgement remain the basics in MS diagnosis, as the identification of a validated set of biomarkers is still an open problem~\cite{milo2014revised}.}
+
+People with MS (PwMS) are mainly classified according to their disease course:
+relapsing-remitting (\ac{RR}), secondary-progressive (\ac{SP}), primary-progressive (\ac{PP}) and progressive-relapsing (\ac{PR})~\cite{giovannoni2016brain}.
+Neurological disability in \RR patients is mainly due to the development of multifocal inflammatory lesions and it results in relapses, that are attacks of neurological worsening, followed by partial or complete recovery. Disability accrues predominantly in progressive courses (\SP, \PP, \PR) that are more characterized from diffuse immune mechanisms and neurodegeneration.
+An estimated $15\%$ of PwMS have a \PP or \PR course at the onset, the remaining $85\%$ is diagnosed with a \RR course.
+About $80\%$ of \RR patients develop \SP course within $15\text{--}20$ years if untreated, or if the adopted pharmacological and rehabilitative protocols are not continuously adjusted according to the evolution of the disease~\cite{scalfari2014onset}.
+
+
+% This form is characterized by clearly defined {\em relapses}, \ie  attacks of neurological worsening, followed by partial or complete recovery.
+% and it takes only $14$ years on average for people to become unable to walk for $100$ meters unaided .
+% Patients in \SP form experience a steady progress of the disease in absence of relapses, while patients in \PR form are characterized by both relapses and gradual worsening.
+
+For this reason, the prediction of the transition from \RR to \SP is one of the most important methodological gaps that MS researchers are currently addressing.
+The availability of a statistical model able to predict disease worsening is one of the major unmet needs that could significantly improve timeliness, personalization and, consequently, the efficacy of the treatments.
+Nowadays, there are no clear clinical, imaging, immunologic or pathologic criteria to foresee the transition from \RR~to~\SP~\cite{lublin2014defining}. Several clinical factors relating to possible \SP course predictors have been identified~\cite{bergamaschi2015bremso, dickens2014type}.
+However, as showed by~\cite{vukusic2003prognostic}, studies investigating on prognostic factors for MS course evolution generally suffer from two shortcomings: they
+% However, such studies generally
+report a high proportion of \RR patients not monitored enough to reach progressive course and they lead, to some extent, to contradictory results.
+Currently, MS research mainly focuses on developing and assessing drugs and rehabilitative protocols for \RR patients disregarding progressive courses.
+
+
+In the recent past, researchers explored the potential role of Patient-Centered Outcomes (\ac{PCO}) to follow the progression of neurodegenerative diseases and  to take timely healthcare decisions~\cite{black2013patient}. %~\todo{REF \cite{??}}.
+%\PCOs usually consist in ordinal or categorical scaled questionnaires and self-reported measures.
+\PCOs comprise self- and physician-administered tests, questionnaires and clinical scales consisting of either ordinal or categorical scaled answers.
+As opposed to stressful, not frequently repeatable and expensive clinical exams, like magnetic resonance imaging or blood tests, \PCOs are patient-friendly and low-cost measures that could allow to investigate the individual changes and disease impact on several aspects such as physical, cognitive, psychological, social and well-being domains~\cite{fiorini2015machine}.
+%.
+To date, \PCOs are extensively used to assess general health status, to support diagnosis and monitor progress of disease and to quantify the patients' perception of the effectiveness of a given therapy or procedure \cite{nelson2015patient}.
+Nevertheless, it is still unclear which are the most informative \PCOs and, contextually, whether they can be used as {\em predictors} for disease evolution.
+
+%\todo{In our study, we propose a machine learning approach that, leveraging on \PCOs data, aims at
+%forecasting the transition of PwMS from \RR to \SP and at providing insights on the most appropriate use of \PCOs.}
+In our study, we propose a machine learning approach that, leveraging on \PCO data, aims at predicting the temporal evolution of MS disease course providing insights on the most appropriate use of \PCOs.
+We resort to a vast category of predictive models, ranging from sparse regularization to ensemble and deep learning methods.
+These models are widely adopted in the biomedical context as they benefit from good generalization properties as well as they allow to address regression and classification problems within the same statistical and computational framework~\cite{lecun2015deep, qi2012random, nowak2011fused,  teramoto2009balanced, zou2005regularization}.
+%azencott2013efficient
+
+\section{\PCOs data set description}\label{sec:proms_data_collection}
+
+% \PCOs are low-cost and patient-friendly source of information that can be acquired over time in order to quantitatively assess patients' disease impact on several aspects of their life.
+
+The predictive model presented in this work is based on a \PCO data set acquired from a cohort of PwMS progressively enrolled within an ongoing funded project. Ethical review committee approval \textit{023REG2014} was obtained for this work.  %% codice approvazione comitato etico: \anonym
+
+Each patient is evaluated every four months through the items of the \PCOs reported in Table~\ref{tab:proms} which cover physical, cognitive and psychosocial domains.
+\PCO data are intrinsically noisy due to the subjectivity of self-reported measures provided by the patients that can be influenced by personal feelings and opinions. In order to ameliorate this issue, $4$ questionnaires out of $10$ are administered by medical staff which is trained to keep a homogeneous level of evaluation.
+
+In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except EDSS. Such scale is based on a neurological examination and, although usually adopted as an index of the disability level, it focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
+%\todo{other comments here?}
+
+% The model considered all the \PCOs except EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.
+
+\begin{table}[htb]
+	\center
+	\footnotesize
+	\begin{tabular}{l|l|l}%{@{} l*{4}{l} @{}}
+		\toprule
+		\textbf{Acronym} & \textbf{Full name} & \textbf{Reference} \\
+		\midrule
+		$MFIS$ & Modified fatigue impact scale & \cite{flachenecker2002fatigue}\\
+		$HADS$ & Hospital anxiety and depression scale &  \cite{honarmand2009validation}\\
+		$LIFE$ &  Life satisfaction index &  \cite{franchignoni1999life}\\
+		$OAB$ & Overactive bladder questionnaire & \cite{cardozo2014validation}\\
+		$EDINB$ &  Edinburgh handedness inventory & \cite{oldfield1971assessment} \\
+		$ABILH$ &  Hand ability index & \cite{arnould2012can} \\
+		\midrule
+		$FIM$ &  Functional independence measure  &\cite{granger1990functional}\\
+		$MOCA$ &  Montreal cognitive assessment & \cite{dagenais2013value}\\
+		$PASAT$ &  Paced auditory serial addition task & \cite{aupperle2002three} \\
+		$SDMT$ &  Symbol digit modality test  & \cite{parmenter2007screening}\\
+		$EDSS$ & Expanded disability status scale & \cite{kurtzke1983rating}\\
+		\bottomrule
+	\end{tabular}
+	\caption{The set of available \PCOs.
+		The first $6$ are self-reported, while the last $5$ are administered by trained medical staff.
+		In our analysis all \PCOs were used, with the exception of $EDSS$.
+		% The set of clinically validated questionnaires available for this work. All questionnaires were used to predict the disease course evolution with exception of $EDSS$. The answers to the first $6$ questionnaires are completely self-reported, while the last $5$ are administered by trained medical staff.
+	}\label{tab:proms}
+\end{table}
+
+
+% we focus on the use of $10$ of the clinically validated questionnaires reported in Table~\ref{tab:proms}. Each questionnaire consists of a different number of items testing the capabilities of the patients in different domains, such as physical, cognitive or psychosocial.
+% Moreover, the set of variables considered by our
+The collected \PCO data set comprises additional information such as:
+\begin{enumerate*}[label=\roman*)]
+	\item number of relapses in the last four months (NR),
+	\item educational level expressed in terms of total years of education (EDU),
+	\item height (H) and
+	\item weight (W).
+\end{enumerate*}
+Each sample of the data set is represented by a vector of $d=165$ predictors.
+Moreover, a neurologist assigns to each patient the corresponding disease course. The global distribution of MS types across time points is depicted in Figure~\ref{fig:PPRRSP}.
+
+% \todo{@AISM: add here the motivations that lead us to exclude EDSS from the analysis.}
+
+
+%In this work we focus on detecting the \RR to \SP prediction, hence the patients in \PR and \PP form will not be taken into account.
+In this work we focus on predicting MS course evolution of  \RR and  \SP patients, hence the subjects with \PR and \PP forms will not be taken into account.
+We considered all the patients with a minimum of $1$ time point (the most recently enrolled) up to $T=8$ time points for a total of $2699$ samples, of which $1220$ \RR and $1579$ \SP (see Figure~\ref{fig:patients}). As this is an ongoing project, the number of PwMS decreases with time. We expect to fill the gap of samples between \textit{Exam~$1$} and \textit{Exam~$8$} by the end of the funded study.
+
+ In this work we analyze \PCOs data acquired every four months from a cohort of MS patients enrolled in a funded study.
+ Currently, we have collected data for eight examinations and, as patients enrollment is still ongoing,  the number of individuals for each time point is successively decreasing
+
+ The number of considered samples across examinations is hence $2699$, of which $1220$ \RR and $1579$ \SP.
+
+ \begin{figure}[h!]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/patients_copy.png}
+		\label{fig:patients}%
+	}%
+	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/PP-RR-SP_copy.png} \label{fig:PPRRSP}
+	}%
+	\caption{An overview of the \PCO data set used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3137$), divided according to the disease form. \todo{break figure in two}}\label{fig:data}
+\end{figure}
+
+
+
+% We adopted suitable categorical data encoding and missing values imputing strategies to cope with these issues (see Section~\ref{sec:problem_description}).
+
+\section{Problem description}\label{sec:problem_description}
+
+%a machine-learning based temporal model that, extracting information from \PCOs data, is able to answer to
+Predicting the MS course evolution can be split in three different related tasks: \f (\F), \g (\G) and \fog (\FOG).
+% Predicting the MS evolution can be split in two different related tasks, namely {\em diagnosis} and {\em prognosis}.
+In particular, given the $165$-dimensional representation of a patient at a fixed time point $\bm{x}_i^t$, \F consists in assigning the corresponding disease course $y_i^t$. Given the historical representation  of a patient $\bm{x}_i^t$ for $t=1,\dots,\tau$, \G consists in predicting the patient representation $\bm{x}_i^{\tau+1}$.
+Finally, \FOG consists in foreseeing the MS disease course $y_i^{\tau+1}$ from $\bm{x}_i^t$ for $t=1,\dots,\tau$.
+%
+\input{part1/pipeline}
+%
+Here, we developed a predictive model that solves these tasks assuming the temporal structure outlined in Figure~\ref{fig:pipeline}.
+% the relationship between given \PCOs and the disease course diagnosed to a patient at a fixed time point can be expressed as $f(\bm{x}_i^{t}) = y_i^{t}$.
+The \F problem is translated into a binary classification task and we address it by learning a discriminative function $f(\bm{x}_i^{t}) = y_i^{t}$. The \G problem is modeled as $g(\bm{x}_i^{t}) = \bm{x}_i^{t+1}$, where $g(\bm{x})$ is a multiple-output regression function.
+Once $\hat{f}(\bm{x})$ and $\hat{g}(\bm{x})$ are learned by training on historical \PCO data, the \FOG problem is finally solved by the temporal model $\hat{f} \circ \hat{g}(\bm{x}_i^{t}) = y_i^{t+1}$. In time-series data analysis, this is known as \textit{one-step-ahead forecast}. Notably, the \FOG model allows to foresee if the patient at the next time point is going to experience a transition from \RR to \SP, or not.
+
+\subsection{Data preprocessing}
+Analyzing \PCO data is challenging from several respects.
+First, items belonging to different questionnaires are encoded with numerical values in different ranges.
+% each item can have categorical or ordinal values in a
+% different numerical ranges.
+% For instance, the items of the MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the SDMT outcome is the global number of correctly answered items of the test (max $110$) and the EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
+To tackle this issue, we opted for a $[0-1]$ scaling of the ordinal answers and a binary one-hot-encoding of the categorical ones.
+Secondly, as the missing data amount to $1.52\%$ of the entire data set, we resort to the K-nearest neighbor data imputing strategy proposed in~\cite{troyanskaya2001missing}.
+To ensure unbiasedness of the results, this preprocessing phase is not performed on the entire data collection, but it is separately evaluated prior to each model fitting process on its cross-validation portion of the training set, as described in the next section.
+
+
+\subsection{Experimental design}\label{sec:experimental_design}
+
+We shall discuss separately the experimental designs used to learn $f(\bm{x})$ and $g(\bm{x})$.
+
+% In particular, the training set comprises all samples collected at time points $t = 1, \dots ,T_{tr}$, the validation set at $t=T_{tr}+1,\dots,T_{vld}$ and the test set at $t=T_{vld}+1,\dots,T$.
+% Here, as the maximum number of collected time points is $T=8$, we fixed $T_{tr} = 3$ and $T_{vld} = 4$.
+% In particular, the training set comprises all samples collected at time points $t = 1, \dots ,T_{tr}$, the validation set at $t=T_{tr}+1,\dots,T_{vld}$ and the test set at $t=T_{vld}+1,\dots,T$.
+
+The \F model $f(\bm{x})$ solves a binary classification problem: to each input $\bm{x}_i^t$ is associated  an output $y_i^t$ that encodes the corresponding MS disease course (\RR or \SP) with a binary label.
+We split the data set in three temporal chunks, namely {\em training}, {\em validation} and {\em test} sets, consisting of all samples collected at time points $t=1,2,3$, $t=4$ and $t=5,6,7,8$, respectively.
+Accordingly, we used $1853$ samples for training $f(\bm{x})$, $398$ for validation leaving the remaining $448$ for test.
+Five candidate models for $f(\bm{x})$ are fitted on $20$ Monte Carlo (MC) random sampling of the training set each time keeping $\frac{1}{4}$ of the samples aside~\cite{molinaro2005prediction}. For each MC sampling the fitting procedure is performed on the remaining $\frac{3}{4}$ of the samples and it includes an inner parameter optimization via grid-search cross-validation~\cite{hastie2009elements}. In particular, we require the MS course prediction to be based on a reduced number of variables (see Section~\ref{sec:learning_f}), therefore we enforce sparsity in each candidate model.
+% Each candidate model is required to be sparse, therefore the MS course prediction is based on a reduced number of variables (see Section~\ref{sec:learning_f}).
+Leveraging on the MC strategy, we rank the variables according to their selection frequency~\cite{barbieri16palladio, meinshausen2010stability}.
+Once a variable ranking is achieved for each candidate model, the list of selected variables is identified by thresholding the corresponding ranking with the threshold that maximizes the accuracy on the validation set. Finally, the last training step consists in fitting each candidate model on the union of training and validation sets taking only into account the corresponding reduced subset of selected variables. The final \F model $\hat{f}(\bm{x})$ is chosen as the one that performs better on the previously unseen test set in terms of accuracy, precision, recall and $\text{F}_1$ score.
+
+%presents the answers provided by the MS patients to the \PCOs questionnaires, while the label vector $\bm{y}$ has the corresponding disease form diagnosis.
+On the other hand, learning the \G model $g(\bm{x})$ implies solving a multiple-output regression problem and each input $\bm{x}_i^t$ is associated with the output vector $\bm{x}_i^{t+1}$.
+% and the class labels are not taken into account.
+Therefore, we can only consider samples at time point $t$ with an available follow-up at the next time point $t+1$, which reduces the overall number of available samples.
+The data set splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8$ for test, resulting in $1737$ and $254$ samples, respectively.
+The fitting procedure includes an inner parameter optimization via grid-search cross-validation. Each candidate model is a function
+$g: \mathbb{R}^{165} \rightarrow \mathbb{R}^k$ where $k$ is the number of variables selected by the best \F model.
+% that predicts the evolution of the variables selected by the best \F model starting from the full set of \PCOs.
+The final \G model $\hat{g}(\bm{x})$ is chosen as the candidate model that performs better on the previously unseen test set in terms of mean absolute error (MAE).
+
+%Finally, the predictive capability of the prognosis model $\hat{f} \circ \hat{g}(\bm{x})$ is evaluated by predicting $\hat{g}(X_{T-1})=\hat{X}_T$, that is the evolution of the \PCOs for the patients at time point $T-1$, then applying the diagnosis model on the predicted data matrix $\hat{f}(\hat{X}_T)=\hat{y}_T$ and comparing them with the diagnosis provided by the doctors at the same examination.
+
+The predictive capability of the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$ is finally evaluated on the test set. The \F model $\hat{f}(\bm{x}_i^t)$ predicts the MS course $\hat{y}_i^t$ from the \PCO data vector $\hat{\bm{x}}_i^t$ that, in turn, is predicted by the \G model $\hat{g}(\bm{x}_i^{t-1})$. We shall notice here that the predictions $\hat{f} \circ \hat{g}(\bm{x}_i^t)=y_i^{t+1}$ for $t=8$ are foreseeing possible \RR to \SP transitions that are beyond our data observation, hence predictions at the last time point cannot be used to assess the \FOG model performance. Therefore, its performance is evaluated only on $220$ test samples.
+
+\subsection{Learning $f(x)$} \label{sec:learning_f}
+
+
+%First, we will require the diagnosis function $f(\bm{x})$ to be sparse, hence the MS outcome prediction will be based on a reduced number of variables.
+We imposed $f(\bm{x})$ to be sparse. This requirement is helpful from two distinct respects:
+\begin{enumerate*}[label=\alph*)]
+	\item the performance of the predictive model may increase thanks to a reduced effect the course of dimensionality~\cite{hastie2015statistical} and
+	% \item the effect the course of dimensionality~\cite{hastie2015statistical} may be attenuated, hence increasing the performance of the predictive model, and
+	\item the identification of a reduced subset of meaningful \PCOs provides interpretability of the results for the clinicians.
+\end{enumerate*}
+In order to achieve such sparse model, we take advantage of two main variable selection strategies: embedded and wrapper methods~\cite{guyon2003introduction}.
+When using embedded methods, we exploited the sparsity inducing penalties of EN to take into account possible correlation between \PCO variables and of SLR to benefit from the renowned classification capability of the logistic loss function.
+We applied the RFE wrapper method to
+% Concerning the use of wrapper methods, which exploit a RFE schema, we chose
+two tree-based learning machines (RF and GB) that are capable of capturing nonlinear relationship between input and output and are intrinsically well-suited to deal with categorical/ordinal variables. We also explored the use of RFE with SVM, as in~\cite{guyon2002gene}.
+% which is a state-of-the-art machine learning method for classification.
+
+\subsection{Learning $g(x)$}
+
+As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
+% To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
+
+Concerning the linear models, we explored two different solutions: NNM and MTEN. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to the state-of-the-art MLP approach.
+
+\section{Results}\label{sec:results}
+
+% \todo{add table of selected features}
+We shall discuss separately the results achieved in terms of \F, \G and \FOG models.
+
+Regarding \F, the GB method outperforms the other candidate models reaching accuracy $0.900$, precision $0.936$, recall $0.899$ and $\text{F}_1$ score $0.917$, as shown in Figure~\ref{fig:diagnosis_competition}. Therefore we chose it as \F model $\hat{f}(\bm{x})$.
+Insights on the use of \PCOs for MS assessment are provided by the sparsity of the \F model induced by the RFE schema.
+The $31$ selected variables are reported in Table~\ref{tab:selected}.
+Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Table~\ref{tab:selected}, we observe that each \PCO used in this study is represented at least once, except EDINB, and the most represented is FIM.
+We also see that, whenever possible, the model tends to select aggregate scores (total and subtotal) rather that single items. This is consistent with the clinical practice, where neurologists are more likely to assess patient's health status by using the aggregate scores, rather than the single questions.
+Quite surprisingly, the recent number of relapses is the only additional information not selected by the model.
+Finally, we note that all the domains that are known to be affected by the disease are well covered: mobility (upper and lower limbs), cognition, emotional, fatigue, bladder and psychosocial.
+The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the five \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
+
+Regarding \G, MTEN outperforms the other candidate models in terms of MAE ( $\text{MAE}_{\text{MTEN}}=0.095$, $\text{MAE}_{\text{NNM}}=0.102$, $\text{MAE}_{\text{MLP}}=0.105$), hence we select it as our \G model $\hat{g}(\bm{x})$.
+
+
+ \begin{figure}[h!]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/final_scores_2_copy.png}
+		\label{fig:diagnosis_competition}%
+	}%
+	 \hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/selection_heatmap_copy.png} \label{fig:selection_heatmap}
+	}%
+	\caption{A visual representation of the results obtained from the \F model. On the left panel (a) we show the classification performance achieved on the test set by the candidate models. Precision, recall and $\text{F}_1$ score are estimated considering \SP as the positive class. As GB outperforms the other methods on each performance metric, it is chosen as \F model. On the right panel (b) a heatmap displays the distance between the lists of variables selected by each model in terms of their hamming distance. \todo{break figure in two}}\label{fig:f}
+\end{figure}
+
+
+%
+Finally, the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$, obtained by combining MTEN and GB achieves the following performance scores on the $220$ test samples: accuracy $0.841$, precision $0.900$, recall $0.824$ and $\text{F}_1$ score $0.860$.
+
+
+In this work we proposed a novel temporal model based on patient-centered outcomes and machine learning for disease form prediction in multiple sclerosis.
+In particular, we address the tasks of current course assignment, \PCOs evolution prediction and future course assignment. The model is built on a collection of \PCOs acquired on a cohort of individuals enrolled in an ongoing funded study ({\em DETECT-MS PRO}).
+% The measures are categorical or ordinal answers to a given set of \PCOs.
+\PCOs data are typically used to corroborate evidence provided by quantitative exams, in our case the absence of clear MS disease form predictors makes the information extracted from \PCOs data the only available resource.
+The proposed temporal model was able to correctly assign the current MS form and to foresee future ones with accuracy of $90.0\%$ and $84.1\%$, respectively.
+This demonstrates that \PCOs can effectively be used as MS disease course predictor.
+%In the next future, we plan to expand the data collection with respect to the amount of enrolled subjects as well as the number of time points.
+In the next future, we plan to further investigate on the predictive capabilities of the proposed model with longer temporal horizons and to compare it with different approaches, such as probabilistic graphical models.
+%, that allow to explicitly incorporate the temporal nature of the data.}
+Given the achieved promising results, the proposed model is soon going to be validated in clinical practice, where it will assist the clinicians involved in this study to foresee possible disease course transition and to take important decisions concerning treatment and therapies that can substantially improve the quality of life of their patients.
+% In fact, the proposed temporal model was able to correctly foresee the evolution of the disease form of $84.1\%$ of MS patients.
+In the context of neurodegenerative diseases, clinicians typically use \PCOs data to corroborate evidences coming from standard quantitative exams \cite{black2013patient}. Interestingly, in our case the absence of clear \SP predictors makes the information extracted from \PCOs data the only available resource.
+%Our result shows that a timely prediction of the disease course can be obtained from patient-friendly and low-cost measures.
+In the era of precision medicine, the problem of predicting MS course evolution still relies on stressful exams and clinical judgement.
+To the best of our knowledge, this is the first attempt to solve this delicate task leveraging on patient-friendly measures and machine learning.
+
+

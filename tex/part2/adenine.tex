@@ -21,9 +21,9 @@ In biology, as well as in any other scientific domain, exploring and visualizing
 % Data exploration is a very insightful starting point for many data analysis projects.
 % \todo{For instance, in biomedical scenarios, physicians are likely to be interested in answering some biological questions starting from observations collected from a pool of subjects enrolled in a study.}
 For instance, the aim of a biomedical study can be detecting groups of patients that respond differently to a given treatment, or inferring possible molecular relationships among all, or a subset, of the measured variables.
-In both cases, bioinformaticians will be asked to extract meaningful information from collections of complex and high-dimensional measures, such as NGS data.
+In both cases, bioinformaticians will be asked to extract meaningful information from collections of complex and high-dimensional measures, such as \ac{NGS} data.
 
-In these cases, a preliminary Exploratory Data Analysis (EDA) is not only a good practice, but also fundamental before further and deeper investigations can take place.
+In these cases, a preliminary Exploratory Data Analysis (\ac{EDA}) is not only a good practice, but also fundamental before further and deeper investigations can take place.
 To accomplish this task, several machine learning and data mining techniques were developed over the years.
 Among those, we recall the combined use of the following classes of methods: \begin{enumerate*}[label=(\roman*)]
   \item missing values imputing,
@@ -35,10 +35,10 @@ Among those, we recall the combined use of the following classes of methods: \be
 
 \section{Popular data exploration tools} \label{sec:data_exploration_tools}
 
-In the last few years, a fair number of data exploration software and libraries were released. Such tools may be grouped in two families: GUI-based and command-line applications.
+In the last few years, a fair number of data exploration software and libraries were released. Such tools may be grouped in two families: \ac{GUI}-based and command-line applications.
 Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however,
 its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{friedman2001elements} and it does not offer strategies to perform automatic discovery of the number of clusters.
-The most notable project that spans between the two families is \emph{Orange} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python APIs. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
+The most notable project that spans between the two families is \emph{Orange} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
 Moreover, large data sets are difficult to analyze with both \emph{Divvy} and \emph{Orange} as they can run only on a single workstation, lacking of distributed computing support.
 
 \section{\ade overview} \label{sec:adenine_overview}

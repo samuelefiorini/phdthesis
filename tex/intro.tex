@@ -6,27 +6,23 @@
 % qui no soluzioni ma problemi: domande + esempi
 Understanding the underlying mechanisms of biological systems can be a challenging task. Different domains can be involved and their interactions can be unknown.
 
-Nowadays, most of the life science research relies upon the extraction of meaningful information from heterogeneous sources of biological data. Thanks to the remarkable technological progresses of the last decades, the dimensions of such data collections is increasing everyday.
+Nowadays, most of the life science research aims at investigating on the extraction of meaningful information from heterogeneous sources of biological data. Thanks to the remarkable technological progresses of the last decades, the dimensions of modern data collections is continuously increasing.
 
-
-% large collections of complex and heterogeneous data is not a trivial task.
-
-
-
-%%% --------- Thesis structure section
-% ~\ref{part:I}
-% ~\ref{part:II}
 This PhD thesis is divided in two parts. Part I presents a thorough description of the multi-disciplinary prerequisites that are relevant for the comprehension of Part II, which, in turn, presents the original contributions of my work.
 
-Part I is organized as follows: Chapter~\ref{chap:background} introduces the concept of \textit{data science} (Section~\ref{sec:data_science}) and its declination toward life science studies. It also describes the major challenges of the field (Section~\ref{sec:challenges_biomedical}) along with several examples of the most common clinical/biological questions and their translation to data analysis tasks (Section~\ref{sec:clinical_to_data}).
-Chapter~\ref{chap:state-of-the-art} summarizes basic notation and definitions adopted throughout the thesis (Section~\ref{sec:notation}) and presents an overview of the statistical and technological tools that are mostly relevant for this work. In particular, this chapter defines the concept of \textit{machine learning} from a general perspective and provides rigorous description of a selection of supervised and unsupervised learning strategies (Section~\ref{sec:machine_learning}). At the end of this chapter, hints on the computational requirements and implementation strategies are also presented (Section~\ref{sec:implementation}).
+Part I is organized as follows: Chapter~\ref{chap:background} introduces the concept of \textit{data science} (Section~\ref{sec:data_science}) and its declination toward life science and biomedical studies. In this chapter, the major challenges of the field are presented (Section~\ref{sec:challenges_biomedical}) along with several examples of the most common clinical/biological questions and their translation to data analysis tasks (Section~\ref{sec:clinical_to_data}).
+Chapter~\ref{chap:state-of-the-art} summarizes basic notation and definitions adopted throughout the thesis (Section~\ref{sec:notation}) and presents an overview of the statistical and technological tools that are mostly relevant for this work. In particular, this chapter defines the concept of \textit{machine learning} from a general perspective and provides rigorous description of a selection of supervised and unsupervised learning strategies (Section~\ref{sec:machine_learning}).
+This chapter also defines the concept of variable/feature selection (Section~\ref{subsec:feature_selection}) and introduces the most relevant model selection and evaluation strategies (Section~\ref{subsec:model_selection}).
+At the end of this chapter, hints on the computational requirements and implementation strategies are finally presented (Section~\ref{sec:implementation}).
 
 %twofold: the development of an exploratory data analysis tool and
 Part II describes the main contributions of my PhD work which consisted in the process of translating into data analysis tasks a number of biological questions coming from real-world clinical environments. For each task, this second part shows how the previously introduced tools can be exploited in order to develop statistically sound models that are capable of providing insightful answers to different clinical questions.
 This part is organized as follows:
-Chapter~\ref{chap:adenine} introduces \ade, an open-source Python framework for large-scale data exploration I developed during my PhD. \todo{Chapter~\ref{chap:frassoni} describes a work I developed in collaboration with Gaslini hospital on biological age estimation from blood samples}.
-Chapter~\ref{chap:aism} describes the development of a temporal model that aims at following the evolution of multiple sclerosis patients exploiting the use of patient-friendly and inexpensive measures such as patient centered outcomes.
-Chapter~\ref{chap:diabete} describes a machine learning time-series forecasting approach for glucose sensor data collected by type I and type II diabetic patients.
+Chapter~\ref{chap:adenine} introduces \ade, an open-source Python framework for large-scale data exploration that I developed during my PhD. Chapter~\ref{chap:frassoni} describes a work I conducted in collaboration with \textit{Istituto Giannina Gaslini Children's Hospital} on metabolic age estimation from peripheral blood mononuclear cells samples.
+Chapter~\ref{chap:aism} describes a work I conducted in collaboration with the \textit{Italian Multiple Sclerosis Foundation} in which I developed a temporal model that aims at predicting the evolution of multiple sclerosis patients exploiting the use of patient-friendly and inexpensive measures such as patient centered outcomes.
+Chapter~\ref{chap:diabete} describes a work held in collaboration with \textit{Ospedale Policlinico San Martino} in which I developed a machine learning time-series forecasting approach for glucose sensor data collected by type I and type II diabetic patients.
+
+My conclusions are finally drawn in Chapter~\ref{chap:conclusions}.
 
 \chapter{Basic notation and definitions} \label{sec:notation}
 %% the number of variables
@@ -50,3 +46,10 @@ In feature selection tasks, the number of selected features is $\tilde d$.
 A kernel function acting on the elements of the input space is defined as $\mathcal{K}(\bm{x}_{i},\bm{x}_{j})=\langle \phi(\bm{x}_{i}), \phi(\bm{x}_{j})\rangle$, where $\phi(\bm{x})$ is a {\em feature map} from $\mathds{R}^d \rightarrow \mathds{R}^{d'}$.
 Feature learning algorithms project the data into a $p$-dimensional space.
 %The number of atoms in Dictionary Learning is $p$.
+
+Whenever possible,
+real-valued variables will be indicated with lowercase letters (\eg $a$),
+unidimensional vectors with lowercase bold letters (\eg $\bm{a}$) and
+matrices, or tensors, with capital letters (\eg $A$).
+When used in the context of a data matrix, a subscript index will be used to identify a sample whereas a superscript index will refer to a given feature.
+So, for instance, given a data matrix $X \in \mathbb{R}^{n \times d}$ the $j$-th feature of the $i$-th sample is $\bm{x}_i^j$, with $0 \leq i \leq n$ and $0\leq j\leq d$.

@@ -2,8 +2,9 @@
 
 % Abbreviations
 \usepackage{xspace}
-\newcommand*{\eg}{e.g.\@\xspace}
-\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\eg}{\textit{e.g.}\@\xspace}
+\newcommand*{\ie}{\textit{i.e.}\@\xspace}
+\newcommand*{\etc}{\textit{etc}\@\xspace}
 \newcommand*{\ade}{{\sc adenine}\@\xspace}
 
 % MS stuff
@@ -14,6 +15,13 @@
 \newcommand*{\CIS}{{\em CIS}\@\xspace}
 \newcommand*{\PCOs}{{PCOs}\@\xspace}
 \newcommand*{\PCO}{{\em PCO}\@\xspace}
+\newcommand*{\f}{{Current Course Assignment}\@\xspace}
+\newcommand*{\F}{{CCA}\@\xspace}
+\newcommand*{\g}{{\PCOs Evolution Prediction}\@\xspace}
+\newcommand*{\G}{{PEP}\@\xspace}
+\newcommand*{\fog}{{Future Course Assignment}\@\xspace}
+\newcommand*{\FOG}{{FCA}\@\xspace}
+
 
 % GENE SYMBOL
 \newcommand{\apc}{{\sc apc}\@\xspace}
@@ -29,7 +37,6 @@
 \newcommand{\gsk}{{\sc gsk{\footnotesize 3}b}\@\xspace}
 \newcommand{\axin}{{\sc axin{\footnotesize 2}}\@\xspace}
 
-
 % Math stuff
 \usepackage{amsmath,amsfonts,dsfont,mathrsfs,mathtools,amssymb}
 \usepackage{bm}
@@ -40,7 +47,8 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 % Notes
-\usepackage{xcolor}
+%\usepackage{xcolor}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \newcommand\todo[1]{\textcolor{red}{{\bf \{#1\}}}} %TODO
 \newcommand{\me}[0]{Samuele Fiorini}
 %\newcommand{\longtitle}[0]{Understanding time-evolving \\ biomedical data with machine learning}
@@ -48,10 +56,11 @@
 \newcommand{\longtitle}[0]{Challenges in biomedical data science:\\data-driven solutions to clinical questions}
 \newcommand{\runningtitle}[0]{Machine Learning 4 healthcare}
 
-% Code snippets and quotations
+% Code snippets quotations and boxes
 \usepackage{listings}
 \usepackage{csquotes}
 \usepackage{algorithm, algpseudocode}
+\usepackage{tcolorbox}
 
 
 % Images root
@@ -128,3 +137,6 @@
   \renewcommand\UrlRight{\egroup}}
 
 \renewcommand\url[1]{\href{#1}{\ULurl{#1}}}
+
+% ACRONYMS
+\input{acronyms}
