@@ -3,8 +3,7 @@
 \chapter{Machine learning state of the art} \label{chap:state-of-the-art}
 
 \begin{displayquote}
-\textit{This chapter defines the concept of machine learning and presents a comprehensive overview of the algorithms and models that are more relevant with the biomedical data science applications described in Part II.}
-%\section{} \label{sec:machine_learning}
+	\textit{This chapter starts defining the concept of machine learning in its two major declinations: supervised and unsupervised learning. It continues providing a comprehensive overview of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
 \end{displayquote}
 
 The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
@@ -16,10 +15,10 @@ With a simple search on Google Trends\footnote{\url{https://trends.google.com}} 
   \caption{The Internet popularity over the past five years of two terms: \textit{data science} and \textit{machine learning}. The vertical axis represents the number of Google searches of an input term normalized with respect to its maximum (source: Google Trends).} \label{fig:google_trend_ML}
 \end{figure}
 
-A partial explanation to this phenomenon can be found in a recent article published on Science~\cite{appenzeller2017revolution}, where the authors observed how the explosion in modern data collection abilities is leading to a new \textit{scientific revolution}.
-Biomedical applications are prototypical in this sense. For instance, raw data acquired by a genome sequencer from a single individual weight around 140 GB~\cite{marx2013biology} and a 3D reconstruction of cardiac MRI acquisition need around 20 GB. Currently, an average hospital requires more than 665 TB of storage.
+A partial explanation to this phenomenon can be found in a recent article published on Science~\cite{appenzeller2017revolution}, where the authors observed how the explosion of modern data collection abilities is leading the human kind toward another \textit{scientific revolution}.
+Biomedical applications are prototypical in this sense. For instance, the volume of the raw data acquired from a genome sequencer for a single \ac{DNA} has a volume of approximately 140 GB~\cite{marx2013biology}. Another example can be the 3D reconstruction of cardiac MRI acquisition which need around 20 GB for a single human heart, or the 3D \ac{CT} scan which has a volume in the order of GB for each patient. Several more examples can be given. It has been estimated that an average hospital currently stores more than 665 TB of data that need to be analyzed and understood.
 %the typical resolution of MRI images is currently $512 \times 512$
-Such massive amounts of data have long overwhelmed human analysis and insights potential. This makes ML a key element for clinicians and scientists trying to make sense of large-scale observations.
+Such massive amounts of data have long overwhelmed human analysis and insights potential. This makes ML a key element for clinicians and scientists that try to make sense of large-scale observations.
 
 But, what is \textit{machine learning}? And how does it differ from statistics?
 
@@ -32,7 +31,7 @@ A unique answer to this question may not be easy to provide. In fact, ML can be 
   "[...] \emph{a set of methods that can automatically detect patterns in data, and then use the uncovered patterns to predict future data, or to perform other kinds of decision making under uncertainty} [...]"
   \end{displayquote}
 
-  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU}).}, held in October 2015 at the Stanford University, gave the following three definitions.
+  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU})}, held in October 2015 at the Stanford University, gave the following three definitions.
 
   \begin{displayquote}
     \begin{itemize}
@@ -72,77 +71,113 @@ As of today ML is the workhorse of data science.
 %    \subsubsection{The optimization problem} \label{subsubsec:supevised_optimization}
 
     Given a set of input-output pairs $\{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
-    \todo{ERM vs MLE/MAP}
 
     \begin{equation}\label{eq:loss}
       \min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) %+ \lambda R(f)
     \end{equation}
 
     The loss function $V(f(\bm{x}),y)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss functions for regression and classification problems were proposed; Table~\ref{tab:losses} defines the most commonly adopted in biomedical studies while their visual representation is presented in Figure~\ref{fig:loss}. \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
+    
+    \begin{figure}[!h]
+    	\centering
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
+    		\label{fig:regression}%
+    	}%
+    	% \hfill%
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
+    	}%
+    	\caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
+    \end{figure}
+    
+    
+    \begin{table}[!h]
+    	\centering
+    	\caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
+    	\begin{tabular}{@{}ll@{}ll@{}}
+    		\toprule
+    		Loss function & $V(f(\bm{x}),y)$  & Learning problem           \\ \midrule
+    		Square                   & $(y - f(\bm{x}))^2$ & regression \\
+    		Absolute                 & $|y - f(\bm{x})|$ & regression   \\
+    		$\epsilon$-insensitive   & $\begin{cases}
+    		0 & \text{if } |y-f(\bm{x})| < \epsilon\\
+    		|y-f(\bm{x})| - \epsilon & \text{otherwise}
+    		\end{cases} $        & regression                 \\
+    		\midrule
+    		Zero-one               & $\begin{cases}
+    		0 & \text{if } y = f(\bm{x})\\
+    		1 & \text{otherwise}
+    		\end{cases}$ & classification \\
+    		Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
+    		Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
+    		Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
+    		\bottomrule
+    	\end{tabular}
+    \end{table}
         
      % rubare da BIB
     % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
     The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples $n$ may be small with respect to the number of observed variables $d$ which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data. Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect. \todo{+overfit +figu}
     \todo{In ML, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.}
+    Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
+    Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}
+    
+    \begin{figure}[!h]
+    	\centering
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/0_regression_underfit.png}
+    		\label{fig:regression}%
+    	}%
+    	%\hfill%
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/1_regression_overfit.png}
+    		\label{fig:regression}%
+    	}%
+        \hfill%
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/2_regression_fit.png}
+    		\label{fig:regression}%
+    	}%
+    	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a regression problem. The data are a downsampled version ($f_s = 546 Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14 2015, 09:50:45 UTC at LIGO Hanford (WA).}\label{fig:regression_fit}
+    \end{figure}
+
+    \begin{figure}[!h]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part1/0_classification_underfit.png}
+		\label{fig:regression}%
+	}%
+	%\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part1/1_classification_overfit.png}
+		\label{fig:regression}%
+	}%
+	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part1/2_classification_fit.png}
+		\label{fig:regression}%
+	}%
+	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the t-SNE algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
+\end{figure}
+
     
     A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.    
-    In its broader definition regularization is the process of introducing additional information $R(f)$ in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. \todo{Equation~\eqref{eq:lossq:losspen}}
+    In its broader definition regularization is the process of introducing additional information $R(f)$ in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. \todo{Equation~\eqref{eq:losspen}}
     
      \begin{equation}\label{eq:losspen}
     	\min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) + \lambda R(f)
     \end{equation}
     
-    
-    The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. 
+    The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. The choice of the adopted regularization penalty $R(f)$ leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
         
-    
-%    
+       
 %    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
 
-    
-    \begin{figure}[!ht]
-        \centering
-        \subfloat[]{%
-            \includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
-            \label{fig:regression}%
-        }%
-        % \hfill%
-        \subfloat[]{%
-        \includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
-        }%
-        \caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
-    \end{figure}
+    Supervised learning machines can rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}.
+    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix A for more details on this two strategies, and their connection.      
 
-
-    \begin{table}[!ht]
-      \centering
-      \caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
-      \begin{tabular}{@{}ll@{}ll@{}}
-        \toprule
-        Loss function & $V(f(\bm{x}),y)$  & Learning problem           \\ \midrule
-        Square                   & $(y - f(\bm{x}))^2$ & regression \\
-        Absolute                 & $|y - f(\bm{x})|$ & regression   \\
-        $\epsilon$-insensitive   & $\begin{cases}
-            0 & \text{if } |y-f(\bm{x})| < \epsilon\\
-            |y-f(\bm{x})| - \epsilon & \text{otherwise}
-        \end{cases} $        & regression                 \\
-        \midrule
-        Zero-one               & $\begin{cases}
-            0 & \text{if } y = f(\bm{x})\\
-            1 & \text{otherwise}
-            \end{cases}$ & classification \\
-        Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
-        Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
-        Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
-        \bottomrule
-      \end{tabular}
-    \end{table}
-
-    Supervised learning machines can rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}. Although, the posed optimization problems can have very different properties; they can be convex, non-convex, they can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization problems in ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
-
-       
-
-    \subsection{Regularization methods}
+    \subsection{Regularization methods} \label{subsec:regularization_methods}
     Regularization methods are a broad class of ML models that include ...
 
     \subsection{Ensemble methods}
