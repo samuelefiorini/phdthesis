@@ -70,7 +70,7 @@ As of today ML is the workhorse of data science.
 
 %    \subsubsection{The optimization problem} \label{subsubsec:supevised_optimization}
 
-    Given a set of input-output pairs $\{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
+    Given a set of input-output pairs $\mathcal{D} = \{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
 
     \begin{equation}\label{eq:loss}
       \min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) %+ \lambda R(f)
@@ -175,7 +175,7 @@ As of today ML is the workhorse of data science.
 %    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
 
     Supervised learning machines can rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}.
-    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix A for more details on this two strategies, and their connection.      
+    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.      
 
     \subsection{Regularization methods} \label{subsec:regularization_methods}
     Regularization methods are a broad class of ML models that include ...

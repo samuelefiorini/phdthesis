@@ -1,15 +1,59 @@
-% !TEX root = ../main.tex
+% !TEX root = ./main.tex
+\appendix
 
-\chapter*{Appendix A} \label{appendix:A}
-\section*{Empirical risk minimization} \label{sec:erm}
+\chapter{Appendix} \label{appendix:A}
+This appendix provides some insightful statistical details on the formulation of the supervised learning problem expressed in Equation~\eqref{eq:losspen}.
+
+%The expected value of the function $g(a,b)$, where $(a,b)$ are two continuous random variables with joint probability distribution $f(a,b)$, can be computed with the \textit{Law of the unconscious statistician} (\ac{LOTUS}), reported in Theorem~\ref{th:lotus}.
+
+\section{Theorems and definitions}
+
+\begin{theorem}[Law of the unconscious statistician] \label{th:lotus}
+	Given $(a,b)$ continuous random variables with joint probability distribution $p(a,b)$, the expected value of the function of two variables $g(a,b)$ can be computed as follows.
+	$$\mathbb{E}[g(a,b)]=\int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}g(a,b)p(a,b)dadb$$
+\end{theorem}
+
+
+\section{Empirical risk minimization} \label{sec:erm}
+In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f(\bm{x})$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$ we introduced the concept of \textit{loss function} $L(f(\bm{x}), y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the best predictive model $f^*(x)$ can be found minimizing the (true) expected risk $\mathcal{E}(f)$.
+
+\begin{equation} \label{eq:fstar}
+	f^*(\bm{x}) = \min_f{\mathcal{E}(f)}
+\end{equation}
+
+Applying the law of the unconscious statistician, stated in Theorem~\ref{th:lotus}, the expected risk $\mathcal{E}(f)$ can be written as in Equation~\eqref{eq:expected_loss}, where $(\bm{x},y)$ are two random variables with joint probability distribution $p(\bm{x},y)$.
+
+\begin{equation} \label{eq:expected_loss}
+	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} L(f(\bm{x}),y) p(\bm{x},y) d\bm{x}dy
+\end{equation}
+
+In real situations, a direct computation of $\mathcal{E}(f)$ is unfeasible as the joint probability distribution $p(\bm{x},y)$ is unknown. Nevertheless, we are provided with a collection of examples $\mathcal{D}=\{(\bm{x}_i,y_i) \in \mathcal{X} \times \mathcal{Y}\}_{i=1}^n$ that are supposed to be sampled \ac{iid} from $\mathcal{X} \times \mathcal{Y}$ according to $p(\bm{x}, y)$.
+In statistical learning theory, introduced by Vapnik in 1995~\cite{vapnik2013nature}, the dataset $\mathcal{D}$ is used to build a stochastic approximation of $\mathcal{E}(f)$ which is called \textit{empirical risk} $\mathcal{E}(f_{\mathcal{D}})$ and it is defined as in Equation~\eqref{eq:empirical_risk}.
+
+\begin{equation} \label{eq:empirical_risk}
+	\mathcal{E}(f_{\mathcal{D}}) = \frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)
+\end{equation}
+
+As $\mathcal{D}$ comes from the probability distribution $p(\bm{x},y)$, the empirical risk can be considered as a proxy of the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. Hence, the solution of the supervised learning problem can be found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
+
+\begin{equation} \label{eq:erm}
+	\hat f(\bm{x}) = \min_f{\mathcal{E}(f_{\mathcal{D}})} = \min_f{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)}
+\end{equation}
+
+ \todo{properties: generalization + well-posedness (stability)}
+ \todo{use $\mathcal{H}$ at the beginning and restrict it here}
+ \todo{regularization}
+ \todo{write loss + pen}
+ 
+
 Moreover, the posed optimization problems can have very different properties; they can be convex, non-convex, they can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization problems in ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
 
 
-\section*{Maximum likelihood estimation} \label{sec:mle}
+\section{Maximum likelihood estimation} \label{sec:mle}
 bla bla bla
 
-\section*{Maximum a posteriori} \label{sec:map}
+\section{Maximum a posteriori} \label{sec:map}
 bla bla bla
 
-\section*{ERM vs MLE/MAP} \label{sec:erm-mlemap_connection}
+\section{ERM vs MLE/MAP} \label{sec:erm-mlemap_connection}
 bla bla bla
