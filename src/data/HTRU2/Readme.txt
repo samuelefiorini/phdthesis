@@ -68,7 +68,6 @@ Web:		http://www.scienceguyrob.com or http://www.cs.manchester.ac.uk
 	Candidates are stored in both files in separate rows. Each row lists the variables first,
 	and the class label is the final entry. The class labels used are 0 (negative) and 1 
 	(positive).
-	
 	Please not that the data contains no positional information or other astronomical details. It is 
 	simply feature data extracted from candidate files using the PulsarFeatureLab tool (see [10]).
 
