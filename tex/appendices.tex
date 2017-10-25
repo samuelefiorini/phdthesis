@@ -15,7 +15,7 @@ This appendix provides some insightful statistical details on the formulation of
 
 
 \section{Empirical risk minimization} \label{sec:erm}
-In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f(\bm{x})$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$ we introduced the concept of \textit{loss function} $L(f(\bm{x}), y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the best predictive model $f^*(x)$ can be found minimizing the (true) expected risk $\mathcal{E}(f)$.
+In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f: \mathcal{X} \rightarrow \mathcal{Y}$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$ we introduced the concept of \textit{loss function} $L(\hat y, y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the best predictive model $f^*(x)$ could theoretically be found minimizing the (true) expected risk $\mathcal{E}(f)$.
 
 \begin{equation} \label{eq:fstar}
 	f^*(\bm{x}) = \min_f{\mathcal{E}(f)}
@@ -24,21 +24,24 @@ In Section~\ref{subsec:supervised_learning} we introduced the concept of supervi
 Applying the law of the unconscious statistician, stated in Theorem~\ref{th:lotus}, the expected risk $\mathcal{E}(f)$ can be written as in Equation~\eqref{eq:expected_loss}, where $(\bm{x},y)$ are two random variables with joint probability distribution $p(\bm{x},y)$.
 
 \begin{equation} \label{eq:expected_loss}
-	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} L(f(\bm{x}),y) p(\bm{x},y) d\bm{x}dy
+	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \iint L(f(\bm{x}),y) p(\bm{x},y) d\bm{x}dy
+%	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} L(f(\bm{x}),y) p(\bm{x},y) d\bm{x}dy
 \end{equation}
 
-In real situations, a direct computation of $\mathcal{E}(f)$ is unfeasible as the joint probability distribution $p(\bm{x},y)$ is unknown. Nevertheless, we are provided with a collection of examples $\mathcal{D}=\{(\bm{x}_i,y_i) \in \mathcal{X} \times \mathcal{Y}\}_{i=1}^n$ that are supposed to be sampled \ac{iid} from $\mathcal{X} \times \mathcal{Y}$ according to $p(\bm{x}, y)$.
+In real situations, a direct computation of $\mathcal{E}(f)$ is unfeasible as the joint probability distribution $p(\bm{x},y)$ is unknown. Nevertheless, we are provided with a collection of examples $\mathcal{D}=\{(\bm{x}_i,y_i)\}_{i=1}^n$ that are supposed to be sampled \ac{iid} from the set $\mathcal{X} \times \mathcal{Y}$ according to $p(\bm{x}, y)$.
 In statistical learning theory, introduced by Vapnik in 1995~\cite{vapnik2013nature}, the dataset $\mathcal{D}$ is used to build a stochastic approximation of $\mathcal{E}(f)$ which is called \textit{empirical risk} $\mathcal{E}(f_{\mathcal{D}})$ and it is defined as in Equation~\eqref{eq:empirical_risk}.
 
 \begin{equation} \label{eq:empirical_risk}
 	\mathcal{E}(f_{\mathcal{D}}) = \frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)
 \end{equation}
 
-As $\mathcal{D}$ comes from the probability distribution $p(\bm{x},y)$, the empirical risk can be considered as a proxy of the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. Hence, the solution of the supervised learning problem can be found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
+As $\mathcal{D}$ comes from the probability distribution $p(\bm{x},y)$, the empirical risk can be considered as a proxy for the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. The solution of the supervised learning problem can be found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
 
 \begin{equation} \label{eq:erm}
 	\hat f(\bm{x}) = \min_f{\mathcal{E}(f_{\mathcal{D}})} = \min_f{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)}
 \end{equation}
+
+In practice, minimizing the empirical risk instead of the expected risk comes at a price which is paid in terms of predictive performance of $\hat f(\bm{x})$. 
 
  \todo{properties: generalization + well-posedness (stability)}
  \todo{use $\mathcal{H}$ at the beginning and restrict it here}
