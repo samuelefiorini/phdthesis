@@ -21,6 +21,11 @@ The goal of this appendix is to shed light on some of the statistical tools and 
 	where $P(B|A)$ is the probability of observing $B$ given that $A$ is true.
 \end{theorem}
 
+\begin{theorem}[Chain rule] \label{th:chain_rule}
+	Given $n$ events $A_1, A_2, \dots, A_n$ with probability $P(A_1), P(A_2), \dots, P(A_n)$ the joint probability $P(A_1, A_2, \dots, A_n)$ can be written as follows.
+	$$P(A_1, A_2, \dots, A_n) = P(A_1|A_2, \dots, A_n) \cdot P(A_2|A_3, \dots, A_n) \dots P(A_{n-1}|A_{n}) \cdot P(A_n)$$
+\end{theorem}
+
 \begin{definition}[Well-posed problem]
 	A problem is \textbf{well-posed} if its solution:
 	\begin{enumerate*}[label=(\roman*)]
@@ -35,10 +40,12 @@ The goal of this appendix is to shed light on some of the statistical tools and 
 \end{definition}
 
 \begin{definition}[Likelihood function] \label{def:likelihood}
-	Let $a_1, a_2, \dots, a_n$ be continuous random variables with joint probability distribution $p(a_1, a_2, \dots, a_n; \bm{\phi})$ depending on the parameter $\bm{\phi}$. Given the observed values $a_1=\bar a_1, a_2 = \bar a_2, \dots, a_n = \bar a_n$, the likelihood function is defined as
-	$$\mathcal{L}(\bar a_1, \bar a_2, \dots, \bar a_n; \bm{\phi}) = p(\bar a_1, \bar a_2, \dots, \bar a_n; \bm{\phi})$$
-	and if the random variables $a_i$ (for $i=1,\dots,n$) are \text{\ac{iid}}, then the likelihood function can be simplified as follows.
-	$$\mathcal{L}(\bar a_1, \bar a_2, \dots, \bar a_n; \bm{\phi}) = \prod_{i=1}^n p(\bar a_i; \bm{\phi})$$
+	Let $\bm{a}$ be a continuous random variable with probability distribution $p(\bm{a}, \bm{\phi})$ depending on the parameter $\bm{\phi}$. Then the function $\mathcal{L}(\bm{\phi}|\bm{\bar a})=p(\bm{\bar a},\bm{\phi})$ is the likelihood function of $\bm{\phi}$ given that $\bm{\bar a}$ is the outcome of $\bm{a}$.
+	% Given the observed values $\bm{\bar a} = [\bar a_1, \bar a_2, \dots, \bar a_n]^T$, the likelihood function
+	% % $$\mathcal{L}(\bm{\bar a}, \bm{\phi}) = p(\bm{\bar a}, \bm{\phi})$$
+	% $p(\bm{\bar a}, \bm{\phi})$
+	% and if the random variables $a_i$ (for $i=1,\dots,n$) are \text{\ac{iid}}, then the likelihood function can be simplified as follows.
+	% $$\mathcal{L}(\bm{\bar a}, \bm{\phi}) = \prod_{i=1}^n p(\bar a_i, \bm{\phi})$$
 \end{definition}
 
 
@@ -94,46 +101,67 @@ and, according to its definition, it can ensure well-posedness of the problem an
 
 \section{Maximum likelihood  estimation} \label{sec:mle}
 In this section we will see a different approach to tackle the supervised learning problem.
-Let the outputs $y \in \mathcal{Y}$ be represented by a random variable with the probability distribution $p(y;\phi)$ parameterized by $\phi \in \Phi$.
-Assuming that we also have an input-output model $f(\bm{x}, \theta): \mathcal{X} \rightarrow \mathcal{Y}$ with parameter $\theta \in \Theta$. The goal of supervised learning, in this case, reduces in estimating the parameters $[\phi, \theta]$ from a collection of \ac{iid} samples $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n$.
-Applying Definition~\ref{def:likelihood} we can write the likelihood function as in Equation~\eqref{eq:likelihood}.
+Once again, let the training data be made of input-output pairs $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n$, with $(\bm{x},y) \in \mathcal{X} \times \mathcal{Y}$. This approach relies on the expression of the uncertainty over the value of $y$ with a probability distribution $p(y|\bm{x},\bm{\theta})$ parameterized by $\bm{\theta} \in \Theta$.
+Applying Definition~\ref{def:likelihood}, and assuming that the samples are drawn \ac{iid}, we can write the likelihood function for $\bm{\theta}$ as in Equation~\eqref{eq:likelihood}.
 
 \begin{equation} \label{eq:likelihood}
-	\mathcal{L}(y_i|\bm{x}_i; \theta, \phi) = \prod_{i=1}^{n} p(y_i | \bm{x}_i ; f(\bm{x}, \theta))
+	\mathcal{L}(y|\bm{x}, \bm{\theta}) = \prod_{i=1}^{n} p(y_i | \bm{x}_i , \bm{\theta})
 \end{equation}
 
-Equation~\eqref{eq:likelihood} can be considered as the probability of observing the outputs $y_i$ given:
-\begin{enumerate*}[label=(\roman*)]
-	\item the observed inputs $\bm{x}_i$,
-	\item the model $f_\theta(\bm{x})$ and
-	\item the probability distribution $p_\phi$.
-\end{enumerate*}
-Therefore, an estimate of the parameters $[\phi, \theta]$ can be obtained via Maximum Likelihood Estimation (MLE), as in Equation~\eqref{eq:mle}.
+Equation~\eqref{eq:likelihood} can be considered as the probability of observing the outputs $y$, given the input $\bm{x}$ and the parameters $\bm{\theta}$.
+This statistical setup suggests a way to obtain an estimate for $\bm{\theta}$ which value, in general, is unknown. The criterion in Equation~\eqref{eq:mle} is known as Maximum Likelihood Estimation (MLE).
 
 \begin{equation} \label{eq:mle}
-	[\hat \phi, \hat \theta] =\argmax_{\phi, \theta~\in~\Phi \times \Theta}\mathcal{L}(y_i|\bm{x}_i; \theta, \phi) = \argmax_{\phi, \theta~\in~\Phi \times \Theta} \prod_{i=1}^{n} p_\phi(f_\theta(\bm{x}_i))
+	\bm{\hat \theta}_{MLE} =\argmax_{\theta~\in~\Theta}\mathcal{L}(y_i|\bm{x}_i, \bm{\theta}) = \argmax_{\theta~\in~\Theta} \prod_{i=1}^{n} p(y_i | \bm{x}_i, \bm{\theta})
 \end{equation}
 
 Instead of maximizing the likelihood it is often convenient to minimize the \textit{negative log-likelihood}\footnote{approaching information theory or deep learning papers, the log-likelihood is often referred to as \textit{cross-entropy}}. Equation~\eqref{eq:mle} can then be rewritten as Equation~\eqref{eq:nll}.
 
 \begin{equation} \label{eq:nll}
-	[\hat \phi, \hat \theta] =\argmin_{\phi, \theta~\in~\Phi \times \Theta} - \sum_{i=1}^n \log p_\phi(f_\theta(\bm{x}_i))
+	\bm{\hat \theta}_{MLE} = \argmin_{\theta~\in~\Theta} - \sum_{i=1}^n \log p(y_i | \bm{x}_i, \bm{\theta})
 \end{equation}
 
-As in the case of ERM, the MLE estimate may easily overfit the data as no regularization strategy is adopted. The standard way to impose some kind of regularization is to assume a prior on the parametric model $p(f_\theta)$. Given a prior and a likelihood, we can apply the Bayes rule (see Theorem~\ref{th:bayes_rule}) to define the so-called posterior distribution $p(f_\theta | y, \bm{x})$ as in Equation~\eqref{eq:posterior}\footnote{the dependency from $\phi$ is omitted for ease of notation}.
+Moreover, if some prior knowledge on $\bm{\theta}$ is available, it is possible to incorporate it in the form of a prior distribution $p(\bm{\theta})$. Applying the Bayes rule (Theorem~\ref{th:bayes_rule}) it is possible to write the \textit{posterior distribution} $p(\bm{\theta}|y,\bm{x})$ as in Equation~\eqref{eq:posterior}.
 
 \begin{equation} \label{eq:posterior}
-	p(f_\theta | y, \bm{x}) = \frac{\mathcal{L}(y|\bm{x}; \theta) \cdot p(f_\theta)}{p(y|\bm{x})}
+	p(\bm{\theta}|y,\bm{x}) = \frac{p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta})}{p(y|\bm{x})}
 \end{equation}
 
-The normalization constant is the marginal likelihood and, being independent from the parameters $\theta$, can be ignored. For the sake of achieving a predictive model, the posterior function can be thought as the product between likelihood and prior. We can finally rewrite our optimization problem as in Equation~\eqref{eq:map}.
+The normalizing constant in Equation~\eqref{eq:posterior} $p(y|\bm{x})$ is independent from $\bm{\theta}$, it is known as the marginal likelihood and it can be estimated as in Equation~\eqref{eq:marginal_likelihood}.
+
+\begin{equation} \label{eq:marginal_likelihood}
+	p(y|\bm{x}) = \int p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta}) d\bm{\theta}
+\end{equation}
+
+This suggest a new way to achieve an estimate for $\bm{\theta}$ that takes into account the prior distribution. The criterion in Equation~\eqref{eq:map} is known as Maximum A Posteriori (MAP).
 
 \begin{equation} \label{eq:map}
-	[\hat \phi, \hat \theta] = \argmax_{\phi, \theta~\in~\Phi \times \Theta}\mathcal{L}(y_i|\bm{x}_i; \theta, \phi) \cdot p(f_\theta) =
-%	\argmax_{\phi, \theta~\in~\Phi \times \Theta} \prod_{i=1}^{n} p_\phi(f_\theta(\bm{x}_i)) \cdot p(f_\theta) =
-	\argmin_{\phi, \theta~\in~\Phi \times \Theta} -\bigg[\sum_{i=1}^n \log p_\phi(f_\theta(\bm{x}_i))  + \log p(f_\theta)\bigg]
+	\bm{\hat \theta}_{MAP} = \argmax_{\theta~\in~\Theta} p(\bm{\theta}|y,\bm{x}) = \argmax_{\theta~\in~\Theta} p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta})
 \end{equation}
-Equation~\eqref{eq:map} is known as Maximum A Posteriori (MAP) estimate.
+
+Once again, assuming the independence of the samples and applying the $\log$ trick, Equation~\eqref{eq:map} can be rewritten as Equation~\eqref{eq:map2}.
+
+\begin{equation} \label{eq:map2}
+	\bm{\hat \theta}_{MAP} = \argmin_{\theta~\in~\Theta} - \bigg[\sum_{i=1}^n \log p(y_i|\bm{x}_i,\bm{\theta})  + \log p(\theta)\bigg]
+\end{equation}
+
+\todo{check again this section}
+
+
+% As in the case of ERM, the MLE estimate may easily overfit the data as no regularization strategy is adopted. The standard way to impose some kind of regularization is to assume a prior on the parametric model $p(f_\theta)$. Given a prior and a likelihood, we can apply the Bayes rule (see Theorem~\ref{th:bayes_rule}) to define the so-called posterior distribution $p(f_\theta | y, \bm{x})$ as in Equation~\eqref{eq:posterior}\footnote{the dependency from $\phi$ is omitted for ease of notation}.
+%
+% \begin{equation} \label{eq:posterior}
+% 	p(f_\theta | y, \bm{x}) = \frac{\mathcal{L}(y|\bm{x}; \theta) \cdot p(f_\theta)}{p(y|\bm{x})}
+% \end{equation}
+%
+% The normalization constant is the marginal likelihood and, being independent from the parameters $\theta$, can be ignored. For the sake of achieving a predictive model, the posterior function can be thought as the product between likelihood and prior. We can finally rewrite our optimization problem as in Equation~\eqref{eq:map}.
+%
+% \begin{equation} \label{eq:map}
+% 	[\hat \phi, \hat \theta] = \argmax_{\phi, \theta~\in~\Phi \times \Theta}\mathcal{L}(y_i|\bm{x}_i; \theta, \phi) \cdot p(f_\theta) =
+% %	\argmax_{\phi, \theta~\in~\Phi \times \Theta} \prod_{i=1}^{n} p_\phi(f_\theta(\bm{x}_i)) \cdot p(f_\theta) =
+% 	\argmin_{\phi, \theta~\in~\Phi \times \Theta} -\bigg[\sum_{i=1}^n \log p_\phi(f_\theta(\bm{x}_i))  + \log p(f_\theta)\bigg]
+% \end{equation}
+% Equation~\eqref{eq:map} is known as Maximum A Posteriori (MAP) estimate.
 
 %and it is independent from the parameters $\theta$ as it is given by Equation~\eqref{eq:marginal_likelihood}.
 %\begin{equation} \label{eq:marginal_likelihood}
