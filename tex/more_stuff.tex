@@ -42,8 +42,10 @@
 \usepackage{bm}
 \newcommand{\dataset}{{\cal D}}
 \newcommand{\fracpartial}[2]{\frac{\partial #1}{\partial  #2}}
-\newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{min}}\;}
-\newcommand{\argmax}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{max}}\;}
+%\newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{min}}\;}
+%\newcommand{\argmax}[1]{\underset{#1}{\operatorname{arg}\,\operatorname{max}}\;}
+\newcommand{\argmin}{\mathop{\mathrm{argmin}}\limits}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}\limits}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 % Notes
@@ -63,6 +65,7 @@
 \usepackage{tcolorbox}
 
 \newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
 
 % Images root
 \graphicspath{{../images/}}
