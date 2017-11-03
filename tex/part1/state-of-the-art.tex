@@ -77,7 +77,7 @@ As of today ML is the workhorse of data science.
     \end{equation}
 
     The loss function $V(f(\bm{x}),y)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss functions for regression and classification problems were proposed; Table~\ref{tab:losses} defines the most commonly adopted in biomedical studies while their visual representation is presented in Figure~\ref{fig:loss}. \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
-    
+
     \begin{figure}[!h]
     	\centering
     	\subfloat[]{%
@@ -90,8 +90,8 @@ As of today ML is the workhorse of data science.
     	}%
     	\caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
     \end{figure}
-    
-    
+
+
     \begin{table}[!h]
     	\centering
     	\caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
@@ -115,14 +115,14 @@ As of today ML is the workhorse of data science.
     		\bottomrule
     	\end{tabular}
     \end{table}
-        
+
      % rubare da BIB
     % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
     The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples $n$ may be small with respect to the number of observed variables $d$ which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data. Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect. \todo{+overfit +figu}
     \todo{In ML, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.}
     Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
     Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}
-    
+
     \begin{figure}[!h]
     	\centering
     	\subfloat[]{%
@@ -161,21 +161,21 @@ As of today ML is the workhorse of data science.
 	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the t-SNE algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
 \end{figure}
 
-    
-    A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.    
+
+    A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
     In its broader definition regularization is the process of introducing additional information $R(f)$ in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. \todo{Equation~\eqref{eq:losspen}}
-    
+
      \begin{equation}\label{eq:losspen}
     	\min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) + \lambda R(f)
     \end{equation}
-    
+
     The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. The choice of the adopted regularization penalty $R(f)$ leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
-        
-       
+
+
 %    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
 
     Supervised learning machines can rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}.
-    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.      
+    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.
 
     \subsection{Regularization methods} \label{subsec:regularization_methods}
     Regularization methods are a broad class of ML models that include ...
