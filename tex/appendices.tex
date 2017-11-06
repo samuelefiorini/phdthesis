@@ -4,11 +4,13 @@
 \chapter{Appendix} \label{appendix:A}
 As already pointed out at the beginning of Chapter~\ref{chap:state-of-the-art}, ML is a cross-disciplinary field and the statistical tools used in literature to describe models and algorithms heavily depend on the academic background of the author. This can make the approach to ML fascinating and somewhat cumbersome at the same time.
 
-The goal of this appendix is to shed light on some of the statistical tools and definitions that are typically left unsaid or given for granted by most of the authors. In particular, in the following sections insightful statistical details on the formulation of the supervised learning problem expressed in Equation~\eqref{eq:losspen} will be provided.
+The goal of this appendix is to shed light on some of the statistical tools and definitions that are typically left unsaid, or given for granted, by most of the authors. In particular, in the following sections insightful statistical details on the formulation of the supervised learning problem expressed in Equation~\eqref{eq:losspen} will be provided.
 
 %The expected value of the function $g(a,b)$, where $(a,b)$ are two continuous random variables with joint probability distribution $f(a,b)$, can be computed with the \textit{Law of the unconscious statistician} (\ac{LOTUS}), reported in Theorem~\ref{th:lotus}.
 
 \section{Useful theorems and definitions}
+
+This first section lists the theorems and the definitions that are useful for the comprehension of the following sections.
 
 \begin{theorem}[Law of the unconscious statistician] \label{th:lotus}
 	Given two continuous random variables $(a,b) \in A \times B$ with joint probability distribution $p(a,b)$, the expected value of the function $g(a,b)$ can be stated as follows.
@@ -40,7 +42,7 @@ The goal of this appendix is to shed light on some of the statistical tools and 
 \end{definition}
 
 \begin{definition}[Likelihood function] \label{def:likelihood}
-	Let $\bm{a}$ be a continuous random variable with probability distribution $p(\bm{a}, \bm{\phi})$ depending on the parameter $\bm{\phi}$. Then the function $\mathcal{L}(\bm{\phi}|\bm{\bar a})=p(\bm{\bar a},\bm{\phi})$ is the likelihood function of $\bm{\phi}$ given that $\bm{\bar a}$ is the outcome of $\bm{a}$.
+	Let $\bm{a}$ be a continuous random variable with probability distribution $p(\bm{a}, \bm{\phi})$ depending on the parameter $\bm{\phi}$; then the function $\mathcal{L}(\bm{\phi}|\bm{\bar a})=p(\bm{\bar a},\bm{\phi})$ is the likelihood function of $\bm{\phi}$ given that $\bm{\bar a}$ is the outcome of $\bm{a}$.
 	% Given the observed values $\bm{\bar a} = [\bar a_1, \bar a_2, \dots, \bar a_n]^T$, the likelihood function
 	% % $$\mathcal{L}(\bm{\bar a}, \bm{\phi}) = p(\bm{\bar a}, \bm{\phi})$$
 	% $p(\bm{\bar a}, \bm{\phi})$
@@ -50,7 +52,7 @@ The goal of this appendix is to shed light on some of the statistical tools and 
 
 
 \section{Empirical risk minimization} \label{sec:erm}
-In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f: \mathcal{X} \rightarrow \mathcal{Y}$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$ we introduced the concept of \textit{loss function} $L(\hat y, y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the ideal estimator, also known as the \textit{target} function, $f^*(\bm{x})$ is the minimizer of the (true) expected risk $\mathcal{E}(f)$ in a rather \textit{large} class of functions $\mathcal{F}$.
+In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f: \mathcal{X} \rightarrow \mathcal{Y}$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$, we introduced the concept of \textit{loss function} $L(\hat y, y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the ideal estimator, also known as the \textit{target} function, $f^*(\bm{x})$ is the minimizer of the (true) expected risk $\mathcal{E}(f)$ in a rather \textit{large} class of functions $\mathcal{F}$.
 %We assume that $f^*(\bm{x})$ minimizes $\mathbb{E}(f)$ in a rather \textit{large} class of functions $\mathcal{F}$.
 
 
@@ -61,7 +63,7 @@ In Section~\ref{subsec:supervised_learning} we introduced the concept of supervi
 Applying the law of the unconscious statistician, stated in Theorem~\ref{th:lotus}, the expected risk $\mathcal{E}(f)$ can be written as in Equation~\eqref{eq:expected_loss}, where $(\bm{x},y)$ are two random variables with joint probability distribution $p(\bm{x},y)$.
 
 \begin{equation} \label{eq:expected_loss}
-	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \iint_{\mathcal{X} \times \mathcal{Y}}L(f(\bm{x}),y)~p(\bm{x},y)~d\bm{x}dy
+	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y)] = \iint_{\mathcal{X} \times \mathcal{Y}}L(f(\bm{x}),y)~p(\bm{x},y)~d\bm{x}dy
 %	\mathcal{E}(f) = \mathbb{E}[L(f(\bm{x}),y))] = \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty} L(f(\bm{x}),y) p(\bm{x},y) d\bm{x}dy
 \end{equation}
 
@@ -72,13 +74,13 @@ In statistical learning theory, as introduced by Vapnik~\cite{vapnik2013nature},
 	\mathcal{E}(f_{\mathcal{D}}) = \frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)
 \end{equation}
 
-As $\mathcal{D}$ is drawn according to the probability distribution $p(\bm{x},y)$, our hope is that the empirical risk can be considered as a proxy for the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. The solution of the supervised learning problem is then found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
+As $\mathcal{D}$ is drawn according to the probability distribution $p(\bm{x},y)$, our hope is that the empirical risk can be used as a proxy for the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. The solution of the supervised learning problem is then found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
 
 \begin{equation} \label{eq:erm}
 	\hat f(\bm{x}) = \argmin_{f \in \mathcal{F}}{\mathcal{E}(f_{\mathcal{D}})} = \argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)}
 \end{equation}
 
-In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f)$ comes at a price. The central problem is whether the first is a good approximation of the second. For instance, when $p(\bm{x}, y)$ is too \textit{complex}, the number of examples is too small and/or the class of functions $\mathcal{F}$ is \textit{too large}, $\hat f(\bm{x})$ will be far from the target function $f^*(\bm{x})$, even when its empirical error is $0$. In real circumstances, it is impossible to control the true probability distribution and it is often extremely difficult to collect a very large number of examples. The only element we can control is the class of functions $\mathcal{F}$, and in particular its \textit{size}. Since Tikhonov~\cite{tikhonov1963solution} it is known that, for an arbitrary function space $\mathcal{F}$, the ERM problem is ill-posed (see Definition~\ref{def:ill_posed}). A possible way to ensure well-posedness is to impose a constrain that restricts the function space. Hence, the constrained ERM problem assumes the form in Equation~\eqref{eq:constrained_erm}
+In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f)$ comes at a price. The central problem is whether the first is a good approximation of the second. For instance, when $p(\bm{x}, y)$ is too \textit{complex}, the number of examples is too small and/or the class of functions $\mathcal{F}$ is \textit{too large}, $\hat f(\bm{x})$ will be far from the target function $f^*(\bm{x})$, even when its empirical error is $0$. In real circumstances, it is impossible to control the true probability distribution and it is often extremely difficult to collect a very large number of examples. The only element we can control is the class of functions $\mathcal{F}$ and, in particular, its \textit{size}. Since Tikhonov~\cite{tikhonov1963solution} it is known that, for an arbitrary function space $\mathcal{F}$, the ERM problem is ill-posed (see Definition~\ref{def:ill_posed}). A possible way to ensure well-posedness is to impose a constrain that restricts the function space. Hence, the constrained ERM problem assumes the form in Equation~\eqref{eq:constrained_erm}
 
 \begin{equation} \label{eq:constrained_erm}
 	\begin{aligned}
@@ -93,10 +95,10 @@ Applying the \textit{Lagrange multipliers technique}\footnote{for a thorough des
 	\argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)} + \lambda \mathcal{R}(f)
 \end{equation}
 
-The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{$\mathcal{R}(f)$ in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization}}
+The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{$\mathcal{R}(f)$, in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization}}
 and, according to its definition, it can ensure well-posedness of the problem and it can enforce different interesting properties on the achieved solution, see Section~\ref{subsec:regularization_methods}. It can also be shown that the use of appropriate regularizes promotes generalization, hence increases our chance to find a $\hat f(\bm{x})$ \textit{close} to $f^*(\bm{x})$.
 
- According to the choice made for $L(\cdot)$ and $\mathcal{R}(\cdot)$, the posed minimization problem of Equation~\eqref{eq:losspen2} can have very different properties; it can be convex or non-convex, it can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization methods for ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
+ According to the choice made for $L(\cdot)$ and $\mathcal{R}(\cdot)$, the minimization problem posed in Equation~\eqref{eq:losspen2} can have very different properties; it can be convex or non-convex, it can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization methods for ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
 
 
 \section{Maximum likelihood  estimation} \label{sec:mle}
@@ -108,14 +110,14 @@ Applying Definition~\ref{def:likelihood}, and assuming that the samples are draw
 	\mathcal{L}(y|\bm{x}, \bm{\theta}) = \prod_{i=1}^{n} p(y_i | \bm{x}_i , \bm{\theta})
 \end{equation}
 
-Equation~\eqref{eq:likelihood} can be considered as the probability of observing the outputs $y$, given the input $\bm{x}$ and the parameters $\bm{\theta}$.
-This statistical setup suggests a way to obtain an estimate for $\bm{\theta}$ which is, in general, unknown. This criterion is expressed in Equation~\eqref{eq:mle} and it is known as \textit{Maximum Likelihood Estimation} (MLE).
+Equation~\eqref{eq:likelihood} can be considered as the probability of observing the output $y_i$, given the input $\bm{x}_i$ and the parameters $\bm{\theta}$ ($\forall i=1,\dots,n$).
+This statistical setup suggests a strategy to obtain an estimate for $\bm{\theta}$ known as \textit{Maximum Likelihood Estimation} (MLE), see Equation~\eqref{eq:mle}.
 
 \begin{equation} \label{eq:mle}
 	\bm{\hat \theta}_{MLE} =\argmax_{\theta~\in~\Theta}\mathcal{L}(y_i|\bm{x}_i, \bm{\theta}) = \argmax_{\theta~\in~\Theta} \prod_{i=1}^{n} p(y_i | \bm{x}_i, \bm{\theta})
 \end{equation}
 
-Instead of maximizing the likelihood it is often convenient to minimize the \textit{negative log-likelihood}\footnote{approaching information theory or deep learning literature, the log-likelihood is often referred to as \textit{cross-entropy}}. Equation~\eqref{eq:mle} can then be rewritten as Equation~\eqref{eq:nll}.
+Instead of maximizing the likelihood it is often convenient to minimize the \textit{negative log-likelihood}\footnote{approaching information theory or deep learning literature, the negative log-likelihood is often referred to as \textit{cross-entropy}}. Equation~\eqref{eq:mle} can then be rewritten as Equation~\eqref{eq:nll}.
 
 \begin{equation} \label{eq:nll}
 	\bm{\hat \theta}_{MLE} = \argmin_{\theta~\in~\Theta} - \sum_{i=1}^n \log p(y_i | \bm{x}_i, \bm{\theta})
@@ -127,7 +129,7 @@ Moreover, if some prior knowledge on $\bm{\theta}$ is available, it is possible 
 	p(\bm{\theta}|y,\bm{x}) = \frac{p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta})}{p(y|\bm{x})}
 \end{equation}
 
-The normalizing constant in Equation~\eqref{eq:posterior} $p(y|\bm{x})$ is independent from $\bm{\theta}$, it is known as the marginal likelihood and it can be estimated as in Equation~\eqref{eq:marginal_likelihood}.
+The normalizing constant in Equation~\eqref{eq:posterior} $p(y|\bm{x})$ is independent from $\bm{\theta}$. It is known as the marginal likelihood and it can be estimated as in Equation~\eqref{eq:marginal_likelihood}.
 
 \begin{equation} \label{eq:marginal_likelihood}
 	p(y|\bm{x}) = \int p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta})~d\bm{\theta}
@@ -139,15 +141,13 @@ Equation~\eqref{eq:posterior} suggest a new strategy to achieve an estimate for 
 	\bm{\hat \theta}_{MAP} = \argmax_{\theta~\in~\Theta} p(\bm{\theta}|y,\bm{x}) = \argmax_{\theta~\in~\Theta} p(y|\bm{x}, \bm{\theta}) \cdot p(\bm{\theta})
 \end{equation}
 
-Finally, given that
-$p(y|\bm{x} \bm{\theta})$ is the likelihood of $\bm{\theta}$ (see Definition~\ref{def:likelihood}),
-the samples are assumed to be \ac{iid} and
-applying the negative log-likelihood trick,
-Equation~\eqref{eq:map} can be rewritten as Equation~\eqref{eq:map2}.
+Finally, given that $p(y|\bm{x}, \bm{\theta})$ is the likelihood of $\bm{\theta}$ (see Definition~\ref{def:likelihood}), we can assume \ac{iid} samples and apply the negative log-likelihood trick to rewrite Equation~\eqref{eq:map} as in Equation~\eqref{eq:map2}.
 
 \begin{equation} \label{eq:map2}
 	\bm{\hat \theta}_{MAP} = \argmin_{\theta~\in~\Theta} - \bigg[\sum_{i=1}^n \log p(y_i|\bm{x}_i,\bm{\theta})  + \log p(\bm{\theta})\bigg]
 \end{equation}
+
+Fixing the two distributions, the predictive model can be achieved solving the minimization problem in Equation~\eqref{eq:map2}. For the solution of this minimization problem the same observations provided at the end of the last section for Equation~\eqref{eq:losspen2} hold.
 
 \section{ERM vs MLE/MAP} \label{sec:erm-mlemap_connection}
 The goal of this last section is to show that the approaches described in Section~\ref{sec:erm} and in Section~\ref{sec:mle} look very different, but they actually are two sides of the same coin.
@@ -155,31 +155,31 @@ The goal of this last section is to show that the approaches described in Sectio
 Assuming that we have the usual collection of \ac{iid} samples $\mathcal{D}=\{(\bm{x}_i,y_i)\}_{i=1}^n$, where $(\bm{x}_i,y_i) \in \mathcal{X} \times \mathcal{Y}~\forall~i=1,\dots,n$, our aim here is to learn a good input-output relationship $f: \mathcal{X} \rightarrow \mathcal{Y}$. The function $f$ may depend from some parameters that, for ease of writing, will be temporary omitted. If we decide to proceed by MLE, we can find $\hat f_{MLE}$ solving the optimization problem in Equation~\eqref{eq:fmle}.
 
 \begin{equation} \label{eq:fmle}
-	\hat f_{MLE} = \max_{f~\in~\mathcal{F}} \prod_{i=1}^n p(y_i|\bm{x}_i,f)
+	\hat f_{MLE} = \argmax_{f~\in~\mathcal{F}} \prod_{i=1}^n p(y_i|\bm{x}_i,f)
 \end{equation}
 
-Applying the usual negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}\footnote{the two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$}.
+Applying the negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}\footnote{the two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$}.
 
 \begin{equation} \label{eq:logfmle}
-	\hat f_{MLE} = \min_{f~\in~\mathcal{F}} - \frac{1}{n} \sum_{i=1}^n \log p(y_i|\bm{x}_i,f)
+	\hat f_{MLE} = \argmin_{f~\in~\mathcal{F}} - \frac{1}{n} \sum_{i=1}^n \log p(y_i|\bm{x}_i,f)
 \end{equation}
 
 As we can see here, we are naming \textit{negative log-likelihood} what in Section~\ref{sec:erm} was called \textit{loss function}. In fact, using $L(f(\bm{x}), y) = -\log p(y|\bm{x}, f)$ Equation~\eqref{eq:logfmle} can be rewritten as in Equation~\eqref{eq:ferm}, which is the ERM problem.
 
 \begin{equation} \label{eq:ferm}
-	\hat f_{ERM} = \min_{f~\in~\mathcal{F}} \frac{1}{n} \sum_{i=1}^n L(f(\bm{x}_i), y_i)
+	\hat f_{ERM} = \argmin_{f~\in~\mathcal{F}} \frac{1}{n} \sum_{i=1}^n L(f(\bm{x}_i), y_i)
 \end{equation}
 
 In Section~\ref{sec:erm} we have seen that introducing $\mathcal{R}(f)$ reduces the space of functions $\mathcal{F}$ and prevents the achieved solution from overfitting. Intuitively, the same effect can be achieved by introducing a prior $p(f)$ as in the MAP estimate. Following Equation~\eqref{eq:map2} we can write Equation~\eqref{eq:map3}.
 
 \begin{equation} \label{eq:map3}
-	\hat f_{MAP} = \min_{f~\in~\mathcal{F}} - \frac{1}{n} \bigg[ \sum_{i=1}^n \log p(y_i|\bm{x}_i,f) + \lambda \log p(f) \bigg]
+	\hat f_{MAP} = \argmin_{f~\in~\mathcal{F}} - \frac{1}{n} \bigg[ \sum_{i=1}^n \log p(y_i|\bm{x}_i,f) + \lambda \log p(f) \bigg]
 \end{equation}
 
 Finally, as for Equation~\eqref{eq:ferm}, we can express the penalty as $R(f) = - \frac{\lambda}{n} \log p(f)$ and Equation~\eqref{eq:map3} becomes Equation~\eqref{eq:ferm2}, which is the classical $Loss + Penalty$ formulation of the ERM problem.
 
 \begin{equation} \label{eq:ferm2}
-	\hat f_{ERM} = \min_{f~\in~\mathcal{F}} \frac{1}{n} \sum_{i=1}^n L(f(\bm{x}_i), y_i) + \lambda R(f)
+	\hat f_{ERM} = \argmin_{f~\in~\mathcal{F}} \frac{1}{n} \sum_{i=1}^n L(f(\bm{x}_i), y_i) + \lambda R(f)
 \end{equation}
 
 In this section an intuitive explanation of the connection between two popular supervised learning approaches is provided. For a more rigorous overview on ERM and MLE/MAP we refer to~\cite{hastie2009elements} and to~\cite{rasmussen2006gaussian}, respectively.
@@ -191,22 +191,22 @@ To clarify the connection between ERM and MLE/MAP we can revisit the simple line
 Once again, we have a collection of \ac{iid} samples $\mathcal{D}=\{(\bm{x}_i,y_i)\}_{i=1}^n = (X, \bm{y})$, where $(\bm{x}_i,y_i) \in \mathcal{X} \times \mathcal{Y}$ $\forall~i=1,\dots,n$ and our aim is to learn an input-output relationship $f: \mathcal{X} \rightarrow \mathcal{Y}$.
 Moreover, we assume that the outputs $y_i$ is affected by additive Gaussian noise, hence $y_i = f(\bm{x}_i) + \varepsilon$ where $\varepsilon \sim \mathcal{N}(0,\sigma_n^2)$.
 Interestingly, this corresponds to the assumption that $f$ is modeling the mean of the outputs $y_i$, while its standard deviation $\sigma_n$ remains unknown, therefore $y_i \sim \mathcal{N}(f(\bm{x}_i), \sigma_n^2)$ ($\forall~i=1,\dots,n$).
-In Section~\ref{sec:erm} we have seen that the ERM solution can be estimated as in Equation~\ref{eq:ferm}. For the sake of simplicity we can restrict to the Ridge Regression  case (see Section~\ref{subsec:regularization_methods}), \ie we look for a model that can be written as $\hat y = f(\bm{x}) = \bm{x}^T \bm{ \hat w}$ minimizing the square loss $L(\hat y,y) = \norm{y - X\bm{w}}_2^2$ penalized by the $\ell_2$ norm $\mathcal{R}(\bm{w}) = \norm{w}_2^2$.
+In Section~\ref{sec:erm} we have seen that the ERM solution can be estimated as in Equation~\ref{eq:ferm}. For the sake of simplicity we can restrict to the Ridge Regression  case (see Section~\ref{subsec:regularization_methods}), \ie we look for a model that can be written as $\hat y = f(\bm{x}) = \bm{x}^T \bm{ \hat w}$ minimizing the square loss $L(\hat y,y) = \frac{1}{n} \norm{y - X\bm{w}}_2^2$ penalized by the $\ell_2$-norm $\mathcal{R}(\bm{w}) = \norm{w}_2^2$.
 Therefore, the minimization problem is stated in Equation~\eqref{eq:ridge_regression2}.
 
 \begin{equation} \label{eq:ridge_regression2}
-	\hat f_{ridge} = \argmin_{f~\in~\mathcal{F}} J(\bm{y}, X, \bm{w}) = \argmin_{f~\in~\mathcal{F}}\frac{1}{2} \norm{\bm{y} - X\bm{w}}_2^2+\frac{\lambda}{2}\norm{\bm{w}}_2^2
+	\hat f_{ridge} = \argmin_{f~\in~\mathcal{F}} J(\bm{y}, X, \bm{w}) = \argmin_{f~\in~\mathcal{F}}\frac{1}{2n} \norm{\bm{y} - X\bm{w}}_2^2+\frac{\lambda}{2}\norm{\bm{w}}_2^2
 \end{equation}
 
-In Section~\ref{sec:erm-mlemap_connection} we have seen that the regularized minimization problem corresponds to a MAP estimate with an appropriate choice for negative log-likelihood and prior distribution (over $\bm{w}$) which correspond to loss function and regularization penalty, respectively. So, considering $J(\bm{y}, X, \bm{w})$ as a negative log-posterior and factoring out $\lambda$ we can write
+In Section~\ref{sec:erm-mlemap_connection} we have seen that the regularized minimization problem corresponds to a MAP estimate with an appropriate choice for negative log-likelihood and prior distribution (on $\bm{w}$) which correspond to loss function and regularization penalty, respectively. So, considering $J(\bm{y}, X, \bm{w})$ as a negative log-posterior and factoring out $\lambda$ we can write
 $$
-\exp{\bigg[-J(\bm{y}, X, \bm{w})\bigg]} \propto \exp \bigg[ -\frac{1}{2\lambda} \norm{\bm{y}-X\bm{w}}_2^2 \bigg] \cdot \exp{\bigg[-\frac{1}{2}\norm{w}_2^2 \bigg]}
+\exp{\bigg[-J(\bm{y}, X, \bm{w})\bigg]} \propto \exp \bigg[ -\frac{1}{2n\lambda} \norm{\bm{y}-X\bm{w}}_2^2 \bigg] \cdot \exp{\bigg[-\frac{1}{2}\norm{w}_2^2 \bigg]}
 $$
 which can be seen as
 $$
 p(\bm{w}|\bm{y},X) = p(\bm{y}|X,\bm{w}) \cdot p(\bm{w})
 $$
-where $p(\bm{y}|X,\bm{w}) = \mathcal{N}(X\bm{w}, \lambda I)$ and $p(\bm{w}) = \mathcal{N}(0,I)$. So, in this probabilistic interpretation, the variance of the noise affecting the output $\bm{y}$ plays the role of the regularization parameter $\lambda = \sigma_n^2$.
+where $p(\bm{y}|X,\bm{w}) = \mathcal{N}(X\bm{w},n \lambda I)$ and $p(\bm{w}) = \mathcal{N}(0,I)$. So, in this probabilistic interpretation, the variance of the noise affecting the output $\bm{y}$ plays the role of the regularization parameter $\lambda \approx \sigma_n^2$.
 
 
 % The likelihood for the weights $\bm{w}$ of the linear model can be written as in Equation~\eqref{eq:gaussian_likelihood}.
@@ -226,3 +226,49 @@ where $p(\bm{y}|X,\bm{w}) = \mathcal{N}(X\bm{w}, \lambda I)$ and $p(\bm{w}) = \m
 
 
 \subsection{Logistic regression revisited} \label{subsec:logistic_regression_revisited}
+
+In this section we revisit binary classification via logistic regression from a probabilistic perspective.
+
+In binary classification problems we are provided with a collection of input-output pairs $\mathcal{D}=\{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$, where $\bm{x}_i \in \mathcal{X}$ and $y_i \in \{+1,-1\}$, $\forall i=1,\dots,n$.
+Once again we are looking for a model $f: \mathcal{X} \rightarrow \mathcal{Y}$ that associates each input sample with its corresponding class. For the sake of simplicity we restrict to the case of linear functions $\hat y = f(\bm{x}) = \bm{x}^T\bm{\hat w}$.
+
+The main idea behind logistic regression is to use a loss function having a $[0,1]$ range to estimate the probability that a sample $\bm{x}_i$ belongs to one of the two classes. As suggested by its name, the function of choice is the logistic $\sigma(z) = [1+\exp{(-z)}]^{-1}$.
+
+In this context, we model our outputs $y_i$ as Bernoulli random variables, which implies that
+$$
+P(y=1 | \bm{x}) = \sigma(-f(\bm{x})) = \frac{1}{1+\exp{(-f(\bm{x}))}}
+$$
+and
+$$
+P(y=-1 | \bm{x}) = \sigma(f(\bm{x})) = \frac{1}{1+\exp{(f(\bm{x}))}}
+$$
+consequently, we can write the general form as in Equation~\eqref{eq:logistic}.
+
+\begin{equation} \label{eq:logistic}
+	P(y = \pm 1 | \bm{x}) = \frac{1}{1+\exp{(-y f(\bm{x}))}}
+\end{equation}
+
+Therefore, assuming a Gaussian prior on the weights $\bm{w} \sim \mathcal{N}(0,I)$, we can perform a MAP estimate of $\hat f$ solving the problem in Equation~\eqref{eq:logistic_map}.
+
+\begin{equation} \label{eq:logistic_map}
+	\hat f = \argmax_{f \in \mathcal{F}} \prod_{i=1}^n p(\bm{w}|y_i, \bm{x}_i) = \argmax_{f \in \mathcal{F}} \prod_{i=1}^n \frac{1}{1+\exp{(-y_i~\bm{x}_i^T\bm{w})}} \cdot \exp{(-\frac{1}{2} \norm{\bm{w}}_2^2)}
+\end{equation}
+
+Log-transforming Equation~\eqref{eq:logistic_map}, and applying some elementary linear algebra, we can write Equation~\eqref{eq:logistic_logmap}.
+
+\begin{equation} \label{eq:logistic_logmap}
+	\hat f = \argmin_{f \in \mathcal{F}} \frac{1}{2n\lambda} \sum_{i=1}^n \log \big[ 1 + \exp{(-y_i \bm{x}_i^T \bm{w})} \big] + \frac{\lambda}{2} \norm{\bm{w}}_2^2
+\end{equation}
+
+The minimization problem expressed in Equation~\eqref{eq:logistic_logmap} is known as Regularized Logistic Regression. It can be casted in the regularization framework of Equation~\eqref{eq:ferm2} where the logistic loss function $L(f(\bm{x}),y) = \log{[1+\exp{(-yf(\bm{x}))}]}$ is penalized by the $\ell_2$-norm.
+
+
+
+
+
+
+
+
+
+% asd\footnote{in the deep learning literature this is usually named \textit{activation} function}
+%%
