@@ -16,4 +16,4 @@ rm *.fdb_latexmk
 # Prepare for the next build
 mkdir _build
 touch _build/main.pdf
-ln -s _build/main.pdf main.pdf
+ln -sf _build/main.pdf main.pdf
