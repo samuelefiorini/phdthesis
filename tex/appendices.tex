@@ -80,12 +80,12 @@ As $\mathcal{D}$ is drawn according to the probability distribution $p(\bm{x},y)
 	\hat f(\bm{x}) = \argmin_{f \in \mathcal{F}}{\mathcal{E}(f_{\mathcal{D}})} = \argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)}
 \end{equation}
 
-In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f)$ comes at a price. The central problem is whether the first is a good approximation of the second. For instance, when $p(\bm{x}, y)$ is too \textit{complex}, the number of examples is too small and/or the class of functions $\mathcal{F}$ is \textit{too large}, $\hat f(\bm{x})$ will be far from the target function $f^*(\bm{x})$, even when its empirical error is $0$. In real circumstances, it is impossible to control the true probability distribution and it is often extremely difficult to collect a very large number of examples. The only element we can control is the class of functions $\mathcal{F}$ and, in particular, its \textit{size}. Since Tikhonov~\cite{tikhonov1963solution} it is known that, for an arbitrary function space $\mathcal{F}$, the ERM problem is ill-posed (see Definition~\ref{def:ill_posed}). A possible way to ensure well-posedness is to impose a constrain that restricts the function space. Hence, the constrained ERM problem assumes the form in Equation~\eqref{eq:constrained_erm}
+In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f)$ comes at a price. The central problem is whether the first is a good approximation of the second. For instance, when $p(\bm{x}, y)$ is too \textit{complex}, the number of examples is too small and/or the class of functions $\mathcal{F}$ is \textit{too large}, $\hat f(\bm{x})$ will be far from the target function $f^*(\bm{x})$, even when its empirical error is $0$. In real circumstances, it is impossible to control the true probability distribution and it is often extremely difficult to collect a very large number of examples. The only element we can control is the class of functions $\mathcal{F}$ and, in particular, its \textit{size}. Since Tikhonov~\cite{tikhonov1963solution} it is known that, for an arbitrary function space $\mathcal{F}$, the ERM problem is ill-posed (see Definition~\ref{def:ill_posed}). A possible way to ensure well-posedness is to impose a constrain that restricts the function space. Hence, the constrained ERM problem assumes the form in Equation~\eqref{eq:constrained_erm}, where $\lambda \neq 0$.
 
 \begin{equation} \label{eq:constrained_erm}
 	\begin{aligned}
 		\argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)} \\
-		\text{subject to}~\mathcal{R}(f) < A
+		\text{subject to}~\mathcal{R}(f) < \frac{1}{\lambda}
 	\end{aligned}
 \end{equation}
 
