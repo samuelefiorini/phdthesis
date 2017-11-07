@@ -56,226 +56,366 @@ As of today ML is the workhorse of data science.
 
   \section{Supervised learning} \label{subsec:supervised_learning}
 
-  Humans are remarkably good at \emph{learning by examples}. When a kid is taught what a pencil looks like, he will be capable of understanding the concept of pencil from a limited number of guided observations. Similarly, when future radiologists are trained to distinguish between healthy tissues from tumors in MRI scans, they will be provided with several annotated biomedical images from which they will be able to generalize.
-  The applied learning paradigm is characterized by the presence of two key objects: \textit{data} and \textit{labels}. In the last example, the MRI scans are the data, and their annotations (\eg tumor vs healthy tissue) are the labels.
+	  Humans are remarkably good at \emph{learning by examples}. When a kid is taught what a pencil looks like, he will be capable of understanding the concept of pencil from a limited number of guided observations. Similarly, when future radiologists are trained to distinguish between healthy tissues from tumors in MRI scans, they will be provided with several annotated biomedical images from which they will be able to generalize.
+	  The applied learning paradigm is characterized by the presence of two key objects: \textit{data} and \textit{labels}. In the last example, the MRI scans are the data, and their annotations (\eg tumor \vs healthy tissue) are the labels.
 
-  Supervised learning is the branch of ML in which predictive models are trained on labeled data. In the ML jargon, and in this thesis, one usually refers to \textit{data} as collections of \textit{samples} described by an arbitrarily large number of \textit{predictors} (\textit{features}) that are used as \textit{input} in a training process having labels as \textit{output}.
+	  Supervised learning is the branch of ML in which predictive models are trained on labeled data. In the ML jargon, and in this thesis, one usually refers to \textit{data} as collections of \textit{samples} described by an arbitrarily large number of \textit{predictors} (\textit{features}) that are used as \textit{input} in a training process having labels as \textit{output}.
 
-  Input samples throughout this thesis are represented as $d$-dimensional vectors $\bm{x}$ belonging to an input space $\mathcal{X}$, where $\mathcal{X}\subseteq\mathbb{R}^d$ and labels are represented with the variable $y$ belonging to an output space $\mathcal{Y}$.
-  The nature of $\mathcal{Y}$ defines the learning task as \textit{binary classification} if  $\mathcal{Y} = \{-1,+1\}$, \textit{multiclass classification} if $\mathcal{Y} = \{1,2,\dots,k\}$,
-  \textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ and
-  \textit{vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
-%  In the second part of this thesis each of these learning problems will be faced.
-  The remainder of this section summarizes the methods that are most relevant with the data-driven strategies adopted to tackle the biomedical data science challenges described in the second part of in this thesis.
+	  Input samples throughout this thesis are represented as $d$-dimensional vectors $\bm{x}$ belonging to an input space $\mathcal{X}$, where typically $\mathcal{X}\subseteq\mathbb{R}^d$ and labels are represented with the variable $y$ belonging to an output space $\mathcal{Y}$.
+	  The nature of $\mathcal{Y}$ defines the learning task as \textit{binary classification} if  $\mathcal{Y} = \{-1,+1\}$, \textit{multiclass classification} if $\mathcal{Y} = \{1,2,\dots,k\}$,
+	  \textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ and
+	  \textit{vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
+	%  In the second part of this thesis each of these learning problems will be faced.
+	  The remainder of this section summarizes the methods that are most relevant with the data-driven strategies adopted to tackle the biomedical data science challenges described in the second part of in this thesis.
 
-%    \subsubsection{The optimization problem} \label{subsubsec:supevised_optimization}
+	  Given a set of input-output pairs $\mathcal{D} = \{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
 
-    Given a set of input-output pairs $\mathcal{D} = \{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
+	  \begin{equation}\label{eq:loss}
+	    \argmin_f \frac{1}{n}\sum_{i=1}^n L(f(\bm{x}_i),y_i) %+ \lambda R(f)
+	  \end{equation}
 
-    \begin{equation}\label{eq:loss}
-      \min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) %+ \lambda R(f)
-    \end{equation}
+	  The loss function $L(f(\bm{x}),y)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss functions for regression and classification problems were proposed; Table~\ref{tab:losses} defines the most commonly adopted in biomedical studies while their visual representation is presented in Figure~\ref{fig:loss}.
+		Choosing the appropriate loss function for the problem at hand is crucial and there is no trivial solution for this problem.
+		Different choices for $L(f(\bm{x}),y)$ are known under different names for the obtained learning machine. In the remainder of this section the most commonly adopted solutions are presented.
+		% \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
 
-    The loss function $V(f(\bm{x}),y)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss functions for regression and classification problems were proposed; Table~\ref{tab:losses} defines the most commonly adopted in biomedical studies while their visual representation is presented in Figure~\ref{fig:loss}. \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
-
-    \begin{figure}[!h]
-    	\centering
-    	\subfloat[]{%
-    		\includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
-    		\label{fig:regression}%
-    	}%
-    	% \hfill%
-    	\subfloat[]{%
-    		\includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
-    	}%
-    	\caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
-    \end{figure}
-
-
-    \begin{table}[!h]
-    	\centering
-    	\caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
-    	\begin{tabular}{@{}ll@{}ll@{}}
-    		\toprule
-    		Loss function & $V(f(\bm{x}),y)$  & Learning problem           \\ \midrule
-    		Square                   & $(y - f(\bm{x}))^2$ & regression \\
-    		Absolute                 & $|y - f(\bm{x})|$ & regression   \\
-    		$\epsilon$-insensitive   & $\begin{cases}
-    		0 & \text{if } |y-f(\bm{x})| < \epsilon\\
-    		|y-f(\bm{x})| - \epsilon & \text{otherwise}
-    		\end{cases} $        & regression                 \\
-    		\midrule
-    		Zero-one               & $\begin{cases}
-    		0 & \text{if } y = f(\bm{x})\\
-    		1 & \text{otherwise}
-    		\end{cases}$ & classification \\
-    		Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
-    		Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
-    		Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
-    		\bottomrule
-    	\end{tabular}
-    \end{table}
-
-     % rubare da BIB
-    % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
-    The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the result may have poor predictive power. For instance, the acquisition devices may introduce random fluctuations in the measures or the amount of collected samples $n$ may be small with respect to the number of observed variables $d$ which, in turn, may not even be representative of the target phenomenon. From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data. Precautions in the model formulation process must be taken in order to achieve solutions that are \textit{robust} to the noise effect. \todo{+overfit +figu}
-    \todo{In ML, a model that fits well the training data but performs poorly on new samples is said to be \textit{overfitting} the training set.}
-    Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
-    Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}
-
-    \begin{figure}[!h]
-    	\centering
-    	\subfloat[]{%
-    		\includegraphics[width=0.5\textwidth]{part1/0_regression_underfit.png}
-    		\label{fig:regression}%
-    	}%
-    	%\hfill%
-    	\subfloat[]{%
-    		\includegraphics[width=0.5\textwidth]{part1/1_regression_overfit.png}
-    		\label{fig:regression}%
-    	}%
-        \hfill%
-    	\subfloat[]{%
-    		\includegraphics[width=0.5\textwidth]{part1/2_regression_fit.png}
-    		\label{fig:regression}%
-    	}%
-    	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a regression problem. The data are a downsampled version ($f_s = 546 Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14 2015, 09:50:45 UTC at LIGO Hanford (WA).}\label{fig:regression_fit}
-    \end{figure}
-
-    \begin{figure}[!h]
-	\centering
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part1/0_classification_underfit.png}
-		\label{fig:regression}%
-	}%
-	%\hfill%
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part1/1_classification_overfit.png}
-		\label{fig:regression}%
-	}%
-	\hfill%
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part1/2_classification_fit.png}
-		\label{fig:regression}%
-	}%
-	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the t-SNE algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
-\end{figure}
+	  \begin{figure}[!h]
+	  	\centering
+	  	\subfloat[]{%
+	  		\includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
+	  		\label{fig:regression}%
+	  	}%
+	  	% \hfill%
+	  	\subfloat[]{%
+	  		\includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
+	  	}%
+	  	\caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
+	  \end{figure}
 
 
-    A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
-    In its broader definition regularization is the process of introducing additional information $R(f)$ in order to solve a possibly ill-posed problem \cite{tikhonov1963solution, evgeniou2000regularization}. \todo{Equation~\eqref{eq:losspen}}
+	  \begin{table}[!h]
+	  	\centering
+	  	\caption{Definition of the loss functions for regression (top) and classification (bottom) problems represented in Figure~\ref{fig:loss}.}\label{tab:losses}
+	  	\begin{tabular}{@{}ll@{}ll@{}}
+	  		\toprule
+	  		Loss function & $L(f(\bm{x}),y)$  & Learning problem           \\ \midrule
+	  		Square                   & $(y - f(\bm{x}))^2$ & regression \\
+	  		Absolute                 & $|y - f(\bm{x})|$ & regression   \\
+	  		$\epsilon$-insensitive   & $\begin{cases}
+	  		0 & \text{if } |y-f(\bm{x})| < \epsilon\\
+	  		|y-f(\bm{x})| - \epsilon & \text{otherwise}
+	  		\end{cases} $        & regression                 \\
+	  		\midrule
+	  		Zero-one               & $\begin{cases}
+	  		0 & \text{if } y = f(\bm{x})\\
+	  		1 & \text{otherwise}
+	  		\end{cases}$ & classification \\
+	  		Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
+	  		Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
+	  		Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
+	  		\bottomrule
+	  	\end{tabular}
+	  \end{table}
 
-     \begin{equation}\label{eq:losspen}
-    	\min_f \frac{1}{n}\sum_{i=1}^n V(f(\bm{x}_i),y_i) + \lambda R(f)
-    \end{equation}
+	   % rubare da BIB
+	  % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
+	  The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the solution may have poor predictive power.
+		For instance:
+		\begin{enumerate}
+			\item the acquisition devices may introduce random fluctuations in the measures;
+			\item the amount of collected samples $n$ may be small with respect to the number of observed variables $d$;
+			\item the variables may not be representative of the target phenomenon.
+	  \end{enumerate}
+		From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
+		Precautions in the model formulation process must be taken in order to achieve solutions that are insensitive to small changes in the input data and, in general, \textit{robust} to the noise effect.
 
-    The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}. The choice of the adopted regularization penalty $R(f)$ leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
+		Considering a ML model ($\mathcal{\hat M}$) fitted on a collection of data ($\mathcal{D}$), the most desirable property of $\mathcal{\hat M}$ is that it should be able to achieve good prediction performance not only on $\mathcal{D}$, but also on all the future, therefore unseen, data points $\mathcal{D}'$.
+		In other words, assuming that the samples in $\mathcal{D}$ are affected by some kind of random component, $\mathcal{\hat M}$ should be able to learn a predictive function that does not \textit{follow the noise}, but rather models the true input-output relationship.
+		In ML, a model that fits well $\mathcal{D}$ but performs poorly on $\mathcal{D}'$ is said to be \textit{overfitting}.
 
+	  \begin{figure}[!h]
+	  	\centering
+	  	\subfloat[]{%
+	  		\includegraphics[width=0.5\textwidth]{part1/0_regression_underfit.png}
+	  		\label{fig:regression}%
+	  	}%
+	  	%\hfill%
+	  	\subfloat[]{%
+	  		\includegraphics[width=0.5\textwidth]{part1/1_regression_overfit.png}
+	  		\label{fig:regression}%
+	  	}%
+	      \hfill%
+	  	\subfloat[]{%
+	  		\includegraphics[width=0.5\textwidth]{part1/2_regression_fit.png}
+	  		\label{fig:regression}%
+	  	}%
+	  	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a regression problem. The data are a downsampled version ($f_s = 546 Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14 2015, 09:50:45 UTC at LIGO Hanford (WA).}\label{fig:regression_fit}
+	  \end{figure}
 
-%    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
-
-    Supervised learning machines can rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}.
-    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.
-
-    \subsection{Regularization methods} \label{subsec:regularization_methods}
-    Regularization methods are a broad class of ML models that include ...
-
-    \subsection{Ensemble methods}
-
-    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
-
-    % FIXME
-    \textit{Bagging} is a common ensemble method that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} data set $\{X,\bm{y}\}_b$ obtained from the training set $\{X,\bm{y}\}$ by random sampling with replacement~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. In particular, in case of classification tasks, the bagged model selects the most predicted class casting a vote among the $B$ base learners.
-
-    % FIXME
-    \textit{Boosting} is another popular ensemble method that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners.
-
-
-    \subsubsection{Random Forests}
-    Decision trees are easily interpretable models that recursively partitions the training data into subsets, based on the test of a single feature value at each split (or node). At each iteration, the feature that yields the best split in terms of a pre-selected metric (Gini impurity, information gain or variance reduction) is chosen to create a new node. Decision trees tend to not perform well in practice, which led to the introduction of random forests in 2001~\cite{breiman2001random}.
-
-    Random forests are ensembles of decision trees, each grown on a bootstrap sample from the training data.
-    To increase robustness to noise and diversity among the trees, each node is split using the best split among a subset of features randomly chosen at that node.
-    The final prediction is made by aggregating the prediction of $m$ trees, either by a majority vote in the case of classification problems, or by averaging predictions in the case of regression problems.
-    Random forests are a {\it bagging} approach, which works on the assumption that the variance of individual decision trees can be reduced by averaging trees built on many uncorrelated subsamples.
-    By contrast, {\it boosted decision trees} are made by building an iterative collection of decision trees, trained by giving more importance to training examples that were incorrectly classified by the previous trees. \todo{Add use cases for boosted decision trees. $\dots$}
-
-    Random forests can provide several measures of {\it feature importance}, computed by looking at the increase in prediction error % (mean decrease in accuracy; mean decrease in node impurity)
-    when data for a feature is permuted while all other features remain unchanged. Feature selection based on random forests if most often performed using one of these measures. However, several techniques for applying regularization to random forests have been proposed. These techniques broadly fall under two categories: (1) cost-complexity pruning, which consists in limiting tree depth, resulting in less complex models~\cite{ishwaran2008random,kulkarni2012pruning}; and (2) Gini index penalization~\cite{deng2013gene, liu2014learning}. In addition,~\cite{joly2012ell1} proposed using an $\ell_1$-norm  to reduce the space-complexity of random forests.
-
-    Random forests naturally handle both numerical and categorical variables, multiple scales, and non-linearities. They also require little parameter tuning. This makes them popular for the analysis of diverse types of biological data, such as gene expression, GWAS data or mass spectrometry~\cite{qi2012random}. Unfortunately, in practice feature selection schemes that rely on them tend to be very unstable~\cite{kursa2014robustness}.
-
-    \subsubsection{Gradient Boosting}
-    \textit{Gradient boosting}~\citep{friedman2001greedy}  is one of the most widely applied boosting methods in biological problems.
-    %This technique iteratively combines the predictions obtained by several base learners, such as decision trees, into a single model.
-    The key idea behind gradient boosting is that, under some general hypothesis on the cost function, boosting can be seen as an iterative gradient method for numerical optimization.
-    %In particular, in GB at each boosting step a new base learner is fitted on the residuals obtained at the previous boosting iteration.
-    Gradient boosting has several desirable properties~\citep{mayr2014evolution}, such as its capability to learn nonlinear input/output relationship, its ability to embed a feature importance measure (as random forests~\citep{hastie2009elements}) and its stability in case of high-dimensional data~\citep{buehlmann2006boosting}.
-
-    %The consistency of GB in high-dimensional problems was demonstrated in.
-
-    As for any learning machine, boosting methods may suffer of overfitting. The main regularization parameter to control is the number of boosting iterations $M$, \ie the number of base learners, fitted on the training data. This is typically optimized by cross-validated grid-search, or by information criteria-based heuristics~\citep{tutz2006generalized, tutz2007boosting} (see Section~\ref{subsec:model_selection}).
-
-    Regularization in gradient boosting can also be controlled by shrinking the contribution of each base learner by a constant $0<\nu<1$ that controls the learning rate of the boosting procedure~\citep{hastie2009elements}. In order to achieve comparable predictive power, smaller values of $\nu$ imply larger number of $M$, so there is a tradeoff between them.
-    As usually the base learners are decision trees, another important parameter to tune is their maximum depth~\citep{hastie2009elements}.
-
-    In a recent paper~\citep{lusa2015boosting}, the authors show that in high-dimensional balanced binary classification problems, if the base learner is likely to overfit the training data, the use of \textit{Stochastic gradient boosting}~\citep{friedman2002stochastic} is preferable. The latter is a modified version of the original method, where each base learner is fitted on a random extraction without resubmission of a fraction $\eta$ of the training data, where $\eta$ is de-facto a regularization parameter to choose.
-
-    Approaches based on gradient boosting classification are used to detect \textit{de novo} mutations showing an improved specificity and sensitivity with respect to state-of-the-art methods~\citep{liu2014gradient}.
-    When combined with stability selection~\citep{meinshausen2010stability}, gradient boosting has demonstrated to be a very resourceful method for variable selection, leading to an effective control of the false discovery rate. This strategy was followed to associate overall survival with single-nucleotide polymorphisms of patients affected by cutaneous melanoma~\citep{he2016component} and to detect differentially expressed amino acid pathways in autism spectrum disorder patients~\citep{hofner2015controlling}.
-
-    \todo{consider adding boosting method for cox models...}
+	  \begin{figure}[!h]
+			\centering
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/0_classification_underfit.png}
+				\label{fig:regression}%
+			}%
+			%\hfill%
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/1_classification_overfit.png}
+				\label{fig:regression}%
+			}%
+			\hfill%
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/2_classification_fit.png}
+				\label{fig:regression}%
+			}%
+			\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the t-SNE algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
+	  \end{figure}
 
 
+	    A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
+	    In its broader definition \textit{regularization} can be seen as the process of introducing additional information in order to solve a possibly ill-posed problem.
+			As shown in Equation~\eqref{eq:losspen}, this is typically translated in the use of a regularization penalty $\mathcal{R}(f)$, controlled by a regularization parameter $\lambda$ \cite{tikhonov1963solution, evgeniou2000regularization}.
 
-%%
+	     \begin{equation}\label{eq:losspen}
+	    	\argmin_f \frac{1}{n}\sum_{i=1}^n L(f(\bm{x}_i),y_i) + \lambda \mathcal{R}(f)
+	    \end{equation}
+
+			% The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}.
+			Choosing different $\mathcal{R}(f)$ implies inducing different effects on the solution and it also leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
+			With the regularization parameter $\lambda$ it is possible to control the trade-off between adherence to the training data and strength of the effect induced by the $\mathcal{R}(f)$.
+			As an example, we can think of using a penalty that induces smoothness in the solution.
+			A pictorial representation of a learning machine working in overfitting, underfitting (\aka oversmoothing) and optimal fitting regime in a regression and a classification case can be seen in
+			Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
+			and
+		  Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}, respectively.
+
+
+	%    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
+
+	    Supervised learning machines may rely on very different mathematical backgrounds such as generalized linear models, nonlinear deep neural networks, kernels, trees, ensemble of trees, \etc. Nevertheless, disregarding their nature, they all share the common structure defined in Equation~\eqref{eq:losspen}.
+	    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.
+
+	    \subsection{Regularization methods} \label{subsec:regularization_methods}
+	    Regularization methods are a broad class of ML models that include ...
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			\subsubsection{Ridge Regression}
+
+				
+			%Regularized Least Squares (RLS), is one of the most popular learning methods.
+			%With a suitable formulation of the loss function, Regularized Least Squares (RLS) can successfully be applied for both regression and classification problems.
+			In its original proposition, \textit{Ridge regression}~\cite{hoerl1970ridge} is defined as a least square problem penalized by an $\ell_2$-norm on the regression coefficients, see Equation~\eqref{eq:l2}.
+
+			\begin{equation}\label{eq:l2}
+				R_{\mbox{$\ell_2$}}(\bm{w}) = \sum_{j=1}^d (w_j)^2 = ||\bm{w}||_2^2
+			\end{equation}
+
+			This penalty shrinks the coefficients toward zero, but it does not achieve a parsimonious representation, as it always keep all the variables in the model.
+			This model is successfully applied in countless and heterogeneous biological studies mainly involving regression problems.
+			For instance, in~\cite{kratsch2014} the authors propose a Ridge regression-based method to estimate ancestral characters from phylogenetic trees, while in~\cite{bovelstad2007} Ridge regression is used to perform survival prediction from gene expression data.
+
+			%\todo{\begin{enumerate}
+			%	% \item loss: square loss
+			%	% \item penalties: l2
+			%	% \item use in regression, classification
+			%%	\item use cases
+			%%	\item extension to multi-task and multi-class
+			%\end{enumerate}}
+			%Ridge regression can be extended to the case of multiple-output prediction for both vector-valued regression and multi-category classification problems.
+			%In the first case,
+			On the other hand, this method is not commonly used to solve classification problems, where penalized Logistic regression is usually preferred (see Section~\ref{sec:logistic_regression}).
+
+			Given its straightforwardness, Ridge regression was rediscovered and proposed several times under several different names, among which we recall \textit{Tikhonov regularization}~\cite{tikhonov1963solution}, \textit{weight decay}~\cite{krogh1992simple} and \textit{Regularization Network}~\cite{evgeniou2000regularization}.
+			% \cite{ancona2005regularized}
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+			\subsubsection{Logistic Regression}
+			\begin{enumerate}
+				\item loss: logistic
+				\item penalties: all the above apply
+				\item use in classification
+				\item extension to multiple-class: softmax regression
+				\item use cases
+			\end{enumerate}
+
+			\todo{
+			Some logistic regression works:
+			\begin{enumerate}
+				\item
+			\end{enumerate}
+			}
+
+			Moreover, multi-class classification with Logistic regression is typically achieved by using either a \textit{One-vs-One} (OVO) or a \textit{One-vs-All} (AVA) approach~\todo{REF}.
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			\subsubsection{Support Vector Machines}
+			\begin{enumerate}
+				\item loss: hinge
+				\item dual problem?
+				\item penalties: l2 + l1
+				\item use in classification and regression
+				\item extension to multiple-class? (not sure)
+				\item use cases
+			\end{enumerate}
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			\subsubsection{Lasso}
+			%Tibshirani, in its seminal paper~\cite{tibshirani1996regression}, introduced the use of the $\ell_1$-norm  Equation~\eqref{eq:lasso}, as sparisty-enforcing regularizer for least squares problems.
+			%In the original Lasso paper, the sparisty-enforcing properties of the $\ell_1$-norm, Equation~\eqref{eq:lasso}, as regularizer for least squares problems is typically known as the Lasso.
+			%Such penalty is among the most popular sparsity-enforcing regularization method.
+
+			The Lasso~\cite{tibshirani1996regression} can be defined as a least square problem penalized by an $\ell_1$-norm, see Equation~\eqref{eq:lasso}.
+			% In the Lasso, as in Ridge regression (see Section~\ref{sec:ridge}), the data fidelity is measured by means of the square loss, while the $\ell_1$-norm, defined in Equation~\eqref{eq:lasso}, is used as regularization penalty.
+			\begin{equation}\label{eq:lasso}
+				R_{\mbox{$\ell_1$}}(\bm{w}) = \sum_{j=1}^d |w_j| = ||\bm{w}||_1
+			\end{equation}
+
+			The Lasso model became a popular embedded method for variable selection~\cite{guyon2003introduction} thanks to several of its desirable properties. At first, its regularization term enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and computationally feasible even in very high dimensional scenarios.
+
+			A popular application of the Lasso penalty is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}. Such penalized methods were extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
+
+			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, sparse Logistic regression (see Section~\eqref{sec:logistic_regression}) is often preferred~\cite{tong2009genome}.
+
+
+			%\todo{Add use cases: lu2011lasso, rakitsch2013lasso $\dots$}
+
+
+			The Lasso can also be extended to vector-valued regression problems by using the mixed $L_{2,1}$-norm, defined in Equation~\eqref{eq:L21}, as regularization penalty~\cite{gramfort2012mixed}, this method is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
+
+			\begin{equation}\label{eq:L21}
+				||W||_{2,1} = \sum_{i=1}^d\sqrt{\bigg(\sum_{j=1}^k |w_{ij}|^2\bigg)}
+			\end{equation}
+
+			When used for variable selection, the Lasso has two major drawbacks. First, in presence of groups of correlated variables, this method tends to select only one variable per group, ignoring the others. Secondly, the method cannot select more variables than the sample size~\cite{waldmann2013evaluation, de2009regularized}. In order to ameliorate this issues, several Lasso-inspired models were proposed~\cite{meinshausen2010stability, hoggart2008simultaneous, zou2006adaptive} (see Section~\ref{sec:other_sparsity}). In the next section we will describe one of the most famous and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
+
+
+			%Despite being a popular method
+
+			%\todo{\begin{enumerate}
+			%%	\item loss: square loss
+			%%	\item penalties: l1
+			%%	\item use in regression, classification
+			%%	\item extension to multi-task and multi-class
+			%%	\item use cases
+			%\end{enumerate}}
+
+			\subsubsection{Elastic-Net}
+			The Elastic-Net~\cite{de2009elastic, zou2005regularization} method can be formulated as a least square problem penalized by a convex combination of the Lasso ($\ell_1$) and the Ridge regression ($\ell_2$) penalties, see Equation~\eqref{eq:enet}.
+
+			\begin{equation}\label{eq:enet}
+			  R_{\mbox{$\ell_1\ell_2$}}(\bm{w}) = \sum_{j=1}^d ((1-\alpha) |w_j| + \alpha w_j^2) = (1-\alpha)||\bm{w}||_1 + \alpha||\bm{w}||_2^2
+			\end{equation}
+
+			The combined presence of the $\ell_1$- and $\ell_2$-norms promote sparse solutions were groups of correlated variables can be simultaneously selected. It is easy to see that fitting the Elastic-Net model for $\alpha=1$ or $\alpha=0$ is equivalent to solve Ridge or Lasso regression, respectively.
+
+			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}. In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
+
+
+			This method can also be applied to vector-valued regression problems by simply replacing the $\ell_2$-norm with its extension to the matrix case: the \textit{Frobenius} norm (also known as  \textit{Hilbert-Schmidt} norm), defined in Equation~\eqref{eq:frobenius}.
+			\begin{equation}\label{eq:frobenius}
+				||A||_F = \sqrt{\sum_{i=1}^d \sum_{j=1}^k |a_{ij}|^2}
+			\end{equation}
+			\todo{As in $\dots$}~\cite{he2016novel}
+
+
+			\subsubsection{Other sparsity-inducing penalties}
+			asd
+
+	    \subsection{Ensemble methods}
+	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
+
+	    % FIXME
+	    \textit{Bagging} is a common ensemble method that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} data set $\{X,\bm{y}\}_b$ obtained from the training set $\{X,\bm{y}\}$ by random sampling with replacement~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. In particular, in case of classification tasks, the bagged model selects the most predicted class casting a vote among the $B$ base learners.
+
+	    % FIXME
+	    \textit{Boosting} is another popular ensemble method that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners.
+
+
+	    \subsubsection{Random Forests}
+	    Decision trees are easily interpretable models that recursively partitions the training data into subsets, based on the test of a single feature value at each split (or node). At each iteration, the feature that yields the best split in terms of a pre-selected metric (Gini impurity, information gain or variance reduction) is chosen to create a new node. Decision trees tend to not perform well in practice, which led to the introduction of random forests in 2001~\cite{breiman2001random}.
+
+	    Random forests are ensembles of decision trees, each grown on a bootstrap sample from the training data.
+	    To increase robustness to noise and diversity among the trees, each node is split using the best split among a subset of features randomly chosen at that node.
+	    The final prediction is made by aggregating the prediction of $m$ trees, either by a majority vote in the case of classification problems, or by averaging predictions in the case of regression problems.
+	    Random forests are a {\it bagging} approach, which works on the assumption that the variance of individual decision trees can be reduced by averaging trees built on many uncorrelated subsamples.
+	    By contrast, {\it boosted decision trees} are made by building an iterative collection of decision trees, trained by giving more importance to training examples that were incorrectly classified by the previous trees. \todo{Add use cases for boosted decision trees. $\dots$}
+
+	    Random forests can provide several measures of {\it feature importance}, computed by looking at the increase in prediction error % (mean decrease in accuracy; mean decrease in node impurity)
+	    when data for a feature is permuted while all other features remain unchanged. Feature selection based on random forests if most often performed using one of these measures. However, several techniques for applying regularization to random forests have been proposed. These techniques broadly fall under two categories: (1) cost-complexity pruning, which consists in limiting tree depth, resulting in less complex models~\cite{ishwaran2008random,kulkarni2012pruning}; and (2) Gini index penalization~\cite{deng2013gene, liu2014learning}. In addition,~\cite{joly2012ell1} proposed using an $\ell_1$-norm  to reduce the space-complexity of random forests.
+
+	    Random forests naturally handle both numerical and categorical variables, multiple scales, and non-linearities. They also require little parameter tuning. This makes them popular for the analysis of diverse types of biological data, such as gene expression, GWAS data or mass spectrometry~\cite{qi2012random}. Unfortunately, in practice feature selection schemes that rely on them tend to be very unstable~\cite{kursa2014robustness}.
+
+	    \subsubsection{Gradient Boosting}
+	    \textit{Gradient boosting}~\citep{friedman2001greedy}  is one of the most widely applied boosting methods in biological problems.
+	    %This technique iteratively combines the predictions obtained by several base learners, such as decision trees, into a single model.
+	    The key idea behind gradient boosting is that, under some general hypothesis on the cost function, boosting can be seen as an iterative gradient method for numerical optimization.
+	    %In particular, in GB at each boosting step a new base learner is fitted on the residuals obtained at the previous boosting iteration.
+	    Gradient boosting has several desirable properties~\citep{mayr2014evolution}, such as its capability to learn nonlinear input/output relationship, its ability to embed a feature importance measure (as random forests~\citep{hastie2009elements}) and its stability in case of high-dimensional data~\citep{buehlmann2006boosting}.
+
+	    %The consistency of GB in high-dimensional problems was demonstrated in.
+
+	    As for any learning machine, boosting methods may suffer of overfitting. The main regularization parameter to control is the number of boosting iterations $M$, \ie the number of base learners, fitted on the training data. This is typically optimized by cross-validated grid-search, or by information criteria-based heuristics~\citep{tutz2006generalized, tutz2007boosting} (see Section~\ref{subsec:model_selection}).
+
+	    Regularization in gradient boosting can also be controlled by shrinking the contribution of each base learner by a constant $0<\nu<1$ that controls the learning rate of the boosting procedure~\citep{hastie2009elements}. In order to achieve comparable predictive power, smaller values of $\nu$ imply larger number of $M$, so there is a tradeoff between them.
+	    As usually the base learners are decision trees, another important parameter to tune is their maximum depth~\citep{hastie2009elements}.
+
+	    In a recent paper~\citep{lusa2015boosting}, the authors show that in high-dimensional balanced binary classification problems, if the base learner is likely to overfit the training data, the use of \textit{Stochastic gradient boosting}~\citep{friedman2002stochastic} is preferable. The latter is a modified version of the original method, where each base learner is fitted on a random extraction without resubmission of a fraction $\eta$ of the training data, where $\eta$ is de-facto a regularization parameter to choose.
+
+	    Approaches based on gradient boosting classification are used to detect \textit{de novo} mutations showing an improved specificity and sensitivity with respect to state-of-the-art methods~\citep{liu2014gradient}.
+	    When combined with stability selection~\citep{meinshausen2010stability}, gradient boosting has demonstrated to be a very resourceful method for variable selection, leading to an effective control of the false discovery rate. This strategy was followed to associate overall survival with single-nucleotide polymorphisms of patients affected by cutaneous melanoma~\citep{he2016component} and to detect differentially expressed amino acid pathways in autism spectrum disorder patients~\citep{hofner2015controlling}.
+
+	    \todo{consider adding boosting method for cox models...}
 
 
 
-    \subsection{Deep learning}
-    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
-    Deep Learning (DL) methods are a broad class of machine learning techniques that, starting from raw data, aim at learning a suitable feature representation (see Section~\ref{sec:unsupervised}) and a prediction function, at the same time~\cite{lecun2015deep}. DL methods can be seen as an extension of classical Neural Networks, where the final prediction is achieved by composing several layers of non-linear transformations.
-    %The intuition behind DL method is that, starting from raw data, their multi-layer architecture can achieve representations at a more abstract level, capable of achieving high performance in prediction tasks.
-    DL architectures can be devised to tackle binary/multi-category classification~\cite{angermueller2016deep, leung2014deep} as well as single/multiple-output regression~\cite{Chen2016GeneEI, ma2015deep} tasks.
-    %\todo{microarray gene xpression multi-task regression }
+	%%
 
-    Many methods fall in this class~\cite{lecun2015deep}, in order to understand them in general, we sketch here the main ideas behind the most basic one: the Multi-Layer Perceptron (MLP), also known as deep feedforward network.
-    Typically, MLPs are structured as fully connected graphs organized in \textit{layers} that can be of three different types: \textit{input},  \textit{hidden} and \textit{output} (see Figure~\ref{fig:mlp}). Each node of the graph is called \textit{unit}. The number of units in the input layer matches the dimensionality of the raw data ($d$), while number and type of output units are related to the learning task. The size of the hidden layer, and their number, can be arbitrarily chosen according to the prediction task and the available computational resources.
-    In MLPs the information flows through the graph from the input to the output. Each layer $l$ transforms its input data $\bm{x}^{l-1}$ by composing an affine transformation and an activation function $f(\cdot)$ that acts element-wise on its input vector. In other words, defining as $p_{l-i}$ the number of units in the layer $l-i$, the layer $l$ applies the transformation $\bm{x}^{l} = f(\bm{x}^{(l-1)}W_l+b_l)$, where $W_l \in \mathbb{R}^{p_{l-1} \times p_l}$ and $\bm{b} \in \mathbb{R}^{p_l}$ are the weights of the model that are learned from the data. The function $f(\cdot)$ is known as \textit{activation function} and it can be defined in different ways. In classical neural networks, activation functions are modeled as sigmoids (\eg $f(x)=\tanh(x)$, $f(x)=(1+e^{-x})^{-1}$) whilst in modern DL architectures the most used activation function is the Rectified Linear Unit (\ie $f(x)=\max(0,x)$)~\cite{lecun2015deep} .
-    % \begin{equation}\label{eq:relu}
-    % 	f(\bm{x})=\begin{cases} 0  &\text{for}~~  x <0 \\ x  &\text{for~}~x \geq 0 \end{cases}
-    % \end{equation}
 
-    \input{part1/nn_tikz.tex}
 
-    % \todo{output layers + regularization + works}
-    Particular attention must be paid when fitting deep models as they can be prone to overfit the training set~\cite{angermueller2016deep}.
-    The network topology itself defines the \textit{degrees of freedom} of the model: deeper and wider networks can approximate well very complicated input-output relationship, but also the noise affecting the data.
-    Although, tuning the number of hidden layers and their size is not the recommended strategy to prevent from overfitting, as it may lead to suboptimal solutions.
+	    \subsection{Deep learning}
+	    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
+	    Deep Learning (DL) methods are a broad class of machine learning techniques that, starting from raw data, aim at learning a suitable feature representation (see Section~\ref{sec:unsupervised}) and a prediction function, at the same time~\cite{lecun2015deep}. DL methods can be seen as an extension of classical Neural Networks, where the final prediction is achieved by composing several layers of non-linear transformations.
+	    %The intuition behind DL method is that, starting from raw data, their multi-layer architecture can achieve representations at a more abstract level, capable of achieving high performance in prediction tasks.
+	    DL architectures can be devised to tackle binary/multi-category classification~\cite{angermueller2016deep, leung2014deep} as well as single/multiple-output regression~\cite{Chen2016GeneEI, ma2015deep} tasks.
+	    %\todo{microarray gene xpression multi-task regression }
 
-    Regularization in MLPs can be controlled by penalizing the weights of the network (see Section~\ref{subsec:regularization_penalties}). The most common regularization strategy consists in adding an $\ell_2$-norm penalty in the objective function, as in Equation~\eqref{eq:losspen}. In the DL community this procedure is known as weight decay~\cite{krogh1992simple}.
+	    Many methods fall in this class~\cite{lecun2015deep}, in order to understand them in general, we sketch here the main ideas behind the most basic one: the Multi-Layer Perceptron (MLP), also known as deep feedforward network.
+	    Typically, MLPs are structured as fully connected graphs organized in \textit{layers} that can be of three different types: \textit{input},  \textit{hidden} and \textit{output} (see Figure~\ref{fig:mlp}). Each node of the graph is called \textit{unit}. The number of units in the input layer matches the dimensionality of the raw data ($d$), while number and type of output units are related to the learning task. The size of the hidden layer, and their number, can be arbitrarily chosen according to the prediction task and the available computational resources.
+	    In MLPs the information flows through the graph from the input to the output. Each layer $l$ transforms its input data $\bm{x}^{l-1}$ by composing an affine transformation and an activation function $f(\cdot)$ that acts element-wise on its input vector. In other words, defining as $p_{l-i}$ the number of units in the layer $l-i$, the layer $l$ applies the transformation $\bm{x}^{l} = f(\bm{x}^{(l-1)}W_l+b_l)$, where $W_l \in \mathbb{R}^{p_{l-1} \times p_l}$ and $\bm{b} \in \mathbb{R}^{p_l}$ are the weights of the model that are learned from the data. The function $f(\cdot)$ is known as \textit{activation function} and it can be defined in different ways. In classical neural networks, activation functions are modeled as sigmoids (\eg $f(x)=\tanh(x)$, $f(x)=(1+e^{-x})^{-1}$) whilst in modern DL architectures the most used activation function is the Rectified Linear Unit (\ie $f(x)=\max(0,x)$)~\cite{lecun2015deep} .
+	    % \begin{equation}\label{eq:relu}
+	    % 	f(\bm{x})=\begin{cases} 0  &\text{for}~~  x <0 \\ x  &\text{for~}~x \geq 0 \end{cases}
+	    % \end{equation}
 
-    This strategy is adopted in \cite{Chen2015TransspeciesLO} to train a deep architecture on rat cell responses to given stimuli with the final aim to predict human cell responses in the same conditions.
-    Moreover, weight decay is also adopted in \cite{Yuan2016DeepGeneAA} to train \textit{DeepGene}, \ie an MLP which is designed to classify the tumor type from a set of somatic point mutations.
-    Furthermore, weight decay is used in~\cite{Fakhry2016DeepMF} to train a DL architecture for brain electron microscopy image segmentation.
-    Although less common, the $\ell_1$-norm can also be adopted as regularization penalty, as in~\cite{leung2014deep}.
+	    \input{part1/nn_tikz.tex}
 
-    Training MLPs, and deep networks in general, consists in solving a minimization problem via suitable optimization algorithms~\cite{ruder2016overview}. All these methods iteratively update the weights of the network in order to decrease the training error. A popular regularization strategy, known as  \textit{Early stopping}~\cite{prechelt1998early}, consists in interrupting the fitting process as soon as the error on an external validation set increases~\cite{angermueller2016deep}.
+	    % \todo{output layers + regularization + works}
+	    Particular attention must be paid when fitting deep models as they can be prone to overfit the training set~\cite{angermueller2016deep}.
+	    The network topology itself defines the \textit{degrees of freedom} of the model: deeper and wider networks can approximate well very complicated input-output relationship, but also the noise affecting the data.
+	    Although, tuning the number of hidden layers and their size is not the recommended strategy to prevent from overfitting, as it may lead to suboptimal solutions.
 
-    Another common regularization strategy in DL is \textit{Dropout}~\cite{srivastava2014dropout}. This techniques consists in temporarily deactivating a defined number of randomly chosen units of the network at training phase. This reduces the degrees of freedom of the model and it implicitly allows to achieve an ensemble of several smaller networks whose predictions are combined.
-    The use of dropout alone can improve the generalization properties, as in~\cite{Chen2016GeneEI}, where the authors propose a \textit{D-GEX}, DL regression architecture trained to predict the expression of a number of target genes. Dropout can also be used in combination with weight decay or other forms of regularization, as in~\cite{leung2014deep}, where the authors propose to use a deep network to achieve splicing pattern prediction.
+	    Regularization in MLPs can be controlled by penalizing the weights of the network (see Section~\ref{subsec:regularization_penalties}). The most common regularization strategy consists in adding an $\ell_2$-norm penalty in the objective function, as in Equation~\eqref{eq:losspen}. In the DL community this procedure is known as weight decay~\cite{krogh1992simple}.
 
-	\begin{table}[htb]
-		\centering
-		\caption{Overview of the matrix norms used for multiple-output regression.}\label{tab:norms}
-		\begin{tabular}{l|l|l}
-			\toprule
-			Matrix norm  & Notation         & Definition                      \\  \midrule
-			Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
-			Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
-			Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
-		\end{tabular}
-	\end{table}
+	    This strategy is adopted in \cite{Chen2015TransspeciesLO} to train a deep architecture on rat cell responses to given stimuli with the final aim to predict human cell responses in the same conditions.
+	    Moreover, weight decay is also adopted in \cite{Yuan2016DeepGeneAA} to train \textit{DeepGene}, \ie an MLP which is designed to classify the tumor type from a set of somatic point mutations.
+	    Furthermore, weight decay is used in~\cite{Fakhry2016DeepMF} to train a DL architecture for brain electron microscopy image segmentation.
+	    Although less common, the $\ell_1$-norm can also be adopted as regularization penalty, as in~\cite{leung2014deep}.
+
+	    Training MLPs, and deep networks in general, consists in solving a minimization problem via suitable optimization algorithms~\cite{ruder2016overview}. All these methods iteratively update the weights of the network in order to decrease the training error. A popular regularization strategy, known as  \textit{Early stopping}~\cite{prechelt1998early}, consists in interrupting the fitting process as soon as the error on an external validation set increases~\cite{angermueller2016deep}.
+
+	    Another common regularization strategy in DL is \textit{Dropout}~\cite{srivastava2014dropout}. This techniques consists in temporarily deactivating a defined number of randomly chosen units of the network at training phase. This reduces the degrees of freedom of the model and it implicitly allows to achieve an ensemble of several smaller networks whose predictions are combined.
+	    The use of dropout alone can improve the generalization properties, as in~\cite{Chen2016GeneEI}, where the authors propose a \textit{D-GEX}, DL regression architecture trained to predict the expression of a number of target genes. Dropout can also be used in combination with weight decay or other forms of regularization, as in~\cite{leung2014deep}, where the authors propose to use a deep network to achieve splicing pattern prediction.
+
+		\begin{table}[htb]
+			\centering
+			\caption{Overview of the matrix norms used for multiple-output regression.}\label{tab:norms}
+			\begin{tabular}{l|l|l}
+				\toprule
+				Matrix norm  & Notation         & Definition                      \\  \midrule
+				Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
+				Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
+				Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
+			\end{tabular}
+		\end{table}
 
 
 
