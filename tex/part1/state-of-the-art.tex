@@ -3,7 +3,7 @@
 \chapter{Machine learning state of the art} \label{chap:state-of-the-art}
 
 \begin{displayquote}
-	\textit{This chapter starts defining the concept of machine learning in its two major declinations: supervised and unsupervised learning. It continues providing a comprehensive overview of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
+	\textit{This chapter starts defining the concept of machine learning in its two major declinations: supervised and unsupervised learning. It continues providing a comprehensive overview  of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
 \end{displayquote}
 
 The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
@@ -68,16 +68,16 @@ As of today ML is the workhorse of data science.
 	%  In the second part of this thesis each of these learning problems will be faced.
 	  The remainder of this section summarizes the methods that are most relevant with the data-driven strategies adopted to tackle the biomedical data science challenges described in the second part of in this thesis.
 
-	  Given a set of input-output pairs $\mathcal{D} = \{\bm{x}_i, y_i\}_{i=1}^n$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
+	  Given a set of input-output pairs $\mathcal{D} = \{\bm{x}_i, y_i\}_{i=1}^n = (X, \bm{y})$, supervised learning methods aim at finding a function of the inputs $f(\bm{x})$ that approximates the output $y$. This translates into the minimization problem defined in Equation~\eqref{eq:loss}.
 
 	  \begin{equation}\label{eq:loss}
 	    \argmin_f \frac{1}{n}\sum_{i=1}^n L(f(\bm{x}_i),y_i) %+ \lambda R(f)
 	  \end{equation}
 
 	  The loss function $L(f(\bm{x}),y)$ can be seen as a measure of \textit{adherence} to the available training data. Several loss functions for regression and classification problems were proposed; Table~\ref{tab:losses} defines the most commonly adopted in biomedical studies while their visual representation is presented in Figure~\ref{fig:loss}.
-		Choosing the appropriate loss function for the problem at hand is crucial and there is no trivial solution for this problem.
-		Different choices for $L(f(\bm{x}),y)$ are known under different names for the obtained learning machine. In the remainder of this section the most commonly adopted solutions are presented.
-		% \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
+	  Choosing the appropriate loss function for the problem at hand is crucial and there is no trivial solution for this problem.
+	  Different choices for $L(f(\bm{x}),y)$ identifies different learning machines, that are known under different names. The most popular methods will be presented in the next few sections.
+	  % \todo{Different choices for the loss function imply different ML model, see the remainder of this section + this is possibly ill-posed}
 
 	  \begin{figure}[!h]
 	  	\centering
@@ -113,24 +113,25 @@ As of today ML is the workhorse of data science.
 	  		Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
 	  		Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
 	  		Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
+	  		Exponential & $e^{- yf(\bm{x})}$ & classification \\
 	  		\bottomrule
 	  	\end{tabular}
 	  \end{table}
 
 	   % rubare da BIB
 	  % In its most classical definition, the aim of modeling is to infer some unknown structure underlying the data.
-	  The process of identifying a model from a real-world data collection can be very hard. Many unwanted and concurrent factors may be misleading and the solution may have poor predictive power.
-		For instance:
+	  Identifying a reliable data-driven model can be a very tricky task. Many unwanted and concurrent factors may be misleading and the solution may have poor predictive power for several reasons.
+		Including:
 		\begin{enumerate}
 			\item the acquisition devices may introduce random fluctuations in the measures;
 			\item the amount of collected samples $n$ may be small with respect to the number of observed variables $d$;
-			\item the variables may not be representative of the target phenomenon.
+			\item the measured variables may not be representative of the target phenomenon.
 	  \end{enumerate}
 		From a modeling standpoint, every combination of the factors above can be seen as \textit{noise} affecting the data.
-		Precautions in the model formulation process must be taken in order to achieve solutions that are insensitive to small changes in the input data and, in general, \textit{robust} to the noise effect.
+		Precautions in the model formulation process must be taken in order to achieve solutions that are insensitive to small changes in the input data and that are, in general, \textit{robust} to the noise effect.
 
-		Considering a ML model ($\mathcal{\hat M}$) fitted on a collection of data ($\mathcal{D}$), the most desirable property of $\mathcal{\hat M}$ is that it should be able to achieve good prediction performance not only on $\mathcal{D}$, but also on all the future, therefore unseen, data points $\mathcal{D}'$.
-		In other words, assuming that the samples in $\mathcal{D}$ are affected by some kind of random component, $\mathcal{\hat M}$ should be able to learn a predictive function that does not \textit{follow the noise}, but rather models the true input-output relationship.
+		Considering a ML model ($\hat f$) fitted on a collection of data ($\mathcal{D}$), the most desirable property of $\hat f$ is that it should be able to achieve good prediction performance not only on $\mathcal{D}$, but also on all the future, therefore unseen, data points $\mathcal{D}'$.
+		In other words, assuming that the samples in $\mathcal{D}$ are affected by some kind of random\footnote{here with \textit{random} we mean "\textit{uncorrelated with the input-output relationship}"} component, $\hat f$ should be able to learn a predictive function that does not \textit{follow the noise}, but rather models the true input-output relationship.
 		In ML, a model that fits well $\mathcal{D}$ but performs poorly on $\mathcal{D}'$ is said to be \textit{overfitting}.
 
 	  \begin{figure}[!h]
@@ -149,7 +150,7 @@ As of today ML is the workhorse of data science.
 	  		\includegraphics[width=0.5\textwidth]{part1/2_regression_fit.png}
 	  		\label{fig:regression}%
 	  	}%
-	  	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a regression problem. The data are a downsampled version ($f_s = 546 Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14 2015, 09:50:45 UTC at LIGO Hanford (WA).}\label{fig:regression_fit}
+	  	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a regression problem. The data are a downsampled version ($f_s = 546~Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14\textsuperscript{th}, 2015, 09:50:45 {\sc utc} at LIGO Hanford (WA).}\label{fig:regression_fit}
 	  \end{figure}
 
 	  \begin{figure}[!h]
@@ -172,19 +173,25 @@ As of today ML is the workhorse of data science.
 	  \end{figure}
 
 
-	    A common strategy to build predictive models out of noisy data is called \textit{regularization}. As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}), for each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
+%	    Real-world data collections can be heavily affected by random noise,
+%	    As the biomedical world is the the main area of interest of this thesis (see Section~\ref{sec:challenges_biomedical}),
+%	    The most widely adopted common strategy to build predictive models out of noisy data is called \textit{regularization}.
+        In ML literature, \textit{regularization} is the most important countermeasure to overfitting and it is widely adopted, under several forms, to build predictive models out of noisy data.
+
+	    The original contribution of this phd thesis mainly relies on the application of data science and ML concepts to noisy domains. Therefore, regularization strategies are of primary interest in this discussion.
+	    For each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
 	    In its broader definition \textit{regularization} can be seen as the process of introducing additional information in order to solve a possibly ill-posed problem.
 			As shown in Equation~\eqref{eq:losspen}, this is typically translated in the use of a regularization penalty $\mathcal{R}(f)$, controlled by a regularization parameter $\lambda$ \cite{tikhonov1963solution, evgeniou2000regularization}.
 
 	     \begin{equation}\label{eq:losspen}
-	    	\argmin_f \frac{1}{n}\sum_{i=1}^n L(f(\bm{x}_i),y_i) + \lambda \mathcal{R}(f)
+	    	\argmin_{f \in \mathcal{F}} \frac{1}{n}\sum_{i=1}^n L(f(\bm{x}_i),y_i) + \lambda \mathcal{R}(f)
 	    \end{equation}
 
 			% The expected result is a function that fits the training data while having good generalization properties, \ie accurate predictions on previously  \textit{unseen} test data \cite{hastie2009elements}.
 			Choosing different $\mathcal{R}(f)$ implies inducing different effects on the solution and it also leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
 			With the regularization parameter $\lambda$ it is possible to control the trade-off between adherence to the training data and strength of the effect induced by the $\mathcal{R}(f)$.
-			As an example, we can think of using a penalty that induces smoothness in the solution.
-			A pictorial representation of a learning machine working in overfitting, underfitting (\aka oversmoothing) and optimal fitting regime in a regression and a classification case can be seen in
+			As an example, we can think of using a penalty that induces smoothness, such as the $\ell_2$-norm, or sparsity, such as the $\ell_1$-norm, in the solution.
+			A pictorial representation of a learning machine working in overfitting, underfitting and optimal fitting regime in a regression and a classification case can be seen in
 			Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
 			and
 		  Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}, respectively.
@@ -196,23 +203,64 @@ As of today ML is the workhorse of data science.
 	    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.
 
 	    \subsection{Regularization methods} \label{subsec:regularization_methods}
-	    Regularization methods are a broad class of ML models that include ...
+	    Regularization methods is a broad class of models that include linear and nonlinear techniques for both regression and classification. The main characteristic of the methods falling in this class, is that they are particularly straightforward to express as in Equation~\eqref{eq:losspen}. In fact, as described in~\cite{evgeniou2000regularization}, most of them are simply identified by the use of one loss function $L(f(\bm{x}), y)$ and one, or more, regularization penalty $\mathcal{R}(f)$.
+
+	    In the following sections an overview of the most popular regularization methods is presented.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Ridge Regression}
+			\subsubsection{Ordinary least squares}
+			We start this discussion focusing on linear models $\hat y = f(\bm{x})=\bm{x}^T\bm{w}$ and taking into account the most popular loss function for regression problems: the square loss $L(\hat y, y) = (\bm{x}^T\bm{w}-y)^2$. The data fitting problem expressed in Equation~\eqref{eq:ols} is known as \textit{Ordinary Least Squares} (\ac{OLS}), or simply as \textit{linear regression}.
 
-				
-			%Regularized Least Squares (RLS), is one of the most popular learning methods.
-			%With a suitable formulation of the loss function, Regularized Least Squares (RLS) can successfully be applied for both regression and classification problems.
-			In its original proposition, \textit{Ridge regression}~\cite{hoerl1970ridge} is defined as a least square problem penalized by an $\ell_2$-norm on the regression coefficients, see Equation~\eqref{eq:l2}.
-
-			\begin{equation}\label{eq:l2}
-				R_{\mbox{$\ell_2$}}(\bm{w}) = \sum_{j=1}^d (w_j)^2 = ||\bm{w}||_2^2
+			\begin{equation} \label{eq:ols}
+				\bm{\hat w}_{OLS} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2
 			\end{equation}
 
-			This penalty shrinks the coefficients toward zero, but it does not achieve a parsimonious representation, as it always keep all the variables in the model.
-			This model is successfully applied in countless and heterogeneous biological studies mainly involving regression problems.
-			For instance, in~\cite{kratsch2014} the authors propose a Ridge regression-based method to estimate ancestral characters from phylogenetic trees, while in~\cite{bovelstad2007} Ridge regression is used to perform survival prediction from gene expression data.
+			The minimization problem in Equation~\eqref{eq:ols} is convex and differentiable, hence its solution can be achieved both in closed-form as
+			$$
+				\bm{\hat w}_{OLS} = (X^TX)^{-1}X^T\bm{y}
+			$$
+			and by iterative minimization routines such as (stochastic) gradient descent-like algorithms~\cite{boyd2004convex}. A pictorial representation of the solution of an ordinary least squares problem can be seen in Figure~\ref{fig:w_ols}.
+
+			OLS is probably the most na\"ive regression strategy, nevertheless it is widely adopted in several studies. For instance, let's see what happens when we use the OLS model on a real regression problem.
+			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where $\bm{x}_i \in \mathbb{R}^{12}$ and $y_i \in \mathbb{R}$ ($\forall i=1,\dots,111$). For the sake of this discussion, a  thorough description of $\mathcal{D}_{\text{aging}}$ is irrelevant\footnote{this regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we will simply consider the $d=12$ variables as predictors of a continuous outcome $y$ and we will look for a linear input-output relationship.
+			In order to do that, we randomly split $\mathcal{D}_{\text{aging}}$ in two, hence obtaining a training and test sets of, $n_{\text{tr}}=74$ and $n_{\text{ts}}=37$ samples respectively.
+
+			\begin{figure}[!h]
+				\includegraphics[width=\textwidth]{part1/coefs_ols.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\text{OLS}}$ obtained fitting an OLS model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ols}
+		  \end{figure}
+
+
+			We have already pointed out how learning predictive functions only by minimizing a loss function may lead to suboptimal solutions; therefore in the following sections we will explore pro and cons of using different penalties.
+
+			\subsubsection{Ridge regression}
+			In its original proposition, \textit{ridge regression}~\cite{hoerl1970ridge} is defined as a least squares problem penalized by an $\ell_2$-norm on the regression coefficients, see Equation~\eqref{eq:l2}.
+
+			\begin{equation}\label{eq:l2}
+				\mathcal{R}_{\mbox{$\ell_2$}}(\bm{w}) = \sum_{j=1}^d (w_j)^2 = ||\bm{w}||_2^2
+			\end{equation}
+
+			Therefore, the ridge regression minimization problem can be written as in Equation~\eqref{eq:ridge_regression}.
+
+			\begin{equation} \label{eq:ridge_regression}
+				\bm{\hat w}_{\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 + \lambda  \sum_{j=1}^d (w_j)^2 = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2 + \lambda \norm{\bm{w}}_2^2
+			\end{equation}
+
+			This penalty leads to smooth solutions as it shrinks the coefficients toward zero, but it does not achieve a parsimonious representation, as it always keep all the variables in the model.
+			The ridge regression problem of Equation~\eqref{eq:ridge_regression} is convex  and differentiable and a pictorial representation of its solution in a 2D case is depicted in Figure~\ref{fig:w_ridge}. The ridge coefficients $\bm{\hat w}_{\ell_2}$ can be estimated in closed-form as
+			$$
+				\bm{\hat w}_{\ell_2} = (X^TX + \lambda I)^{-1}X^T\bm{y}
+			$$
+			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can of course also be obtained with gradient descend-like optimization routines~\cite{boyd2004convex}.
+
+			\begin{figure}[!h]
+				\includegraphics[width=\textwidth]{part1/coefs_ridge.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
+		  \end{figure}
+
+			Although mainly used for regression problems, as the square loss can be written as a margin loss function
+%			ridge regression is successfully applied in countless and heterogeneous biological studies mainly involving regression problems.
+%			For instance, in~\cite{kratsch2014} the authors propose a ridge regression-based method to estimate ancestral characters from phylogenetic trees, while in~\cite{bovelstad2007} ridge regression is used to perform survival prediction from gene expression data.
 
 			%\todo{\begin{enumerate}
 			%	% \item loss: square loss
@@ -223,40 +271,12 @@ As of today ML is the workhorse of data science.
 			%\end{enumerate}}
 			%Ridge regression can be extended to the case of multiple-output prediction for both vector-valued regression and multi-category classification problems.
 			%In the first case,
-			On the other hand, this method is not commonly used to solve classification problems, where penalized Logistic regression is usually preferred (see Section~\ref{sec:logistic_regression}).
+			\todo{On the other hand, this method is not commonly used to solve classification problems, where penalized Logistic regression is usually preferred (see Section~\ref{sec:logistic_regression}).}
 
-			Given its straightforwardness, Ridge regression was rediscovered and proposed several times under several different names, among which we recall \textit{Tikhonov regularization}~\cite{tikhonov1963solution}, \textit{weight decay}~\cite{krogh1992simple} and \textit{Regularization Network}~\cite{evgeniou2000regularization}.
+			Given its straightforwardness, ridge regression was rediscovered and proposed several times under several different names, among which we recall \textit{Tikhonov regularization}~\cite{tikhonov1963solution}, \textit{weight decay}~\cite{krogh1992simple} \todo{or simply $\ell_2$-regularization~\cite{??}}.
+%			and \textit{Regularization Network}~\cite{evgeniou2000regularization}.
 			% \cite{ancona2005regularized}
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-			\subsubsection{Logistic Regression}
-			\begin{enumerate}
-				\item loss: logistic
-				\item penalties: all the above apply
-				\item use in classification
-				\item extension to multiple-class: softmax regression
-				\item use cases
-			\end{enumerate}
-
-			\todo{
-			Some logistic regression works:
-			\begin{enumerate}
-				\item
-			\end{enumerate}
-			}
-
-			Moreover, multi-class classification with Logistic regression is typically achieved by using either a \textit{One-vs-One} (OVO) or a \textit{One-vs-All} (AVA) approach~\todo{REF}.
-
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Support Vector Machines}
-			\begin{enumerate}
-				\item loss: hinge
-				\item dual problem?
-				\item penalties: l2 + l1
-				\item use in classification and regression
-				\item extension to multiple-class? (not sure)
-				\item use cases
-			\end{enumerate}
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Lasso}
@@ -265,12 +285,17 @@ As of today ML is the workhorse of data science.
 			%Such penalty is among the most popular sparsity-enforcing regularization method.
 
 			The Lasso~\cite{tibshirani1996regression} can be defined as a least square problem penalized by an $\ell_1$-norm, see Equation~\eqref{eq:lasso}.
-			% In the Lasso, as in Ridge regression (see Section~\ref{sec:ridge}), the data fidelity is measured by means of the square loss, while the $\ell_1$-norm, defined in Equation~\eqref{eq:lasso}, is used as regularization penalty.
+			% In the Lasso, as in ridge regression (see Section~\ref{sec:ridge}), the data fidelity is measured by means of the square loss, while the $\ell_1$-norm, defined in Equation~\eqref{eq:lasso}, is used as regularization penalty.
 			\begin{equation}\label{eq:lasso}
 				R_{\mbox{$\ell_1$}}(\bm{w}) = \sum_{j=1}^d |w_j| = ||\bm{w}||_1
 			\end{equation}
 
 			The Lasso model became a popular embedded method for variable selection~\cite{guyon2003introduction} thanks to several of its desirable properties. At first, its regularization term enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and computationally feasible even in very high dimensional scenarios.
+
+			\begin{figure}[!h]
+				\includegraphics[width=\textwidth]{part1/coefs_lasso.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_lasso}
+		  \end{figure}
 
 			A popular application of the Lasso penalty is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}. Such penalized methods were extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
 
@@ -300,26 +325,92 @@ As of today ML is the workhorse of data science.
 			%\end{enumerate}}
 
 			\subsubsection{Elastic-Net}
-			The Elastic-Net~\cite{de2009elastic, zou2005regularization} method can be formulated as a least square problem penalized by a convex combination of the Lasso ($\ell_1$) and the Ridge regression ($\ell_2$) penalties, see Equation~\eqref{eq:enet}.
+			The Elastic-Net~\cite{de2009elastic, zou2005regularization} method can be formulated as a least square problem penalized by a convex combination of the Lasso ($\ell_1$) and the ridge regression ($\ell_2$) penalties, see Equation~\eqref{eq:enet}.
 
 			\begin{equation}\label{eq:enet}
-			  R_{\mbox{$\ell_1\ell_2$}}(\bm{w}) = \sum_{j=1}^d ((1-\alpha) |w_j| + \alpha w_j^2) = (1-\alpha)||\bm{w}||_1 + \alpha||\bm{w}||_2^2
+				R_{\mbox{$\ell_1\ell_2$}}(\bm{w}) = \sum_{j=1}^d ((1-\alpha) |w_j| + \alpha w_j^2) = (1-\alpha)||\bm{w}||_1 + \alpha||\bm{w}||_2^2
 			\end{equation}
 
-			The combined presence of the $\ell_1$- and $\ell_2$-norms promote sparse solutions were groups of correlated variables can be simultaneously selected. It is easy to see that fitting the Elastic-Net model for $\alpha=1$ or $\alpha=0$ is equivalent to solve Ridge or Lasso regression, respectively.
+			The combined presence of the $\ell_1$- and $\ell_2$-norms promote sparse solutions were groups of correlated variables can be simultaneously selected. It is easy to see that fitting the Elastic-Net model for $\alpha=1$ or $\alpha=0$ is equivalent to solve ridge or Lasso regression, respectively.
 
 			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}. In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
 
+			\begin{figure}[!h]
+				\includegraphics[width=\textwidth]{part1/coefs_enet.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_enet}
+		  \end{figure}
 
 			This method can also be applied to vector-valued regression problems by simply replacing the $\ell_2$-norm with its extension to the matrix case: the \textit{Frobenius} norm (also known as  \textit{Hilbert-Schmidt} norm), defined in Equation~\eqref{eq:frobenius}.
+
 			\begin{equation}\label{eq:frobenius}
 				||A||_F = \sqrt{\sum_{i=1}^d \sum_{j=1}^k |a_{ij}|^2}
 			\end{equation}
 			\todo{As in $\dots$}~\cite{he2016novel}
 
+			\begin{figure}[!h]
+				\includegraphics[width=\textwidth]{part1/l1l2_norms_scatterplot.png}
+				\caption{A comparison of the value of the $\ell_1$ and $\ell_2$ norms of the weights obtained by OLS, ridge, Lasso and Elastic-Net.} \label{fig:l1l2_norms_scatterplot}
+		  \end{figure}
 
+			\begin{figure}[h!]
+				\centering
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/w_ols.png}
+					\label{fig:w_ols}%
+				}%
+				%\hfill%
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/w_ridge.png}
+					\label{fig:w_ridge}%
+				}%
+				\hfill%
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/w_lasso.png}
+					\label{fig:w_lasso}%
+				}%
+				%\hfill%
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/w_enet.png}
+					\label{fig:w_enet}%
+				}%
+				\caption{Pictorial representation of the contour lines of the square loss in a 2D regression problem with various penalties: (a) ordinary least squares (no penalty), (b) ridge regression ($\ell_2$-norm penalty), (c) the lasso ($\ell_1$-norm penalty) and finally (d) the Elastic-Net ($\ell_1$- and $\ell_2$-norm penalties).} \label{fig:square_loss_penalties}
+			\end{figure}
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Other sparsity-inducing penalties}
 			asd
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			\subsubsection{Logistic Regression} \label{sec:logistic_regression}
+			\begin{enumerate}
+				\item loss: logistic
+				\item penalties: all the above apply
+				\item use in classification
+				\item extension to multiple-class: softmax regression
+				\item use cases
+			\end{enumerate}
+
+			\todo{
+			Some logistic regression works:
+			\begin{enumerate}
+				\item
+			\end{enumerate}
+			}
+
+			Moreover, multi-class classification with Logistic regression is typically achieved by using either a \textit{One-vs-One} (OVO) or a \textit{One-vs-All} (AVA) approach~\todo{REF}.
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+			\subsubsection{Support Vector Machines}
+			\begin{enumerate}
+				\item loss: hinge
+				\item dual problem?
+				\item penalties: l2 + l1
+				\item use in classification and regression
+				\item extension to multiple-class? (not sure)
+				\item use cases
+			\end{enumerate}
+
+
 
 	    \subsection{Ensemble methods}
 	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
