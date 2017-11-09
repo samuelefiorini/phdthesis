@@ -209,7 +209,7 @@ As of today ML is the workhorse of data science.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Ordinary least squares}
-			We start this discussion focusing on linear models $\hat y = f(\bm{x})=\bm{x}^T\bm{w}$ and taking into account the most popular loss function for regression problems: the square loss $L(\hat y, y) = (\bm{x}^T\bm{w}-y)^2$. The data fitting problem expressed in Equation~\eqref{eq:ols} is known as \textit{Ordinary Least Squares} (\ac{OLS}), or simply as \textit{linear regression}.
+			We start this discussion focusing on linear models $\hat y = f(\bm{x})=\bm{x}^T\bm{w}$ and taking into account the most popular loss function for regression problems: the square loss $L(\hat y, y) = (\bm{x}^T\bm{w}-y)^2$. The data fitting problem expressed in Equation~\eqref{eq:ols} is known as \textit{Ordinary Least Squares} (\ac{OLS}), or simply as \textit{linear regression}, and it does not include any regularization term.
 
 			\begin{equation} \label{eq:ols}
 				\bm{\hat w}_{OLS} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2
@@ -219,22 +219,32 @@ As of today ML is the workhorse of data science.
 			$$
 				\bm{\hat w}_{OLS} = (X^TX)^{-1}X^T\bm{y}
 			$$
-			and by iterative minimization routines such as (stochastic) gradient descent-like algorithms~\cite{boyd2004convex}. A pictorial representation of the solution of an ordinary least squares problem can be seen in Figure~\ref{fig:w_ols}.
+			and by iterative minimization routines such as (stochastic) gradient descent-like algorithms~\cite{boyd2004convex, sra2012optimization}. A pictorial representation of the solution of OLS can be seen in Figure~\ref{fig:w_ols}.
 
-			OLS is probably the most na\"ive regression strategy, nevertheless it is widely adopted in several studies. For instance, let's see what happens when we use the OLS model on a real regression problem.
-			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where $\bm{x}_i \in \mathbb{R}^{12}$ and $y_i \in \mathbb{R}$ ($\forall i=1,\dots,111$). For the sake of this discussion, a  thorough description of $\mathcal{D}_{\text{aging}}$ is irrelevant\footnote{this regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we will simply consider the $d=12$ variables as predictors of a continuous outcome $y$ and we will look for a linear input-output relationship.
-			In order to do that, we randomly split $\mathcal{D}_{\text{aging}}$ in two, hence obtaining a training and test sets of, $n_{\text{tr}}=74$ and $n_{\text{ts}}=37$ samples respectively.
+			Even though mainly used for regression, the square loss can be used to solve binary classification problems too. In this case, the square loss can be rewritten as
 
+			\begin{equation}
+				(\bm{x}^T\bm{w}-y)^2 = (1-y \cdot \bm{x}^T\bm{w})^2
+			\end{equation}
+
+			exploiting the fact that the two classes are encoded as $\pm 1$, therefore $\bm{y} \in \{+1,-1\}^n$. For multiclass classification problems, strategies such as \textit{One-vs-One} (\ac{OVO}) or \textit{One-vs-All} (\ac{OVA}) can be adopted to reduce the problem to the binary classification setup~\cite{hastie2009elements}.
+
+			OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let's see what happens when we use the OLS model on a real regression problem.
+
+			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where each input sample $\bm{x}_i \in \mathbb{R}^{12}$ presents a set of measures describing the metabolic state of a healthy subject and $y_i \in \mathbb{N}_+$ is its age expressed in years.
+			For the sake of this discussion a  thorough description of $\mathcal{D}_{\text{aging}}$ at this point is irrelevant\footnote{this regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we can simply think as the $d=12$ variables as predictors of the outcome $y$ and we look for some linear input-output relationship.
+			In order to do that, we randomly split $\mathcal{D}_{\text{aging}}$ in two chunks obtaining a training and a test set of $n_{\text{tr}}=74$ and $n_{\text{ts}}=37$ samples respectively. Then, we fit the OLS model on the training set obtaining the weights vector $\bm{\hat w}_{\text{OLS}}$ represented in Figure~\ref{fig:coefs_ols}.
 			\begin{figure}[!h]
-				\includegraphics[width=\textwidth]{part1/coefs_ols.png}
-				\caption{A pictorial representation of the vector $\bm{\hat w}_{\text{OLS}}$ obtained fitting an OLS model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ols}
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/coefs_ols.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\text{OLS}}$ obtained fitting an OLS model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ols}
 		  \end{figure}
+			As we can see, in order to achieve a predictive model, OLS can only spread the weights across all the input variables. Evaluating $\bm{\hat w}_{\text{OLS}}$ on the test set, this model has a Mean Absolute Error (\ac{MAE}) of $10.598$ years explaining the $74.29\%$ of the variance.
 
-
-			We have already pointed out how learning predictive functions only by minimizing a loss function may lead to suboptimal solutions; therefore in the following sections we will explore pro and cons of using different penalties.
+			We have already pointed out that learning predictive functions only by minimizing a loss function may lead to suboptimal solutions; therefore in the following sections we will explore pro and cons of using different penalties.
 
 			\subsubsection{Ridge regression}
-			In its original proposition, \textit{ridge regression}~\cite{hoerl1970ridge} is defined as a least squares problem penalized by an $\ell_2$-norm on the regression coefficients, see Equation~\eqref{eq:l2}.
+			In its original proposition, \textit{ridge regression}~\cite{hoerl1970ridge} is defined as a least squares problem penalized by the squared $\ell_2$-norm of the regression coefficients (Equation~\eqref{eq:l2}).
 
 			\begin{equation}\label{eq:l2}
 				\mathcal{R}_{\mbox{$\ell_2$}}(\bm{w}) = \sum_{j=1}^d (w_j)^2 = ||\bm{w}||_2^2
@@ -254,8 +264,9 @@ As of today ML is the workhorse of data science.
 			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can of course also be obtained with gradient descend-like optimization routines~\cite{boyd2004convex}.
 
 			\begin{figure}[!h]
-				\includegraphics[width=\textwidth]{part1/coefs_ridge.png}
-				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/coefs_ridge.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
 		  \end{figure}
 
 			Although mainly used for regression problems, as the square loss can be written as a margin loss function
@@ -293,8 +304,9 @@ As of today ML is the workhorse of data science.
 			The Lasso model became a popular embedded method for variable selection~\cite{guyon2003introduction} thanks to several of its desirable properties. At first, its regularization term enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and computationally feasible even in very high dimensional scenarios.
 
 			\begin{figure}[!h]
-				\includegraphics[width=\textwidth]{part1/coefs_lasso.png}
-				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_lasso}
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/coefs_lasso.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_lasso}
 		  \end{figure}
 
 			A popular application of the Lasso penalty is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}. Such penalized methods were extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
@@ -336,8 +348,9 @@ As of today ML is the workhorse of data science.
 			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}. In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
 
 			\begin{figure}[!h]
-				\includegraphics[width=\textwidth]{part1/coefs_enet.png}
-				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with a positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_enet}
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/coefs_enet.png}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_enet}
 		  \end{figure}
 
 			This method can also be applied to vector-valued regression problems by simply replacing the $\ell_2$-norm with its extension to the matrix case: the \textit{Frobenius} norm (also known as  \textit{Hilbert-Schmidt} norm), defined in Equation~\eqref{eq:frobenius}.
@@ -348,7 +361,8 @@ As of today ML is the workhorse of data science.
 			\todo{As in $\dots$}~\cite{he2016novel}
 
 			\begin{figure}[!h]
-				\includegraphics[width=\textwidth]{part1/l1l2_norms_scatterplot.png}
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/l1l2_norms_scatterplot.png}
 				\caption{A comparison of the value of the $\ell_1$ and $\ell_2$ norms of the weights obtained by OLS, ridge, Lasso and Elastic-Net.} \label{fig:l1l2_norms_scatterplot}
 		  \end{figure}
 
