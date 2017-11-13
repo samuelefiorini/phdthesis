@@ -42,7 +42,7 @@ Among those, we recall the combined use of the following classes of methods: \be
 
 In the last few years, a fair number of data exploration software and libraries were released. Such tools may be grouped in two families: \ac{GUI}-based and command-line applications.
 Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however,
-its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{friedman2001elements} and it does not offer strategies to perform automatic discovery of the number of clusters.
+its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{hastie2009elements} and it does not offer strategies to perform automatic discovery of the number of clusters.
 The most notable project that spans between the two families is \emph{Orange} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
 Moreover, large data sets are difficult to analyze with both \emph{Divvy} and \emph{Orange} as they can run only on a single workstation, lacking of distributed computing support.
 
@@ -82,7 +82,7 @@ Moreover, large data sets are difficult to analyze with both \emph{Divvy} and \e
         & affinity propagation & \cite{frey2007clustering} \\
         & mean shift & \cite{comaniciu2002mean} \\
         & spectral & \cite{shi2000normalized} \\
-        & hierarchical & \cite{friedman2001elements} \\
+        & hierarchical & \cite{hastie2009elements} \\
         & DBSCAN & \cite{ester1996density} \\
         \bottomrule
     \end{tabular}
@@ -142,7 +142,7 @@ The optimal parameter selection of centroid-based algorithms follows the $B$-fol
 For affinity propagation \cite{frey2007clustering} and $k$-means \cite{bishop2006pattern} clustering parameters can be automatically defined (\emph{preference} and \emph{number of clusters}, respectively).
 % Clustering parameters for affinity propagation \cite{frey2007clustering} and k-means \cite{bishop2006pattern}, that are \emph{preference} and \emph{number of clusters}, can be automatically defined.
 Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an implicit cluster discovery.
-For hierarchical~\cite{friedman2001elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and eigenvalues of the Laplacian of the affinity matrix plots, respectively.
+For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and eigenvalues of the Laplacian of the affinity matrix plots, respectively.
 % \todo{@fede DBSCAN}
 
 \section{Usage example} \label{sec:usage_example}
@@ -230,7 +230,7 @@ In the first EDA, we compared the clustering performance achieved by the eight \
     \caption{\small Three different 2D projections of the samples of the GEO gene expression data set used in this work. Projections on the left (a), middle (b) and right (c) panes are obtained via linear PCA, Gaussian PCA and isomap, respectively. The color of each point corresponds to the actual tissue type, while the background color is automatically learned by the $k$-means clustering algorithm. White hexagons correspond to cluster centroids.}\label{fig:scatter}
 \end{figure}
 
-For the second EDA, the relationships among the probe sets corresponding to the genes of the signature are separately explored learning a different hierarchical clustering~\cite{friedman2001elements} tree for mucosa (Figures~\ref{fig:mucosatree}) and CRC samples (Figure~\ref{fig:tumortree}), separately.
+For the second EDA, the relationships among the probe sets corresponding to the genes of the signature are separately explored learning a different hierarchical clustering~\cite{hastie2009elements} tree for mucosa (Figures~\ref{fig:mucosatree}) and CRC samples (Figure~\ref{fig:tumortree}), separately.
 % shows some differences but some similarities too. This is easy explained by the fact that the mucosa samples derive from the same subjects from which the CRC samples are taken.
 % The most evident similarities between these graphs are the following:
 % such genes are also closely connected to TP53 and its isoform.
