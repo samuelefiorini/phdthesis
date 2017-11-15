@@ -203,7 +203,7 @@ As of today ML is the workhorse of data science.
 	    The solution of this problem can be achieved either by Empirical (or Structured) Risk Minimization (\ac{ERM}) either by Maximum Likelihood/A Posteriori (\ac{MLE}/\ac{MAP}) Estimation. See Appendix~\ref{appendix:A} for more details on this two strategies, and their connection.
 
 	    \subsection{Regularization methods} \label{subsec:regularization_methods}
-	    Regularization methods is a broad class of models that include linear and nonlinear techniques for both regression and classification. The main characteristic of the methods falling in this class, is that they are particularly straightforward to express as in Equation~\eqref{eq:losspen}. In fact, as described in~\cite{evgeniou2000regularization}, most of them are simply identified by the use of one loss function $L(f(\bm{x}), y)$ and one, or more, regularization penalty $\mathcal{R}(f)$.
+	    Regularization methods is a broad class of models that include linear and nonlinear techniques for both regression and classification. The main characteristic of the methods falling in this class, is that they are particularly straightforward to express as in Equation~\eqref{eq:losspen}. In fact, as described in~\cite{evgeniou2000regularization}, most of them are easily identifiable by the use of one loss function $L(f(\bm{x}), y)$ and one, or more, regularization penalty $\mathcal{R}(f)$.
 
 	    In the following sections an overview of the most popular regularization methods is presented.
 
@@ -221,7 +221,7 @@ As of today ML is the workhorse of data science.
 			$$
 			or by iterative minimization routines such as (stochastic) gradient descent-like algorithms~\cite{boyd2004convex, sra2012optimization}. A pictorial representation of the solution of OLS can be seen in Figure~\ref{fig:w_ols}.
 
-			Even though mainly used for regression, the square loss can be used to solve binary classification problems too (see Table~\ref{tab:losses}). In this case, the square loss can be rewritten as
+			Even though mainly used for regression, the square loss can be used to solve binary classification problems too (see Table~\ref{tab:losses}). In this case, it can be rewritten as
 
 			\begin{equation} \label{eq:margin_square_loss}
 				(\bm{x}^T\bm{w}-y)^2 = (1-y \cdot \bm{x}^T\bm{w})^2
@@ -229,7 +229,7 @@ As of today ML is the workhorse of data science.
 
 			exploiting the fact that the two classes are encoded with binary labels: $\bm{y} \in \{+1,-1\}^n$. For multiclass classification problems, strategies such as \textit{One-vs-One} (\ac{OVO}) or \textit{One-vs-All} (\ac{OVA}) can be adopted to reduce the problem to the binary classification setup~\cite{hastie2009elements}.
 
-			In case of multiple tasks, the OLS approach can be extended to vector-valued regression tasks as well. In this case the least squares problem can be written as
+			In case of multiple tasks, the OLS approach can be extended to vector-valued regression as well. In this case the least squares problem can be written as
 			\begin{equation} \label{eq:vvr_ols}
 				\begin{aligned}
 				\hat W_{\text{OLS}}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2  \\
@@ -238,9 +238,9 @@ As of today ML is the workhorse of data science.
 			\end{equation}
 			where $\norm{A}_F= \sqrt{\sum_{i=1}^n\sum_{t=1}^k |a_i^t|^2}$ is the \textit{Frobenius} norm (also known as  \textit{Hilbert-Schmidt} norm) and it can be considered as an extension of the $\ell_2$-norm to the matrix case.
 			Lacking of appropriate regularization penalties, solving the problem in Equation~\eqref{eq:vvr_ols} corresponds to solving $k$ isolated regression problems, one for each task.
-			This approach, even if theoretically legit, is rather uncommon in practical applications and a regularized version of Equation~\eqref{eq:vvr_ols} is typically preferred (see following sections).
+			The vector-valued OLS approach, even if theoretically legit, is rather uncommon in practical applications and a regularized version of Equation~\eqref{eq:vvr_ols} is typically preferred (see following sections).
 
-			OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let's see what happens when we use the OLS model on a real regression problem.
+			Coming back to the single regression task, OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let's see what happens when we use the OLS model on a real regression problem.
 
 			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where each input sample $\bm{x}_i \in \mathbb{R}^{12}$ presents a set of measures describing the metabolic state of a healthy subject and $y_i \in \mathbb{N}_+$ is its age expressed in years.
 			For the sake of this discussion a  thorough description of $\mathcal{D}_{\text{aging}}$ at this point is irrelevant\footnote{this regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we can simply think as the $d=12$ variables as predictors of the outcome $y$ and we look for some linear input-output relationship.
@@ -252,7 +252,7 @@ As of today ML is the workhorse of data science.
 		  \end{figure}
 			As we can see, in order to achieve a predictive model, OLS can only spread the weights across all the input variables. Evaluating $\bm{\hat w}_{\text{OLS}}$ on the test set, this model has a Mean Absolute Error (\ac{MAE}) of $10.598$ years and explains the $74.29\%$ of the variance.
 
-			This result looks promising, but we will see in the next sections if the use of various regularization penalties could help outperforming OLS.
+			This result looks promising, but we will see in the next sections whether they can be improved with the use of some regularization penalty.
 
 %			We have already pointed out that learning predictive functions only by minimizing a loss function may lead to suboptimal solutions; therefore in the following sections we will explore pro and cons of using different penalties.
 
@@ -277,18 +277,20 @@ As of today ML is the workhorse of data science.
 			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can also be obtained with gradient descend-like optimization routines~\cite{boyd2004convex, sra2012optimization}.
 
 			The regularization parameter $\lambda$ plays the fundamental role of balancing the trade-off between data adherence and smoothness of the solution.
-			Penalizing the $\ell_2$-norm of the regression coefficients, their value is shrunk toward zero. This results in an increased robustness of the solution to the noise affecting training data.
+			Penalizing the $\ell_2$-norm of the regression coefficients, their value is shrunk toward zero. This results in an increased robustness of the solution to the noise affecting the training data.
 
-			In case of multiple outputs, ridge regression can be easily extended to vector-valued regression problems, as in Equation~\eqref{eq:vvr_ridge}.
+			This method can be applied to binary classification problems by using the margin loss function of Equation~\eqref{eq:margin_square_loss}. Nevertheless, for $\ell_2$-norm penalized classification problems the use of the \textit{logistic loss} is usually preferred (see Section~\ref{sec:logistic_regression}).
+
+			In case of multiple outputs, the vector-valued ridge regression problem can be easily written as in Equation~\eqref{eq:vvr_ridge}.
 			\begin{equation} \label{eq:vvr_ridge}
 				\begin{aligned}
-					\hat W_{\text{F}}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2  + \lambda \sum_{i=1}^n \sum_{t=1}^k |w_i^t|^2\\
+					\hat W_{\ell_2}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2  + \lambda \sum_{i=1}^n \sum_{t=1}^k |w_i^t|^2\\
 					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda \norm{W}_F^2
 				\end{aligned}
 			\end{equation}
 			As already seen for vector-valued OLS, the Frobenius norm penalty does not induce any task coupling, hence solving the problem in Equation~\eqref{eq:vvr_ridge} still corresponds to individually solve $k$ regression tasks.
 
-			As already pointed out for the OLS case, this method can be applied to binary classification problems by using the margin loss function of Equation~\eqref{eq:margin_square_loss}. Nevertheless, for $\ell_2$-norm penalized classification problems the use of the \textit{logistic loss} is usually preferred (see Section~\ref{sec:logistic_regression}).
+			In deep learning literature, penalizing the regression coefficients with the $\ell_2$-norm is known as \textit{weight decay}~\cite{krogh1992simple}. Ridge regression can also be considered a form of  \textit{Tikhonov regularization}~\cite{tikhonov1963solution} and of \textit{regularization network}~\cite{evgeniou2000regularization}.
 %			ridge regression is successfully applied in countless and heterogeneous biological studies mainly involving regression problems.
 %			For instance, in~\cite{kratsch2014} the authors propose a ridge regression-based method to estimate ancestral characters from phylogenetic trees, while in~\cite{bovelstad2007} ridge regression is used to perform survival prediction from gene expression data.
 			%\todo{\begin{enumerate}
@@ -302,22 +304,17 @@ As of today ML is the workhorse of data science.
 			%In the first case,
 
 			Let's see what happens when this method is applied to a real regression problem. For ease of comparison, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}.
-			Compared to OLS, ridge regression has the parameter $\lambda$ that must be fixed before fitting the model. In this example, we estimated the best $\lambda$ according to a standard grid-search cross-validation strategy~\cite{hastie2009elements}.
+			Compared to OLS, ridge regression has the parameter $\lambda$ that must be fixed before fitting the model. In this example, we estimated the best value for the regularization parameter $\hat \lambda_{\text{cv}}$ according to a standard grid-search cross-validation strategy~\cite{hastie2009elements}.
 			This consists in fixing a range of ($30$) possible values for $\lambda$ (in a logarithmic scale from $10^{-3}$ to $10^2$) and
 			pick the best value as the one achieving the lowest validation error, estimated via (5-fold) cross-validation.
-			Therefore, once the best value for the regularization parameter ($\lambda = 20.43$) is fixed, the experimental setup used for OLS is preserved.
+			Therefore, once the best value for the regularization parameter ($\hat \lambda_{\text{cv}} = 20.43$) is fixed, the experimental setup used for OLS is preserved.
 			The ridge coefficients $\bm{\hat w}_{\ell_2}$ are represented in Figure~\ref{fig:coefs_ridge}.
 			\begin{figure}[!h]
 				\centering
 				\includegraphics[width=0.8\textwidth]{part1/coefs_ridge.png}
-				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
+				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a ridge regression model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
 			\end{figure}
-			Comparing Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols} we can see that the amplitude of the ridge regression coefficients is lower, in absolute value, several of them are very small, but none of them is exactly zero. This is the expected behavior of the $\ell_2$-norm penalty. Evaluating $\bm{\hat w}_{\ell_2}$ on the test set, this model has  $\text{MAE}=8.615$ years and explains the $81.19\%$ of the variance, outperforming OLS.
-
-			\todo{add multitask}
-
-			In deep learning literature, penalizing the regression coefficients with the $\ell_2$-norm is known as \textit{weight decay}~\cite{krogh1992simple}. Ridge regression can also be considered a form of  \textit{Tikhonov regularization}~\cite{tikhonov1963solution} and of \textit{regularization network}~\cite{evgeniou2000regularization}.
-
+			Comparing Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols} we can see that the amplitude of the ridge regression coefficients is, in absolute value, lower. Indeed, several entries of $\bm{\hat w}_{\ell_2}$ are very small, but none of them is exactly zero. This is the expected behavior of the $\ell_2$-norm penalty. Evaluating $\bm{\hat w}_{\ell_2}$ on the test set, this model has  $\text{MAE}=8.615$ years and explains the $81.19\%$ of the variance, outperforming OLS.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Lasso}
@@ -325,7 +322,7 @@ As of today ML is the workhorse of data science.
 			%In the original Lasso paper, the sparisty-enforcing properties of the $\ell_1$-norm, Equation~\eqref{eq:lasso}, as regularizer for least squares problems is typically known as the Lasso.
 			%Such penalty is among the most popular sparsity-enforcing regularization method.
 
-			The Lasso~\cite{tibshirani1996regression} can be defined as a least square problem penalized by an $\ell_1$-norm, see Equation~\eqref{eq:lasso}.
+			The Lasso~\cite{tibshirani1996regression} can be defined as a least square problem penalized by the $\ell_1$-norm of the regression coefficients, see Equation~\eqref{eq:lasso}.
 			% In the Lasso, as in ridge regression (see Section~\ref{sec:ridge}), the data fidelity is measured by means of the square loss, while the $\ell_1$-norm, defined in Equation~\eqref{eq:lasso}, is used as regularization penalty.
 			\begin{equation}\label{eq:lasso}
 				\mathcal{R}_{\mbox{$\ell_1$}}(\bm{w}) = \sum_{j=1}^d |w_j| = |\bm{w}|_1
@@ -333,11 +330,29 @@ As of today ML is the workhorse of data science.
 			Therefore, the Lasso minimization problem can be written as in Equation~\eqref{eq:lasso}.
 
 			\begin{equation} \label{eq:lasso}
-			\bm{\hat w}_{\ell_1} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 + \lambda  \sum_{j=1}^d |w_j| = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2 + \lambda |\bm{w}|_1
+				\bm{\hat w}_{\ell_1} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 + \lambda  \sum_{j=1}^d |w_j| = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2 + \lambda |\bm{w}|_1
 			\end{equation}
 
+			The Lasso can be used to perform linear model fitting and, thanks to its desirable properties, is a popular choice for embedded variable selection~\cite{guyon2003introduction}. At first, the $\ell_1$-norm enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and, although non-differentiable, it is computationally feasible even in very high dimensional scenarios. Popular minimization algorithms for the Lasso problem are, for instance, the \textit{Fast Iterative Shrinkage-Thresholding Algorithm}  (\ac{FISTA})~\cite{beck2009fast} and the \textit{coordinate descent algorithm}~\cite{wu2008coordinate}. A pictorial representation of the Lasso solution can be seen in Figure~\ref{fig:w_lasso}.
 
-			The Lasso model is a popular  method for linear model fitting and embedded variable selection~\cite{guyon2003introduction} thanks to its desirable properties. At first, the $\ell_1$-norm of its regularization term enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and, although non-differentiable, it is computationally feasible even in very high dimensional scenarios. Popular minimization algorithms for the Lasso problem are, for instance, the \textit{Fast Iterative Shrinkage-Thresholding Algorithm}  (\ac{FISTA})~\cite{beck2009fast} and the \textit{coordinate descent algorithm}~\cite{wu2008coordinate}. A pictorial representation of the Lasso solution can be seen in Figure~\ref{fig:w_lasso}.
+			A popular application of the Lasso is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}.
+			Such $\ell_1$-penalized methods are extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
+			%\todo{Add use cases: lu2011lasso, rakitsch2013lasso $\dots$}
+
+			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, sparse Logistic regression (see Section~\eqref{sec:logistic_regression}) is often preferred~\cite{tong2009genome}.
+
+			The Lasso can also be extended to vector-valued regression problems by using the mixed $L_{2,1}$-norm, defined in Equation~\eqref{eq:L21}, as regularization penalty~\cite{gramfort2012mixed}.
+			\begin{equation}\label{eq:L21}
+				\mathcal{R}_{L_{2,1}}(W)= \sum_{j=1}^d\sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} = \norm{W}_{2,1}
+			\end{equation}
+			Therefore, the vector-valued regularization problem can be written as in Equation~\eqref{eq:multitask_lasso}
+			\begin{equation} \label{eq:multitask_lasso}
+				\begin{aligned}
+					\hat W_{L_{2,1}}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda  \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} \\
+					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda ||W||_{2,1}
+				\end{aligned}
+			\end{equation}
+			and it is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
 
 			Let's see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\lambda=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
 			\begin{figure}[!h]
@@ -349,38 +364,9 @@ As of today ML is the workhorse of data science.
 			The $6$ variables with nonzero weight can be considered as \textit{selected} for the prediction problem at hand.
 			Evaluating $\bm{\hat w}_{\ell_1}$ on the test set, the Lasso has  $\text{MAE}=8.387$ years and explains the $81.51\%$ of the variance, slightly outperforming ridge.
 
-			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, sparse Logistic regression (see Section~\eqref{sec:logistic_regression}) is often preferred~\cite{tong2009genome}.
+			\todo{add: lasso path}
 
-			A popular application of the Lasso is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}.
-			Such $\ell_1$-penalized methods are extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
-
-			%\todo{Add use cases: lu2011lasso, rakitsch2013lasso $\dots$}
-
-			The Lasso can also be extended to vector-valued regression problems by using the mixed $L_{2,1}$-norm, defined in Equation~\eqref{eq:L21}, as regularization penalty~\cite{gramfort2012mixed}.
-
-			\begin{equation}\label{eq:L21}
-                \mathcal{R}_{L_{2,1}}(W)= \sum_{j=1}^d\sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} = \norm{W}_{2,1}
-			\end{equation}
-
-			Therefore, the vector-valued regularization problem can be written as in Equation~\eqref{eq:multitask_lasso}
-			\begin{equation} \label{eq:multitask_lasso}
-			\begin{aligned}
-			\hat W_{L_{2,1}}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda  \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} \\
-			& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda ||W||_{2,1}
-			\end{aligned}
-			\end{equation}
-			and it is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
-
-			When used for variable selection, the Lasso has two major drawbacks. First, in presence of groups of correlated variables, this method tends to select only one variable per group, ignoring the others. Secondly, the method cannot select more variables than the sample size~\cite{waldmann2013evaluation, de2009regularized}. In order to ameliorate this issues, several Lasso-inspired models were proposed~\cite{meinshausen2010stability, hoggart2008simultaneous, zou2006adaptive} (see Section~\ref{sec:other_sparsity}). In the next section we will describe one of the most famous and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
-
-			%Despite being a popular method
-			%\todo{\begin{enumerate}
-			%%	\item loss: square loss
-			%%	\item penalties: l1
-			%%	\item use in regression, classification
-			%%	\item extension to multi-task and multi-class
-			%%	\item use cases
-			%\end{enumerate}}
+			When used for variable selection, the Lasso has two major drawbacks. First, in presence of groups of correlated variables, this method tends to select only one variable per group, ignoring the others. Secondly, the method cannot select more variables than the sample size~\cite{waldmann2013evaluation, de2009regularized}. In order to ameliorate this issues, several Lasso-inspired models were proposed~\cite{meinshausen2010stability, hoggart2008simultaneous, zou2006adaptive} (see Section~\ref{sec:other_sparsity}). In the next section we will describe one of the most popular and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
 
 			\subsubsection{Elastic-Net}
 			The Elastic-Net~\cite{de2009elastic, zou2005regularization} method can be formulated as a least squares problem penalized by a convex combination of Lasso ($\ell_1$-norm) and ridge regression ($\ell_2$-norm) penalties, as in Equation~\eqref{eq:enet}.
