@@ -195,7 +195,7 @@ In Section~\ref{sec:erm} we have seen that the ERM solution can be estimated as 
 Therefore, the minimization problem is stated in Equation~\eqref{eq:ridge_regression2}.
 
 \begin{equation} \label{eq:ridge_regression2}
-	\hat f_{ridge} = \argmin_{f~\in~\mathcal{F}} J(\bm{y}, X, \bm{w}) = \argmin_{f~\in~\mathcal{F}}\frac{1}{2n} \norm{\bm{y} - X\bm{w}}_2^2+\frac{\lambda}{2}\norm{\bm{w}}_2^2
+	\bm{\hat w}_{\ell_2} = \argmin_{\bm{\hat w} \in \mathbb{R}^d} J(\bm{y}, X, \bm{w}) = \argmin_{\bm{\hat w} \in \mathbb{R}^d}\frac{1}{2n} \norm{\bm{y} - X\bm{w}}_2^2+\frac{\lambda}{2}\norm{\bm{w}}_2^2
 \end{equation}
 
 In Section~\ref{sec:erm-mlemap_connection} we have seen that the regularized minimization problem corresponds to a MAP estimate with an appropriate choice for negative log-likelihood and prior distribution (on $\bm{w}$) which correspond to loss function and regularization penalty, respectively. So, considering $J(\bm{y}, X, \bm{w})$ as a negative log-posterior and factoring out $\lambda$ we can write
@@ -251,13 +251,13 @@ consequently, we can write the general form as in Equation~\eqref{eq:logistic}.
 Therefore, assuming a Gaussian prior on the weights $\bm{w} \sim \mathcal{N}(0,I)$, we can perform a MAP estimate of $\hat f$ solving the problem in Equation~\eqref{eq:logistic_map}.
 
 \begin{equation} \label{eq:logistic_map}
-	\hat f = \argmax_{f \in \mathcal{F}} \prod_{i=1}^n p(\bm{w}|y_i, \bm{x}_i) = \argmax_{f \in \mathcal{F}} \prod_{i=1}^n \frac{1}{1+\exp{(-y_i~\bm{x}_i^T\bm{w})}} \cdot \exp{(-\frac{1}{2} \norm{\bm{w}}_2^2)}
+	\bm{\hat w}_{\text{LR}} = \argmax_{\bm{\hat w} \in \mathbb{R}^d} \prod_{i=1}^n p(\bm{w}|y_i, \bm{x}_i) = \argmax_{\bm{\hat w} \in \mathbb{R}^d} \prod_{i=1}^n \frac{1}{1+\exp{(-y_i~\bm{x}_i^T\bm{w})}} \cdot \exp{(-\frac{1}{2} \norm{\bm{w}}_2^2)}
 \end{equation}
 
 Log-transforming Equation~\eqref{eq:logistic_map}, and applying some elementary linear algebra, we can write Equation~\eqref{eq:logistic_logmap}.
 
 \begin{equation} \label{eq:logistic_logmap}
-	\hat f = \argmin_{f \in \mathcal{F}} \frac{1}{2n\lambda} \sum_{i=1}^n \log \big[ 1 + \exp{(-y_i \bm{x}_i^T \bm{w})} \big] + \frac{\lambda}{2} \norm{\bm{w}}_2^2
+	\bm{\hat w}_{\text{LR}} = \argmin_{\bm{\hat w} \in \mathbb{R}^d} \frac{1}{2n\lambda} \sum_{i=1}^n \log \big[ 1 + \exp{(-y_i \bm{x}_i^T \bm{w})} \big] + \frac{\lambda}{2} \norm{\bm{w}}_2^2
 \end{equation}
 
 The minimization problem expressed in Equation~\eqref{eq:logistic_logmap} is known as Regularized Logistic Regression. It can be casted in the regularization framework of Equation~\eqref{eq:ferm2} where the logistic loss function $L(f(\bm{x}),y) = \log{[1+\exp{(-yf(\bm{x}))}]}$ is penalized by the $\ell_2$-norm.
