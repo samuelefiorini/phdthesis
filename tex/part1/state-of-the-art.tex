@@ -274,7 +274,7 @@ As of today ML is the workhorse of data science.
 			$$
 				\bm{\hat w}_{\ell_2} = (X^TX + \lambda I)^{-1}X^T\bm{y}
 			$$
-			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can also be obtained with gradient descend-like optimization routines~\cite{boyd2004convex, sra2012optimization}.
+			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can also be obtained with gradient descent-like optimization routines~\cite{boyd2004convex, sra2012optimization}.
 
 			The regularization parameter $\lambda$ plays the fundamental role of balancing the trade-off between data adherence and smoothness of the solution.
 			Penalizing the $\ell_2$-norm of the regression coefficients, their value is shrunk toward zero. This results in an increased robustness of the solution to the noise affecting the training data.
@@ -480,36 +480,45 @@ As of today ML is the workhorse of data science.
 			% \subsubsection{Other sparsity-inducing penalties} \label{sec:other_sparsity}
 			% asd
 
-			\begin{table}[htb]
-				\centering
-				\caption{Overview of the matrix norms used for vector-valued regression.}\label{tab:norms}
-				\begin{tabular}{l|l|l}
-					\toprule
-					Matrix norm  & Notation         & Definition                      \\  \midrule
-					Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
-					Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
-					Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
-				\end{tabular}
-			\end{table}
+			% \begin{table}[htb]
+			% 	\centering
+			% 	\caption{Overview of the matrix norms used for vector-valued regression.}\label{tab:norms}
+			% 	\begin{tabular}{l|l|l}
+			% 		\toprule
+			% 		Matrix norm  & Notation         & Definition                      \\  \midrule
+			% 		Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
+			% 		Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
+			% 		Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
+			% 	\end{tabular}
+			% \end{table}
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Logistic Regression} \label{sec:logistic_regression}
-			\begin{enumerate}
-				\item loss: logistic
-				\item penalties: all the above apply
-				\item use in classification
-				\item extension to multiple-class: softmax regression
-				\item use cases
-			\end{enumerate}
+			Logistic regression is one of the most popular linear methods for classification problems\footnote{as counter-intuitive as it sounds}. In its unpenalized form, it can be simply seen as the problem of minimizing the logistic loss (see Table~\ref{tab:losses}) on a given training dataset. Therefore, logistic regression can be written as in Equation~\eqref{eq:logistic_regression},
+			\begin{equation} \label{eq:logistic_regression}
+				\bm{\hat w}_{\text{LR}} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n}\sum_{i=1}^n\log(1 + e^{-y_i\,\bm{x}_i^T\bm{w}})
+			\end{equation}
+			where the labels $y_i \in \{+1,-1\}, \forall i=1,\dots,n$. The minimization problem above is convex and differentiable, although as the gradient is nonlinear in $\bm{w}$, it does not have a closed-form solution. So, unpenalized logistic regression problems are typically solved by (stochastic) gradient descent-like techniques~\cite{boyd2004convex, sra2012optimization}.
 
-			\todo{
-			Some logistic regression works:
-			\begin{enumerate}
-				\item
-			\end{enumerate}
-			}
+			Unpenalized logistic regression, although theoretically sound, is somewhat uncommon in real-world studies. As already seen for the square loss, regularization penalties are typically used. For instance, we can have $\ell_2$-regularized logistic regression,
+			\begin{equation} \label{eq:logistic_l2}
+				\bm{\hat w}_{\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n}\sum_{i=1}^n\log(1 + e^{-y_i\,\bm{x}_i^T\bm{w}}) + \lambda \norm{\bm{w}}_2^2
+		  \end{equation}
+			or various forms of sparse logistic regression such as
+			\begin{equation} \label{eq:logistic_l1}
+				\bm{\hat w}_{\ell_1} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n}\sum_{i=1}^n\log(1 + e^{-y_i\,\bm{x}_i^T\bm{w}}) + \lambda |\bm{w}|_1
+		  \end{equation}
+			using the Lasso penalty, or
+			\begin{equation} \label{eq:logistic_l1l2}
+				\bm{\hat w}_{\ell_1\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n}\sum_{i=1}^n\log(1 + e^{-y_i\,\bm{x}_i^T\bm{w}}) + \lambda [\alpha |\bm{w}|_1 + (1-\alpha) \norm{\bm{w}}_2^2]
+		  \end{equation}
+			which uses the Elastic-Net penalty.
 
-			Moreover, multi-class classification with Logistic regression is typically achieved by using either a \textit{One-vs-One} (OVO) or a \textit{One-vs-All} (AVA) approach~\todo{REF}.
+			Moreover, multi-class classification with logistic regression can be achieved by OVO, AVA approaches, as well as with the multiclass generalization of logistic regression: \textit{softmax} regression~\cite{hastie2009elements} (\aka multinomial logistic regression), which can be expressed as
+			\begin{equation} \label{eq:softmax}
+				\hat W_{\text{LR}} = \argmin_{W \in \mathbb{R}^{d \times k}} -\frac{1}{n} \bigg[ \sum_{i=1}^n \sum_{t=1}^k \mathds{1}\{y_i = t\} \log \bigg(\frac{e^{\bm{x}_i^T\bm{w}^t}}{\sum_{l=1}^k e^{\bm{x}_i^T \bm{w}^l}} \bigg) \bigg]
+			\end{equation}
+			where the indicator function $\mathds{1}\{\cdot\}$ includes in the functional only the correctly classified samples.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Support Vector Machines}
