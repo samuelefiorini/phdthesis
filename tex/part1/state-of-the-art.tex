@@ -101,15 +101,9 @@ As of today ML is the workhorse of data science.
 	  		Loss function & $L(f(\bm{x}),y)$  & Learning problem           \\ \midrule
 	  		Square                   & $(y - f(\bm{x}))^2$ & regression \\
 	  		Absolute                 & $|y - f(\bm{x})|$ & regression   \\
-	  		$\epsilon$-insensitive   & $\begin{cases}
-	  		0 & \text{if } |y-f(\bm{x})| < \epsilon\\
-	  		|y-f(\bm{x})| - \epsilon & \text{otherwise}
-	  		\end{cases} $        & regression                 \\
+	  		$\varepsilon$-insensitive   & $|y - f(\bm{x})|_\varepsilon$  & regression                 \\
 	  		\midrule
-	  		Zero-one               & $\begin{cases}
-	  		0 & \text{if } y = f(\bm{x})\\
-	  		1 & \text{otherwise}
-	  		\end{cases}$ & classification \\
+	  		Zero-one               & $\mathds{1}\{y=f(\bm{x})\}$ & classification \\
 	  		Square                 & $(1 - yf(\bm{x}))^2$ & classification  \\
 	  		Logistic                 & $\log(1 + e^{-yf(\bm{x})})$ & classification  \\
 	  		Hinge                 & $|1 - yf(\bm{x})|_+$ & classification  \\
@@ -521,15 +515,44 @@ As of today ML is the workhorse of data science.
 			where the indicator function $\mathds{1}\{\cdot\}$ includes in the functional only the correctly classified samples.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Support Vector Machines}
-			\begin{enumerate}
-				\item loss: hinge
-				\item dual problem?
-				\item penalties: l2 + l1
-				\item use in classification and regression
-				\item extension to multiple-class? (not sure)
-				\item use cases
-			\end{enumerate}
+			\subsubsection{Support Vector Machine}
+			Support Vector Machine (\ac{SVM}) is a powerful algorithm that can be written as a penalized model and can used for both regression (\ac{SVR}) and classification (\ac{SVC}) problems~\cite{evgeniou2000regularization}. In the first case, the adopted loss function is Vapnik's $\varepsilon$-insensitive loss:
+			\begin{equation} \label{eq:epsilon_insensitive}
+				|y - \bm{x}^T\bm{w}|_\varepsilon =
+   			\begin{cases}
+					0 & \text{if } |y-\bm{x}^T\bm{w}| < \varepsilon\\
+					|y-\bm{x}^T\bm{w}| - \varepsilon & \text{otherwise}
+				\end{cases}
+			\end{equation}
+			and in the second case the Hinge loss:
+			\begin{equation} \label{eq:hinge_loss}
+				|1 - y\,\bm{x}^T\bm{w}|_+ = \max[0, 1 - y\,\bm{x}^T\bm{w}]
+			\end{equation}
+			as reported in Table~\ref{tab:losses}. The standard formulation of SVM is penalized with the $\ell_2$-norm~\cite{vapnik2013nature}.
+			Therefore, sticking to linear models, the SVR minimization problem can be written as
+			\begin{equation} \label{eq:svr}
+				\bm{\hat w}_{\text{SVR}} = \argmin_{\bm{w} \in \mathbb{R}^d} |y_i - f(\bm{x}_i)|_\varepsilon + \lambda \norm{\bm{w}}_2^2
+			\end{equation}
+			while the SVC minimization problem is
+			\begin{equation} \label{eq:svc}
+				\bm{\hat w}_{\text{SVC}} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n |1 - y_if(\bm{x}_i)|_+ + \lambda \norm{\bm{w}}_2^2
+			\end{equation}
+			where, as usually, $\lambda$ controls the trade-off between data adherence and smoothing of the solution.
+			The standard formulation of SVM does not cope well with high-dimensional data, as no sparsity-enforcing penalty is adopted. Recently, $\ell_1$-norm penalized SVM were proposed as well in~\cite{zhu20041, peng2016error}.
+
+
+
+
+
+
+			% \begin{enumerate}
+			% 	\item loss: hinge
+			% 	\item dual problem?
+			% 	\item penalties: l2 + l1
+			% 	\item use in classification and regression
+			% 	\item extension to multiple-class? (not sure)
+			% 	\item use cases
+			% \end{enumerate}
 
 
 
