@@ -281,10 +281,10 @@ As of today ML is the workhorse of data science.
 
 			This method can be applied to binary classification problems by using the margin loss function of Equation~\eqref{eq:margin_square_loss}. Nevertheless, for $\ell_2$-norm penalized classification problems the use of the \textit{logistic loss} is usually preferred (see Section~\ref{sec:logistic_regression}).
 
-			In case of multiple outputs, the vector-valued ridge regression problem can be easily written as in Equation~\eqref{eq:vvr_ridge}.
+			In case of multiple outputs, the vector-valued ridge regression problem can be written as in Equation~\eqref{eq:vvr_ridge}.
 			\begin{equation} \label{eq:vvr_ridge}
 				\begin{aligned}
-					\hat W_{\ell_2}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2  + \lambda \sum_{i=1}^n \sum_{t=1}^k |w_i^t|^2\\
+					\hat W_{\ell_2}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2  + \lambda \sum_{j=1}^d \sum_{t=1}^k |w_j^t|^2\\
 					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda \norm{W}_F^2
 				\end{aligned}
 			\end{equation}
@@ -317,7 +317,7 @@ As of today ML is the workhorse of data science.
 			Comparing Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols} we can see that the amplitude of the ridge regression coefficients is, in absolute value, lower. Indeed, several entries of $\bm{\hat w}_{\ell_2}$ are very small, but none of them is exactly zero. This is the expected behavior of the $\ell_2$-norm penalty. Evaluating $\bm{\hat w}_{\ell_2}$ on the test set, this model has  $\text{MAE}=8.615$ years and explains the $81.19\%$ of the variance, outperforming OLS.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Lasso}
+			\subsubsection{Lasso} \label{sec:the_lasso}
 			%Tibshirani, in its seminal paper~\cite{tibshirani1996regression}, introduced the use of the $\ell_1$-norm  Equation~\eqref{eq:lasso}, as sparisty-enforcing regularizer for least squares problems.
 			%In the original Lasso paper, the sparisty-enforcing properties of the $\ell_1$-norm, Equation~\eqref{eq:lasso}, as regularizer for least squares problems is typically known as the Lasso.
 			%Such penalty is among the most popular sparsity-enforcing regularization method.
@@ -343,18 +343,18 @@ As of today ML is the workhorse of data science.
 
 			The Lasso can also be extended to vector-valued regression problems by using the mixed $L_{2,1}$-norm, defined in Equation~\eqref{eq:L21}, as regularization penalty~\cite{gramfort2012mixed}.
 			\begin{equation}\label{eq:L21}
-				\mathcal{R}_{L_{2,1}}(W)= \sum_{j=1}^d\sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} = \norm{W}_{2,1}
+				\mathcal{R}_{\ell_1}(W)= \sum_{j=1}^d\sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} = \norm{W}_{2,1}
 			\end{equation}
 			Therefore, the vector-valued regularization problem can be written as in Equation~\eqref{eq:multitask_lasso}
 			\begin{equation} \label{eq:multitask_lasso}
 				\begin{aligned}
-					\hat W_{L_{2,1}}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda  \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} \\
+					\hat W_{\ell_1}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda  \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} \\
 					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda ||W||_{2,1}
 				\end{aligned}
 			\end{equation}
 			and it is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
 
-			Let's see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\lambda=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
+			Let's see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\hat \lambda_{\text{cv}}=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
 			\begin{figure}[!h]
 				\centering
 				\includegraphics[width=0.8\textwidth]{part1/coefs_lasso.png}
@@ -368,14 +368,17 @@ As of today ML is the workhorse of data science.
 			\begin{figure}[!h]
 				\centering
 				\includegraphics[width=0.8\textwidth]{part1/lasso_path.png}
-				\caption{Profiles of the lasso coefficients for the aging problem as $\lambda$ decreases. The vertical dashed line represents the optimal value $\hat \lambda_{\text{cv}}$ estimated by $5$-fold cross-validation.} \label{fig:lasso_path}
+				\caption{Profiles of the Lasso coefficients for the aging problem as $\lambda$ decreases. The vertical dashed line represents the optimal value $\hat \lambda_{\text{cv}}$ estimated by $5$-fold cross-validation.} \label{fig:lasso_path}
 			\end{figure}
 			Weights corresponding to features that are more likely to be relevant for the prediction problem should early move away from the horizontal axis. Conversely, as the regularization parameter increases, the model should enforce less sparsity, hence tolerating more and more irrelevant features having nonzero weight. The vertical dashed line in Figure~\ref{fig:lasso_path} hits the profiles of the weights consistently with what shown in Figure~\ref{fig:coefs_lasso}.
 
 			When used for variable selection, the Lasso has two major drawbacks. First, in presence of groups of correlated variables, this method tends to select only one variable per group, ignoring the others. Secondly, the method cannot select more variables than the sample size~\cite{waldmann2013evaluation, de2009regularized}.
 			The effect of such drawbacks is dramatic when using the Lasso in $n \ll d$ scenarios.
-			In order to ameliorate this issues, several Lasso-inspired models were proposed~\cite{meinshausen2010stability, hoggart2008simultaneous, zou2006adaptive} (see Section~\ref{sec:other_sparsity}). In the next section we will describe one of the most popular and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
+			In order to ameliorate this issues, several Lasso-inspired models were proposed~\cite{meinshausen2010stability, hoggart2008simultaneous, zou2006adaptive}.
+			% (see Section~\ref{sec:other_sparsity}).
+			In the next section we will describe one of the most popular and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
 
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Elastic-Net}
 			The Elastic-Net~\cite{zou2005regularization, de2009elastic} method can be formulated as a least squares problem penalized by a convex combination of Lasso ($\ell_1$-norm) and ridge regression ($\ell_2$-norm) penalties, as in Equation~\eqref{eq:l1l2}.
 
@@ -383,7 +386,7 @@ As of today ML is the workhorse of data science.
 				R_{\mbox{$\ell_1\ell_2$}}(\bm{w}) = \sum_{j=1}^d (\alpha\,|w_j| + (1-\alpha)\,w_j^2) = \alpha\,|\bm{w}|_1 + (1-\alpha)\,\norm{\bm{w}}_2^2
 			\end{equation}
 
-			Tehrefore, the Elastic-Net minimization problem can be written as in Equation~\eqref{eq:enet}
+			Therefore, the Elastic-Net minimization problem can be written as in Equation~\eqref{eq:enet}
 			\begin{equation} \label{eq:enet}
 				\begin{aligned}
 				\bm{\hat w}_{\ell_1\ell_2} = {} & \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 + \lambda\,\bigg[ \sum_{j=1}^d (\alpha\,|w_j| + (1-\alpha)\,w_j^2) \bigg] \\
@@ -394,16 +397,27 @@ As of today ML is the workhorse of data science.
 			\begin{equation} \label{eq:enet_l1l2}
 			\bm{\hat w}_{\ell_1\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2 + \tau\,|\bm{w}|_1 + \mu\,\norm{\bm{w}}_2^2
 			\end{equation}
-			where $\tau = \lambda\alpha$ and $\mu = \lambda(1-\alpha)$. The first formulation of the problem, Equation~\eqref{eq:enet}, is more convenient when we want to control the overall amount of regularization with $\lambda$, given a certain amount of sparsity $\alpha$. In fact, it is easy to see that fitting the Elastic-Net model for $\alpha=1$ or $\alpha=0$ is equivalent to solve ridge or Lasso regression, respectively. On the other hand, writing the Elastic-Net problem as in Equation~\eqref{eq:enet_l1l2} is more convenient when we want to separately control the $\ell_1$- and $\ell_2$-norm penalties, as in~\cite{de2009regularized}.
+			where $\tau = \lambda\alpha$ and $\mu = \lambda(1-\alpha)$. The first formulation of the problem, Equation~\eqref{eq:enet}, is more convenient when we want to control the overall amount of regularization with $\lambda$, given a certain amount of sparsity $\alpha$. In fact, it is easy to see that fitting the Elastic-Net model for $\alpha=0$ or $\alpha=1$ is equivalent to solve ridge or Lasso regression, respectively. On the other hand, writing the Elastic-Net problem as in Equation~\eqref{eq:enet_l1l2} is more convenient when we want to separately control the $\ell_1$- and $\ell_2$-norm penalties, as in~\cite{de2009regularized}.
 
-			The Elastic-Net\footnote{actually, in the original paper~\cite{zou2005regularization} the authors refer to Equations~\eqref{eq:enet} and~\eqref{eq:enet_l1l2} as \textit{na\"ive} Elastic-Net because empirical evidence show that the solution $\bm{\hat w}_{\ell_1\ell_2}$ may suffer from over-shrinking when appropriate rescaling strategies, also described in~\cite{de2009regularized},  are not applied.} model is widely adopted to perform linear model fitting and variable selection. Indeed, the combined presence of the two norms promotes sparse solutions were groups of correlated variables can be simultaneously selected, hence overcoming the variable selection drawbacks of the Lasso and making the Elastic-Net suitable for variable selection in $n \ll d$ scenarios.
+			The Elastic-Net\footnote{actually, in the original paper the authors refer to Equations~\eqref{eq:enet} and~\eqref{eq:enet_l1l2} as \textit{na\"ive} Elastic-Net~\cite{zou2005regularization} because empirical evidence show that the weights $\bm{\hat w}_{\ell_1\ell_2}$ may suffer from over-shrinking when appropriate rescaling strategies, also described in~\cite{de2009regularized},  are not applied.} model is widely adopted to perform linear model fitting and variable selection. Indeed, the combined presence of the two norms promotes sparse solutions were groups of correlated variables can be simultaneously selected, hence overcoming the variable selection drawbacks of the Lasso and making the Elastic-Net suitable for variable selection in $n \ll d$ scenarios.
 			As already seen for the Lasso, the minimization problem in Equation~\eqref{eq:enet} is convex and non-differentiable, due to the $\ell_1$-norm, and it can be efficiently solved either by proximal forward-backward splitting strategies (\eg FISTA~\cite{beck2009fast}), or by coordinate descent~\cite{wu2008coordinate}. A pictorial representation of the Elastic-Net solution can be seen in Figure~\ref{fig:w_enet}.
 
-			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}. In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
+			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}.
+			% In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
 
-			Even though originally proposed to solve regression problems, as already seen for Lasso and ridge regression, the Elastic-Net can be adopted in binary classification tasks.
+			Even though originally proposed to solve regression problems, as already seen for Lasso and ridge regression, the Elastic-Net can be adopted in binary classification tasks. Nevertheless, for classification problems, the use of the logistic loss is usually preferred.
 
-			\todo{multitask + aging + path + assist a roba a grafi}
+			The Elastic-Net can also be extended to vector-valued regression problems by using a convex combination of the $L_{2,1}$- and the Frobenius norms. This multiple output regression problem is known as Multi-task Elastic-Net~\cite{chen2012adaptive} can be written as in Equation~\eqref{eq:multitask_enet}.
+
+			\begin{equation} \label{eq:multitask_enet}
+				\begin{aligned}
+					\hat W_{\ell_1\ell_2}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda \bigg[ \alpha \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} + (1-\alpha)  \sum_{j=1}^d \sum_{t=1}^k |w_j^t|^2 \bigg] \\
+					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda [\alpha\,||W||_{2,1} + (1-\alpha)\,\norm{W}_F^2]
+				\end{aligned}
+   		\end{equation}
+
+			Let's see what hapens when the Elastic-Net model is applied to an actual regression problem. As usually, we tackle the aging task (introduced in Section~\ref{sec:ols}).
+			The experimental setup in this case is the same already adopted for the Lasso in Section~\ref{sec:the_lasso}. The only difference is that the grid-search cross-validation routine looks for the optimal values for the two regularization parameters $(\hat \lambda_{\text{cv}}, \hat \alpha_{\text{cv}}) = (0.57, 0.48)$ in a 2D grid consisting of $30 \times 30$ values ($\alpha$ candidates range from $0$ to $1$ in a linear scale, whilst $\lambda$ candidates range from $10^{-3}$ to $10^{2}$ in a logarithmic scale). The Elastic-Net coefficients $\bm{\hat w}_{\ell_1\ell_2}$ are represented in Figure~\ref{fig:coefs_enet}.
 
 			\begin{figure}[!h]
 				\centering
@@ -411,14 +425,32 @@ As of today ML is the workhorse of data science.
 				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1\ell_2}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_enet}
 		  \end{figure}
 
-			This method can also be applied to vector-valued regression problems by simply replacing the $\ell_2$-norm with the Frobenius norm.
-			\todo{As in $\dots$}~\cite{he2016novel}
+			Comparing $\bm{\hat w}_{\ell_1\ell_2}$ in Figure~\ref{fig:coefs_enet} with $\bm{\hat w}_{\ell_1}$ in Figure~\ref{fig:coefs_lasso} we can notice that in the Elastic-Net solution $10$ variables have nonzero weight, more with respect to the $6$ of the Lasso. This is the expected behavior of the added $\ell_2$-norm, which helps the model to select groups of collinear variables. Evaluating the Elastic-Net solution on the test set, $\bm{\hat w}_{\ell_1\ell_2}$ achieves $\text{MAE} = 8.321$ years explaining the $82.13\%$, slightly outperforming Lasso, hence ranking first in our little challenge of linear regression methods.
 
+			As already seen for the Lasso, we can inspect the Elastic-Net weights path, obtained for decreasing values of $\lambda$ and fixing $\alpha = \hat \alpha_{\text{cv}}$, see Figure~\ref{fig:enet_path}.
+			\begin{figure}[!h]
+				\centering
+				\includegraphics[width=0.8\textwidth]{part1/enet_path.png}
+				\caption{Profiles of the Elastic-Net coefficients for the aging problem as $\lambda$ decreases. The vertical dashed line represents the optimal value $\hat \lambda_{\text{cv}}$ estimated by $5$-fold cross-validation.} \label{fig:enet_path}
+			\end{figure}
+			The vertical dashed line in Figure~\ref{fig:enet_path} hits the profiles of the weights consistently with the Elastic-Net solution represented in Figure~\ref{fig:coefs_lasso}. The Elastic-Net, compared to the Lasso, produces smoother regularization paths in which the allegedly correlated variables enter the solution earlier.
+
+			Another comparison between the behavior of OLS, ridge, Lasso and Elastic-Net regression is presented in Figure~\ref{fig:l1l2_norms_scatterplot}. The four solutions achieved for the same aging regression problem are represented in a scatter plot where horizontal and vertical axis represents their $\ell_2$- and $\ell_1$-norm, respectively.
 			\begin{figure}[!h]
 				\centering
 				\includegraphics[width=0.8\textwidth]{part1/l1l2_norms_scatterplot.png}
 				\caption{A comparison of the value of the $\ell_1$ and $\ell_2$ norms of the weights obtained by OLS, ridge, Lasso and Elastic-Net.} \label{fig:l1l2_norms_scatterplot}
 		  \end{figure}
+			As expected,
+			\begin{enumerate*}[label=(\roman*)]
+				\item the unpenalized solution $\bm{\hat w}_{\text{OLS}}$ shows the highest values for the two norms and it is placed in the top-right side of the plot,
+				\item the ridge solution $\bm{\hat w}_{\ell_2}$ has lowest $\ell_2$-norm,
+				\item the Lasso solution $\bm{\hat w}_{\ell_1}$ has lowest $\ell_1$-norm and
+				\item the Elastic-Net solution shows the lowest values for the two norms and it is placed in the bottom-left side of the plot.
+		  \end{enumerate*}
+			This is consistent with the type of regularization imposed to each method. Interestingly, in this case, the method that performs better on the test set (Elastic-Net) has lowest norms.
+
+			The Elastic-Net penalty is not the only method in which sparsity is enforced on a group level. For example, (overlapping) group Lasso and graph Lasso penalties can be applied when the variables are naturally partitioned in (overlapping) groups, or their interation can be modeled by a graph. A detailed description of these methods is beyond the scope of this thesis and we refer to~\cite{jacob2009group} and references therein.
 
 			\begin{figure}[h!]
 				\centering
@@ -445,8 +477,8 @@ As of today ML is the workhorse of data science.
 			\end{figure}
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Other sparsity-inducing penalties} \label{sec:other_sparsity}
-			asd
+			% \subsubsection{Other sparsity-inducing penalties} \label{sec:other_sparsity}
+			% asd
 
 			\begin{table}[htb]
 				\centering
