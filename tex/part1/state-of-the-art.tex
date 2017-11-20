@@ -264,7 +264,7 @@ As of today ML is the workhorse of data science.
 			This penalty leads to smooth solutions as it shrinks the coefficients toward zero, but it does not achieve a parsimonious representation, as it always keep all the variables in the model.
 			The ridge regression problem of Equation~\eqref{eq:ridge_regression} is convex  and differentiable and a pictorial representation of its solution in a 2D case is depicted in Figure~\ref{fig:w_ridge}. The ridge coefficients $\bm{\hat w}_{\ell_2}$ can be estimated in closed-form as
 			$$
-				\bm{\hat w}_{\ell_2} = (X^TX + \lambda I)^{-1}X^T\bm{y}
+				\bm{\hat w}_{\ell_2} = (X^TX + \lambda n I)^{-1}X^T\bm{y}
 			$$
 			where $I$ is the $d \times d$ identity matrix. An estimate for the ridge coefficients can also be obtained with gradient descent-like optimization routines~\cite{boyd2004convex, sra2012optimization}.
 
@@ -560,11 +560,118 @@ As of today ML is the workhorse of data science.
 			% 	\item use cases
 			% \end{enumerate}
 
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsection{The kernel trick} \label{sec:kernel_trick}
-			\todo{images and stuff}
+			For ease of reading, all the regularization methods presented so far were focused on learning linear input-output relationships $y = \bm{x}^T\bm{w}$. Actually, they can all be extended to the nonlinear case exploiting the so-called \textit{kernel trick}.
+
+			The basic idea of the kernel trick is to use a map that projects the features on a higher (possibly infinite) dimensional space in which the prediction problem is, to some extent, easier to solve. An example of kernel trick for nonlinear classification problem is presented in Figure~\ref{fig:kernel_trick}.
+
+			\begin{figure}[!h]
+				\centering
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/kernel_trick0.png}
+					\label{fig:kernel_trick0}%
+				}%
+				%\hfill%
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/kernel_trick1.png}
+					\label{fig:kernel_trick1}%
+				}%
+				\hfill%
+				\subfloat[]{%
+					\includegraphics[width=0.5\textwidth]{part1/kernel_trick2.png}
+					\label{fig:kernel_trick2}%
+				}%
+				\caption{Pictorial representation of the kernel trick. Panel (a) shows a 2D classification problem where the input-output relationship is nonlinear. Panel (b) shows the \textit{kernel explosion}, \ie the projection of the 2D problem in a higher (3D) dimensional space in which the two classes are linearly separable, as shown in Panel (c).}\label{fig:kernel_trick}
+			\end{figure}
+
+			We define the nonlinear feature mapping function as $\phi: \mathcal{X} \rightarrow \mathcal{F}$; for instance $\mathcal{X} \in \mathbb{R}^d$ and $\mathcal{F} \in \mathbb{R}^p$ with $p \geq d$, or even $p \gg d$.
+			Given $\phi$, the representer theorem~\cite{smola1998learning}, states that the learning problem of Equation~\eqref{eq:losspen} admits a solution of the form
+			$$
+			\hat f(\bm{x}) = \sum_{i=1}^n k(\bm{x}_i, \bm{x}_j) \alpha_i
+			$$
+			where $\bm{\alpha} \in \mathbb{R}^n$ and the function $k$ behaves like an inner product, \ie it is: symmetric, positive definite, ad it can be defined as in Equation~\eqref{eq:kernel_function}.
+			\begin{equation} \label{eq:kernel_function}
+				k(\bm{x}_i, \bm{x}_j) =  \phi{(\bm{x}_i)}^T \cdot \phi{(\bm{x}_j)} % = \langle \phi{(\bm{x}_i)}, \phi{(\bm{x}_j)} \rangle_{\mathcal{H}}
+			\end{equation}
+			In the ML literature, $k$ is typically called the \textit{kernel} function and it comes in handy to solve the dual version of the learning problems.
+
+			% Following~\cite{evgeniou2000regularization}, we assume that $\mathcal{F}$ is a Reproducing Kernel Hilbert Space (RKHS) $\mathcal{H}$.
+			% Given $\phi$, the nonlinear input-output relationship can be formulated as
+			% $$
+			% f(\bm{x}) = \phi(\bm{x})^T\bm{w}
+			% $$
+			% which, nevertheless, is linear in its parameters $\bm{w}$.
+      %
+			% In this context it is easy to see that every feature map defines the positive definite function $k$ of Equation~\eqref{eq:kernel_function}.
+			% \begin{equation} \label{eq:kernel_function}
+			% 	k(\bm{x}_i, \bm{x}_j) =  \phi{(\bm{x}_i)}^T \cdot \phi{(\bm{x}_j)} % = \langle \phi{(\bm{x}_i)}, \phi{(\bm{x}_j)} \rangle_{\mathcal{H}}
+			% \end{equation}
+			% Therefore, for fixed loss function and regularization penalty, a kernel machine can be written as
+			% \begin{equation} \label{eq:kernel_learning_problem}
+			% 	\hat f = \argmin_{f \in \mathcal{H}} \frac{1}{n} \sum_{i=1}^n L(f(\bm{x}_i), y_i) + \lambda \norm{f}^2_\mathcal{H}
+			% \end{equation}
+			% where $\norm{\cdot}_\mathcal{H}^2$ is the norm associated by the RKHS.
+			% The problem in Equation~\eqref{eq:kernel_learning_problem}, for the
+			% can be casted in the so-called \textit{dual} representation in which the outputs are predicted exploiting a \textit{kernel function} defined as in Equation~\eqref{eq:kernel_function}.
+
+			Let's see a practical example: the kernel ridge regression. We recall that standard ridge regression problem can be rewritten as
+			$$
+			\bm{\hat w}_{\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} J(\bm{w})
+			$$
+			where the objective function $J(\bm{w})$ is
+			$$
+			J(\bm{w}) = \frac{1}{n}\norm{X\bm{w}-\bm{w}}_2^2+\lambda\norm{\bm{w}}_2^2 = \frac{1}{n}(X\bm{w}-\bm{y})^T(X\bm{w}-\bm{y})+\lambda\bm{w}^T\bm{w}
+			$$
+			Therefore, the solution of the ridge regression problem can be evaluated by imposing $\frac{\partial J(\bm{w})}{\partial \bm{w}}=0$ which leads to the following linear system of equations.
+			$$
+			X^TX\bm{w}-X^T\bm{y}+\lambda n \bm{w}=0 \Rightarrow (X^TX+\lambda n I)\bm{w} = X^T\bm{y}
+			$$
+			This can either be solved with respect to $\bm{w}$ (see Section~\ref{sec:ridge_regression}) obtaining the solution of the \textit{primal} form
+			\begin{equation} \label{eq:ridge_backup}
+				\bm{w} = (X^TX+\lambda n I)^{-1}X^T\bm{y}
+		  \end{equation}
+			or it can be rewritten as
+			$$
+			\bm{w} = \frac{1}{\lambda n} X^T(\bm{y}-X\bm{w}) = X^T\bm{\alpha}
+			$$
+			where $\bm{\alpha} = \frac{1}{\lambda n}(\bm{y} - X\bm{w})$ is the \textit{dual} variable. Therefore, the dual formulation of the problem becomes
+			$$
+				\begin{aligned}
+					\bm{\alpha} = {} & \frac{1}{\lambda n}(\bm{y} - X\bm{w}) \\
+						{} & \Rightarrow \lambda n \bm{\alpha} = (\bm{y} - X\bm{w})\\
+						{} & \Rightarrow \lambda n \bm{\alpha} = (\bm{y} - XX^T\bm{\alpha})\\
+						{} & \Rightarrow (XX^T + \lambda n I) \bm{\alpha} = \bm{y}\\
+				\end{aligned}
+			$$
+			\begin{equation} \label{eq:ridge_dual}
+				\Rightarrow \bm{\alpha} = (K + \lambda n I)^{-1}\bm{y} \\
+			\end{equation}
+			where $K$ is the $n \times n$, symmetric and positive semi-definite kernel matrix, with entries $K_i^j = k(\bm{x}_i, \bm{x}_j)$. In this case $k(\bm{x}_i, \bm{x}_j) = \bm{x}_i^T\bm{x}_j$, and this corresponds to the linear kernel. Nevertheless, several other options are available (see Table~\ref{tab:kernels} or~\cite{bishop2006pattern} for more details). Choosing a different kernel for ridge regression simply boils down to choose a different formulation for the kernel function $k$, hence plugging the obtained kernel matrix $K$ in Equation~\eqref{eq:ridge_dual} to achieve the desired solution.
+
+			The advantage of the kernel trick is not only statistical, but also computational. Indeed, we may notice that solving the primal problem (\ie in $\bm{w}$) requires $O(n^3)$ operations, while solving the dual (\ie in $\bm{\alpha}$) requires $O(d^3)$ operations which is better for large scale and relatively low-dimensional problem.
+
+		 \begin{table}[htb]
+				\centering
+				\caption{Popular kernel functions. \ac{RBF} stands for Radial Basis Function.}
+				\label{tab:kernels}
+				\begin{tabular}{@{}ll@{}}
+					\toprule
+					name       & formulation                                            \\ \midrule
+					linear     & $k(\bm{x}, \bm{x}') =\bm{x}^T\bm{x}' $                               \\
+					polynomial & $k(\bm{x},\bm{x}') = (\bm{x}^T\bm{x}' + c)^d$    \\
+					RBF        & $k(\bm{x},\bm{x}') = e^{-\gamma\norm{\bm{x} - \bm{x}'}^2}$ \\
+					sigmoid    & $k(\bm{x},\bm{x}') = \tanh(\gamma \bm{x}^T\bm{x}' + c)$ \\ \bottomrule
+				\end{tabular}
+			\end{table}
+
+			A similar derivation can also be obtained applying the kernel trick to logistic regression and SVM~\cite{bishop2006pattern, shawe2004kernel}.
 
 
 
+
+
+			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Ensemble methods}
 	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
 
