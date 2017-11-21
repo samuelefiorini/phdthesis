@@ -667,16 +667,19 @@ As of today ML is the workhorse of data science.
 
 			A similar derivation can also be obtained applying the kernel trick to logistic regression and SVM~\cite{bishop2006pattern, shawe2004kernel}.
 
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		\subsection{Decision trees}
+		Decision trees are simple, yet powerful, methods for regression and classification.
+		They are based on recursive binary splits of the feature space, in which they fit a very simple model, such as a constant.
 
+		More details on this learning algorithm can be found reading~\cite{hastie2009elements}, Chapter 9.
 
-
-
-			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Ensemble methods}
 	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
 
 	    % FIXME
-	    \textit{Bagging} is a common ensemble method that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} of the training dataset $\mathcal{D}_b$ obtained from the training set $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand for regression problems, the bagging estimate can be the mean (or the median) of the predictions of the $B$ base learners.
+	    \textit{Bagging} is a common ensemble method that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners.
 
 	    % FIXME
 	    \textit{Boosting} is another popular ensemble method that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners~\cite{hastie2009elements}.
