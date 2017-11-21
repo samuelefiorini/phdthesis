@@ -671,8 +671,75 @@ As of today ML is the workhorse of data science.
 		\subsection{Decision trees}
 		Decision trees are simple, yet powerful, methods for regression and classification.
 		They are based on recursive binary splits of the feature space, in which they fit a very simple model, such as a constant.
+		Fitting a decision tree on a given dataset results in partitioning the feature space in \textit{cuboid} regions with edges aligned to the axes.
+		In each region, there is a separate model to predict the target variable. For instance: in regression problems this can be the average of the samples falling in the region, whereas for classification problems, it can be the assignment to the most represented class.
+		In particular, when decision trees are applied to classification problems, the feature space partitioning aims at keeping samples with the same labels grouped together.
+		In this thesis, we opted for one of the most popular method for decision tree-based classification and regression: \ac{CART}~\cite{breiman1984classification}.
+		
+		Fitting a decision tree implies learning from the data the structure of the tree itself, including the selection of the input variable for each splitting iteration, as well as the optimal splitting threshold. Moreover, it must also be defined the value of the prediction for each region.
+		Taking into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$, even considering a fixed number of nodes, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
+		
+		Let the data at the node $m$ be denoted by $Q$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j$-th feature and the threshold $s_m$, we define two half-planes as follows.
+		$$
+		Q_1(\theta) = (\bm{x}_i, y_i) | \bm{x}^j \leq s_m~\text{and}~Q_2(\theta) = (\bm{x}_i, y_i) | \bm{x}^j > s_m
+		$$
+		Then, at each node an impurity measure is evaluated using a suitable impurity function $H$, which depends on the given task. Therefore we can formulate the objective function
+		$$
+		J(Q,\theta) = \frac{n_1}{n_m}H(Q_1(\theta)) + \frac{n_2}{n_m}H(Q_2(\theta))
+		$$
+		where $n_1$ and $n_2$ is the number of samples in region $Q_1$ and $Q_2$, respectively, while $n_m=n_1+n_2$.
+		For each node we then select the best parameter solving the optimization problem in Equation~\eqref{eq:CART}.
+		\begin{equation} \label{eq:CART}
+			\hat \theta_m = \argmin_{\theta} J(Q,\theta)
+		\end{equation}
+		This procedure is recursively applied to $Q_1(\hat \theta_m)$ and $Q_2(\hat \theta_m)$ until the maximum user-defined tree depth is reached.
+		
+		Dealing with regression problems, a typical impurity measure can be, for instance, the Mean Squared Error (\ac{MSE})
+		\begin{equation} \label{eq:MSE}
+			H_{\text{MSE}}(X_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} \big(y_i - \bar y_m \big)^2
+		\end{equation}
+		where $\bar y_m = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} y_i$, is the average output of $X_m$, \ie the training samples in region $R_m$;
+		or the Mean Absolute Error (\ac{MAE})\footnote{we previously came across this measure when evaluating the performance of learning methods on the aging problem, see Sections~\ref{sec:ols},~\ref{sec:ridge_regression},~\ref{sec:the_lasso}, \etc.}, which is simply defined as below.
+		\begin{equation} \label{eq:MAE}
+				H_{\text{MAE}}(X_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} | y_i - \bar y_m |
+		\end{equation}
+		On the other hand, dealing with (multiclass) classification problems, where the classes are identified by the index $k=1,\dots,K$, typical impurity measures are, for instance, the Gini criterion
+		\begin{equation} \label{eq:gini}
+			H_{\text{Gini}}(X_m) = \sum_{k=1}^K p_{mk}(1-p_{mk})
+		\end{equation}
+		where $p_{mk}=\frac{1}{n_m} \sum_{\bm{x_i} \in R_m} \mathds{1}(y_i = k)$ is the proportion of class $k$ observation on the region $R_m$; or the Cross-Entropy (\ac{CE})
+		\begin{equation} \label{eq:ce}
+			H_{\text{CE}}(X_m) = - \sum_{k=1}^K p_{mk} \log(p_{mk})
+		\end{equation}
+		which is an impurity measure heavily applied also for other  learning machines (see Appendix~\ref{appendix:A}).
+		
+		The main free parameter of this model is the maximum depth, \ie the size, of the tree. Deeper trees are more capable of modeling complex input-output relationships with respect to shallow ones. Obviously, too deep trees can overfit the training data. Therefore, the optimal depth of the tree should be estimated from the data via, for instance, grid-search cross-validation.
+		
+		An example of application of this technique for classification and regression is shown in Figure~\ref{fig:decision_trees}.
+		
+	    \begin{figure}[!h]
+			\centering
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_classification.png}
+				\label{fig:dt_clf}%
+			}%
+%			\hfill%
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_regression.png}
+				\label{fig:dt_rgr}%
+			}%
+			\caption{Two examples of decision tree applications for: (a) 2D multiclass classification problem, (b) 1D regression problem.}\label{fig:decision_trees}
+		\end{figure}
+		
+		Decision trees are important in biomedical data science applications as they are easily interpretable and capable of modeling nonlinear input-output relationships. Indeed, the prediction is given following a number of binary decisions which, in some cases, may mimic the way doctors perform diagnosis on their patients. Small decision trees can actually be represented graphically. For instance, applying a this method to the aging problem presented in Section~\ref{sec:ols}, we obtain the tree shown in Figure~\ref{fig:tree_graph}. As usually, the main free parameter of the model, \ie the maximum depth of the tree,  is chosen via grid-search cross-validation ($3$ in this case).
+		
+		\begin{figure}[!h]
+			\centering
+			\includegraphics[width=0.8\textwidth]{part1/decsion_tree_graph.png}
+			\caption{The graph structure learned from the aging problem (see Section~\ref{sec:ols}). The maximum depth of the tree is $3$ and it is chosen via grid-search cross-validation.} \label{fig:tree_graph}
+		\end{figure}	
 
-		More details on this learning algorithm can be found reading~\cite{hastie2009elements}, Chapter 9.
+		More details on this learning paradigm and its applications can be found reading~\cite{hastie2009elements}, Chapter 9 or~\cite{bishop2006pattern}, Chapter 14.
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Ensemble methods}
