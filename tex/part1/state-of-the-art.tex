@@ -668,7 +668,7 @@ As of today ML is the workhorse of data science.
 			A similar derivation can also be obtained applying the kernel trick to logistic regression and SVM~\cite{bishop2006pattern, shawe2004kernel}.
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		\subsection{Decision trees}
+		\subsection{Decision trees} \label{sec:decision_trees} 
 		Decision trees are simple, yet powerful, methods for regression and classification.
 		They are based on recursive binary splits of the feature space, in which they fit a very simple model, such as a constant.
 		Fitting a decision tree on a given dataset results in partitioning the feature space in \textit{cuboid} regions with edges aligned to the axes.
@@ -711,7 +711,7 @@ As of today ML is the workhorse of data science.
 		\begin{equation} \label{eq:ce}
 			H_{\text{CE}}(X_m) = - \sum_{k=1}^K p_{mk} \log(p_{mk})
 		\end{equation}
-		which is an impurity measure heavily applied also for other  learning machines (see Appendix~\ref{appendix:A}).
+		which is an impurity measure heavily also applied as loss function for other  learning machines (see Appendix~\ref{appendix:A}).
 		
 		The main free parameter of this model is the maximum depth, \ie the size, of the tree. Deeper trees are more capable of modeling complex input-output relationships with respect to shallow ones. Obviously, too deep trees can overfit the training data. Therefore, the optimal depth of the tree should be estimated from the data via, for instance, grid-search cross-validation.
 		
@@ -737,24 +737,26 @@ As of today ML is the workhorse of data science.
 			\centering
 			\includegraphics[width=0.8\textwidth]{part1/decsion_tree_graph.png}
 			\caption{The graph structure learned from the aging problem (see Section~\ref{sec:ols}). The maximum depth of the tree is $3$ and it is chosen via grid-search cross-validation.} \label{fig:tree_graph}
-		\end{figure}	
-
+		\end{figure}
+	
+		A very well known weakness of decision trees is their instability. In fact, decision trees are not robust to noise affecting the input data. Even a minor perturbation of a single feature may generate a different split which propagates down to all the splits below. In practice, this is alleviated by the use of decision trees as base learners of ensemble strategies (see Section~\ref{sec:ensemble_methods}).
 		More details on this learning paradigm and its applications can be found reading~\cite{hastie2009elements}, Chapter 9 or~\cite{bishop2006pattern}, Chapter 14.
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	    \subsection{Ensemble methods}
+	    \subsection{Ensemble methods} \label{sec:ensemble_methods}
 	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
 
 	    % FIXME
-	    \textit{Bagging} is a common ensemble method that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners.
+	    \textit{Bagging} is a common ensemble strategy that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners. Decision trees (see Section~\ref{sec:decision_trees}) are typical base learner for bagged estimators.
 
 	    % FIXME
-	    \textit{Boosting} is another popular ensemble method that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners~\cite{hastie2009elements}.
+	    \textit{Boosting} is another popular ensemble strategy that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners~\cite{hastie2009elements}.
 
 	    \subsubsection{Random Forests}
-	    Decision trees are easily interpretable models that recursively partitions the training data into subsets, based on the test of a single feature value at each split (or node). At each iteration, the feature that yields the best split in terms of a pre-selected metric (Gini impurity, information gain or variance reduction) is chosen to create a new node. Decision trees tend to not perform well in practice, which led to the introduction of random forests in 2001~\cite{breiman2001random}.
+%	    Decision trees are easily interpretable models that recursively partitions the training data into subsets, based on the test of a single feature value at each split (or node). At each iteration, the feature that yields the best split in terms of a pre-selected metric (Gini impurity, information gain or variance reduction) is chosen to create a new node. Decision trees is that they tend to not perform well in practice, which led to the introduction of random forests in 2001~\cite{breiman2001random}.
 
-	    Random forests are ensembles of decision trees, each grown on a bootstrap sample from the training data.
+	    Random forests are ensembles of decision trees, proposed by Leo Breiman in its seminal paper~\cite{breiman2001random}. Random forests were proposed to ameliorate some of the drawbacks of decision trees, such as their instability.
+	    In each grown on a bootstrap sample from the training data.
 	    To increase robustness to noise and diversity among the trees, each node is split using the best split among a subset of features randomly chosen at that node.
 	    The final prediction is made by aggregating the prediction of $m$ trees, either by a majority vote in the case of classification problems, or by averaging predictions in the case of regression problems.
 	    Random forests are a {\it bagging} approach, which works on the assumption that the variance of individual decision trees can be reduced by averaging trees built on many uncorrelated subsamples.
