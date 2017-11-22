@@ -371,7 +371,7 @@ As of today ML is the workhorse of data science.
 			In the next section we will describe one of the most popular and straightforward Lasso extensions: the Elastic-Net~\cite{zou2005regularization}.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			\subsubsection{Elastic-Net}
+			\subsubsection{Elastic-Net} \label{sec:elastic_net}
 			The Elastic-Net~\cite{zou2005regularization, de2009elastic} method can be formulated as a least squares problem penalized by a convex combination of Lasso ($\ell_1$-norm) and ridge regression ($\ell_2$-norm) penalties, as in Equation~\eqref{eq:l1l2}.
 
 			\begin{equation}\label{eq:l1l2}
@@ -672,48 +672,48 @@ As of today ML is the workhorse of data science.
 		Decision trees are simple, yet powerful, methods for regression and classification.
 		They are based on recursive binary splits of the feature space, in which they fit a very simple model, such as a constant.
 		Fitting a decision tree on a given dataset results in partitioning the feature space in \textit{cuboid} regions with edges aligned to the axes.
-		In each region, there is a separate model to predict the target variable. For instance: in regression problems this can be the average of the samples falling in the region, whereas for classification problems, it can be the assignment to the most represented class.
+		In each region, there is a separate model to predict the target variable. In regression problems this can be the average of the samples falling in the region, whereas for classification problems, it can be the assignment to the most represented class.
 		In particular, when decision trees are applied to classification problems, the feature space partitioning aims at keeping samples with the same labels grouped together.
-		In this thesis, we opted for one of the most popular method for decision tree-based classification and regression: \ac{CART}~\cite{breiman1984classification}.
+		In this thesis, we refer to one of the most popular method for decision tree-based classification and regression, known as \ac{CART}~\cite{breiman1984classification}.
 		
-		Fitting a decision tree implies learning from the data the structure of the tree itself, including the selection of the input variable for each splitting iteration, as well as the optimal splitting threshold. Moreover, it must also be defined the value of the prediction for each region.
-		Taking into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$, even considering a fixed number of nodes, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
+		Fitting a decision tree implies learning from the data the structure of the tree itself, including the selection of the input variable for each splitting recursion, as well as the optimal splitting threshold. Moreover, it must also be defined the value of the prediction for each region.
+		Let's take into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$. Even when the number of nodes is fixed, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
 		
-		Let the data at the node $m$ be denoted by $Q$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j$-th feature and the threshold $s_m$, we define two half-planes as follows.
+		Let the data at the node $m$ be denoted by $Q_m$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j$-th feature and the threshold $s_m$, we define two half-planes as follows.
 		$$
-		Q_1(\theta) = (\bm{x}_i, y_i) | \bm{x}^j \leq s_m~\text{and}~Q_2(\theta) = (\bm{x}_i, y_i) | \bm{x}^j > s_m
+		Q_{m_1}(\theta) = (\bm{x}_i, y_i) | \bm{x}_i^j \leq s_m~\text{and}~Q_{m_2}(\theta) = (\bm{x}_i, y_i) | \bm{x}_i^j > s_m
 		$$
-		Then, at each node an impurity measure is evaluated using a suitable impurity function $H$, which depends on the given task. Therefore we can formulate the objective function
+		Then, at each node an impurity measure is evaluated using a suitable impurity function $H(Q_m)$, which depends on the given task. Therefore, we can formulate an objective function like
 		$$
-		J(Q,\theta) = \frac{n_1}{n_m}H(Q_1(\theta)) + \frac{n_2}{n_m}H(Q_2(\theta))
+		J(Q_m,\theta) = \frac{n_1}{n_m}H(Q_{m_1}(\theta)) + \frac{n_2}{n_m}H(Q_{m_2}(\theta))
 		$$
-		where $n_1$ and $n_2$ is the number of samples in region $Q_1$ and $Q_2$, respectively, while $n_m=n_1+n_2$.
+		where $n_1$ and $n_2$ is the number of samples in region $Q_{m_1}$ and $Q_{m_2}$, respectively, while $n_m=n_1+n_2$.
 		For each node we then select the best parameter solving the optimization problem in Equation~\eqref{eq:CART}.
 		\begin{equation} \label{eq:CART}
-			\hat \theta_m = \argmin_{\theta} J(Q,\theta)
+			\hat \theta_m = \argmin_{\theta} J(Q_m,\theta)
 		\end{equation}
-		This procedure is recursively applied to $Q_1(\hat \theta_m)$ and $Q_2(\hat \theta_m)$ until the maximum user-defined tree depth is reached.
+		This procedure is recursively applied to $Q_{m_1}(\hat \theta_m)$ and $Q_{m_2}(\hat \theta_m)$ until the maximum tree depth, that we have fixed at the beginning, is reached.
 		
 		Dealing with regression problems, a typical impurity measure can be, for instance, the Mean Squared Error (\ac{MSE})
 		\begin{equation} \label{eq:MSE}
-			H_{\text{MSE}}(X_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} \big(y_i - \bar y_m \big)^2
+			H_{\text{MSE}}(Q_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} \big(y_i - \bar y_m \big)^2
 		\end{equation}
-		where $\bar y_m = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} y_i$, is the average output of $X_m$, \ie the training samples in region $R_m$;
+		where $\bar y_m = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} y_i$, is the average output of $Q_m$, \ie the training samples in region $R_m$;
 		or the Mean Absolute Error (\ac{MAE})\footnote{we previously came across this measure when evaluating the performance of learning methods on the aging problem, see Sections~\ref{sec:ols},~\ref{sec:ridge_regression},~\ref{sec:the_lasso}, \etc.}, which is simply defined as below.
 		\begin{equation} \label{eq:MAE}
-				H_{\text{MAE}}(X_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} | y_i - \bar y_m |
+				H_{\text{MAE}}(Q_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} | y_i - \bar y_m |
 		\end{equation}
 		On the other hand, dealing with (multiclass) classification problems, where the classes are identified by the index $k=1,\dots,K$, typical impurity measures are, for instance, the Gini criterion
 		\begin{equation} \label{eq:gini}
-			H_{\text{Gini}}(X_m) = \sum_{k=1}^K p_{mk}(1-p_{mk})
+			H_{\text{Gini}}(Q_m) = \sum_{k=1}^K p_{mk}(1-p_{mk})
 		\end{equation}
 		where $p_{mk}=\frac{1}{n_m} \sum_{\bm{x_i} \in R_m} \mathds{1}(y_i = k)$ is the proportion of class $k$ observation on the region $R_m$; or the Cross-Entropy (\ac{CE})
 		\begin{equation} \label{eq:ce}
-			H_{\text{CE}}(X_m) = - \sum_{k=1}^K p_{mk} \log(p_{mk})
+			H_{\text{CE}}(Q_m) = - \sum_{k=1}^K p_{mk} \log(p_{mk})
 		\end{equation}
 		which is an impurity measure heavily also applied as loss function for other  learning machines (see Appendix~\ref{appendix:A}).
 		
-		The main free parameter of this model is the maximum depth, \ie the size, of the tree. Deeper trees are more capable of modeling complex input-output relationships with respect to shallow ones. Obviously, too deep trees can overfit the training data. Therefore, the optimal depth of the tree should be estimated from the data via, for instance, grid-search cross-validation.
+		The main free parameter of this model is the maximum depth of the tree, \ie its size. Deeper trees are capable of modeling complex input-output relationships with respect to shallow ones. Obviously, too deep trees can overfit the training data. Therefore, the optimal depth of the tree should be estimated from the data via, for instance, grid-search cross-validation.
 		
 		An example of application of this technique for classification and regression is shown in Figure~\ref{fig:decision_trees}.
 		
@@ -731,7 +731,7 @@ As of today ML is the workhorse of data science.
 			\caption{Two examples of decision tree applications for: (a) 2D multiclass classification problem, (b) 1D regression problem.}\label{fig:decision_trees}
 		\end{figure}
 		
-		Decision trees are important in biomedical data science applications as they are easily interpretable and capable of modeling nonlinear input-output relationships. Indeed, the prediction is given following a number of binary decisions which, in some cases, may mimic the way doctors perform diagnosis on their patients. Small decision trees can actually be represented graphically. For instance, applying a this method to the aging problem presented in Section~\ref{sec:ols}, we obtain the tree shown in Figure~\ref{fig:tree_graph}. As usually, the main free parameter of the model, \ie the maximum depth of the tree,  is chosen via grid-search cross-validation ($3$ in this case).
+		Decision trees are important in biomedical data science applications as they are easily interpretable and capable of modeling nonlinear input-output relationships. Indeed, the prediction is given following a number of binary decisions which, in some cases, may mimic the way doctors perform diagnosis on their patients. Relatively small decision trees can actually be represented graphically. For instance, applying a this method to the aging problem presented in Section~\ref{sec:ols}, we obtain the tree shown in Figure~\ref{fig:tree_graph}. As usually, the main free parameter of the model, \ie the maximum depth of the tree,  is chosen via grid-search cross-validation (and it is $3$, in this case).
 		
 		\begin{figure}[!h]
 			\centering
@@ -739,61 +739,117 @@ As of today ML is the workhorse of data science.
 			\caption{The graph structure learned from the aging problem (see Section~\ref{sec:ols}). The maximum depth of the tree is $3$ and it is chosen via grid-search cross-validation.} \label{fig:tree_graph}
 		\end{figure}
 	
-		A very well known weakness of decision trees is their instability. In fact, decision trees are not robust to noise affecting the input data. Even a minor perturbation of a single feature may generate a different split which propagates down to all the splits below. In practice, this is alleviated by the use of decision trees as base learners of ensemble strategies (see Section~\ref{sec:ensemble_methods}).
+		A very well-known weakness of decision trees is their instability. In fact, decision trees are not robust to noise affecting the input data. Even minor perturbations of a single feature may generate a different split which propagates down to all the splits below. In practice, this is alleviated by the use of decision trees as base learners of ensemble strategies (see Section~\ref{sec:ensemble_methods}).
 		More details on this learning paradigm and its applications can be found reading~\cite{hastie2009elements}, Chapter 9 or~\cite{bishop2006pattern}, Chapter 14.
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Ensemble methods} \label{sec:ensemble_methods}
-	    The key idea behind ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
+	    The key idea of ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
 
 	    % FIXME
-	    \textit{Bagging} is a common ensemble strategy that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$~\citep{hastie2009elements}. For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners. Decision trees (see Section~\ref{sec:decision_trees}) are typical base learner for bagged estimators.
+	    \textit{Bagging} is a common ensemble strategy that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$.
+%	    \citep{hastie2009elements}
+	    For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners. Decision trees (see Section~\ref{sec:decision_trees}) are typical base learner for bagged estimators.
 
 	    % FIXME
 	    \textit{Boosting} is another popular ensemble strategy that, unlike bagging, performs predictions by sequentially fitting a collection of base learner that cast a weighted vote~\citep{hastie2009elements}. At each boosting step, the weight corresponding to samples that were misclassified at the previous iterations increases. Therefore, each successive classifier is somewhat forced to learn the relationships between input and output that were previously missed. From a theoretical standpoint, it would be possible to boost any learning machine, nevertheless boosting methods are mainly used with decision trees as base learners~\cite{hastie2009elements}.
 
-	    \subsubsection{Random Forests}
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	    \subsubsection{Random Forests} \label{sec:random_forests}
 %	    Decision trees are easily interpretable models that recursively partitions the training data into subsets, based on the test of a single feature value at each split (or node). At each iteration, the feature that yields the best split in terms of a pre-selected metric (Gini impurity, information gain or variance reduction) is chosen to create a new node. Decision trees is that they tend to not perform well in practice, which led to the introduction of random forests in 2001~\cite{breiman2001random}.
 
-	    Random forests are ensembles of decision trees, proposed by Leo Breiman in its seminal paper~\cite{breiman2001random}. Random forests were proposed to ameliorate some of the drawbacks of decision trees, such as their instability.
-	    In each grown on a bootstrap sample from the training data.
-	    To increase robustness to noise and diversity among the trees, each node is split using the best split among a subset of features randomly chosen at that node.
-	    The final prediction is made by aggregating the prediction of $m$ trees, either by a majority vote in the case of classification problems, or by averaging predictions in the case of regression problems.
-	    Random forests are a {\it bagging} approach, which works on the assumption that the variance of individual decision trees can be reduced by averaging trees built on many uncorrelated subsamples.
-	    By contrast, {\it boosted decision trees} are made by building an iterative collection of decision trees, trained by giving more importance to training examples that were incorrectly classified by the previous trees. \todo{Add use cases for boosted decision trees. $\dots$}
+	    Random Forests (\ac{RF}) are ensembles of decision trees, proposed by Leo Breiman in the early 2000s~\cite{breiman2001random} to ameliorate the instability of decision trees.
+	    In RF each tree is grown on a bootstrap sample from the training data, typically to its maximum depth.
+	    To increase robustness to noise and diversity among the trees, each node is split using the best split among a subset of features randomly chosen at that node. The number of features on which the trees are grown is one of the free parameters of the model.
+	    The final prediction is made by aggregating the prediction of $M$ trees, either by a majority vote in the case of classification problems, or by averaging predictions in the case of regression problems.
+	    Another important free parameter of the model is the number of trees in the ensemble.
+	    RF are a bagging approach, which works on the assumption that the variance of individual decision trees can be reduced by averaging trees built on many uncorrelated subsamples.
+	    Moreover, increasing the number of trees in the ensemble, RF does not overfit the data. Therefore, this parameter is typically chosen to be \textit{as large as possible}, consistently with the available hardware and computational time.
+%	    By contrast, {\it boosted decision trees} are made by building an iterative collection of decision trees, trained by giving more importance to training examples that were incorrectly classified by the previous trees. \todo{Add use cases for boosted decision trees. $\dots$}
 
-	    Random forests can provide several measures of {\it feature importance}, computed by looking at the increase in prediction error % (mean decrease in accuracy; mean decrease in node impurity)
-	    when data for a feature is permuted while all other features remain unchanged. Feature selection based on random forests if most often performed using one of these measures. However, several techniques for applying regularization to random forests have been proposed. These techniques broadly fall under two categories: (1) cost-complexity pruning, which consists in limiting tree depth, resulting in less complex models~\cite{ishwaran2008random,kulkarni2012pruning}; and (2) Gini index penalization~\cite{deng2013gene, liu2014learning}. In addition,~\cite{joly2012ell1} proposed using an $\ell_1$-norm  to reduce the space-complexity of random forests.
+	    RF can provide several measures of \textit{feature importance}, computed by looking at the increase in prediction error % (mean decrease in accuracy; mean decrease in node impurity)
+	    when data for a feature is permuted while all other features remain unchanged. 
+	    Feature selection based on random forests if most often performed using one of these measures. However, several techniques for applying regularization to random forests have been proposed. These techniques broadly fall under two categories:
+	    \begin{enumerate}
+			\item cost-complexity pruning, which consists in limiting tree depth, resulting in less complex models~\cite{ishwaran2008random,kulkarni2012pruning}; and
+			\item Gini index penalization~\cite{deng2013gene, liu2014learning}.
+	    \end{enumerate}
+    	In addition,~\cite{joly2012ell1} proposed using an $\ell_1$-norm  to reduce the space-complexity of random forests.
 
-	    Random forests naturally handle both numerical and categorical variables, multiple scales, and non-linearities. They also require little parameter tuning. This makes them popular for the analysis of diverse types of biological data, such as gene expression, GWAS data or mass spectrometry~\cite{qi2012random}. Unfortunately, in practice feature selection schemes that rely on them tend to be very unstable~\cite{kursa2014robustness}.
+	    RF naturally handle both numerical and categorical variables, multiple scales, and non-linearities. They also require little parameter tuning. This makes them popular for the analysis of diverse types of biological data, such as gene expression, Genome-wide Association Studies (\ac{GWAS}) data or mass spectrometry~\cite{qi2012random}.
+		In practice, feature selection schemes that rely on RF may to be unstable~\cite{kursa2014robustness}, therefore feature selection stability measures must be adopted to avoid drawing inconsistent conclusions.
+		
+		Let's see what happens when RF are applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is identical to the one previously applied for ridge and Lasso regression (see Section~\ref{sec:ridge_regression} and~\ref{sec:the_lasso}), where the only parameter optimized via grid-search cross-validation is the maximum number of features each tree can grow on (and in this case it is chosen as $4$). The number of trees in the ensemble is fixed to $500$. The RF model on the test set achieves $\text{MAE} = 6.321$ and Explained Variance $\text{EV} = 88.17\%$.
+		Figure~\ref{fig:rf_feature_importance} shows the feature importance measure estimated by this model.
+		\begin{figure}[!h]
+			\centering
+			\includegraphics[width=0.8\textwidth]{part1/rf_feature_importance.png}
+			\caption{A pictorial representation of the feature importance achieved by a RF model with $500$ trees growing on $4$, out of $12$, features.} \label{fig:rf_feature_importance}
+		\end{figure}
+		As we can see, the features that are most relevant for RF are comparable to the ones selected by Elastic-Net (see Figure~\ref{fig:w_enet}).
+		For RF models it is interesting to investigate on the effect of an increasing value for the number of trees in the forest. As shown in Figure~\ref{fig:rf_increasing}, increasing the number of trees in the forest does not lead to overfit. In fact, test error (Figure~\ref{fig:rf_mae}) and explained variance (Figure~\ref{fig:rf_ev}), after approximately $400$ trees, reach a plateau region instead of growing.
+	    \begin{figure}[!h]
+			\centering
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/rf_increasing_MAE.png}
+				\label{fig:rf_mae}%
+			}%
+			%			\hfill%
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/rf_increasing_EV.png}
+				\label{fig:rf_ev}%
+			}%
+			\caption{The effect of the number of trees in a RF model in terms of MAE, panel (a), and EV, panel (b). As expected, larger forests do not lead to overfit, \ie the training error does not reach zero.}\label{fig:rf_increasing}
+		\end{figure}
 
-	    \subsubsection{Gradient Boosting}
-	    \textit{Gradient boosting}~\citep{friedman2001greedy}  is one of the most widely applied boosting methods in biological problems.
-	    %This technique iteratively combines the predictions obtained by several base learners, such as decision trees, into a single model.
-	    The key idea behind gradient boosting is that, under some general hypothesis on the cost function, boosting can be seen as an iterative gradient method for numerical optimization.
-	    %In particular, in GB at each boosting step a new base learner is fitted on the residuals obtained at the previous boosting iteration.
-	    Gradient boosting has several desirable properties~\citep{mayr2014evolution}, such as its capability to learn nonlinear input/output relationship, its ability to embed a feature importance measure (as random forests~\citep{hastie2009elements}) and its stability in case of high-dimensional data~\citep{buehlmann2006boosting}.
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	    \subsubsection{Gradient Boosting} \label{sec:gradient_boosting}
+	    
+	    \textit{Gradient boosting}~\cite{friedman2001greedy} (\ac{GB}) is one of the most widely applied boosting methods in biological problems.
+	    This technique iteratively combines the predictions obtained by several base learners, such as decision trees, into a single model.
+	    The key idea behind GB is that, under some general hypothesis on the cost function, boosting can be seen as an iterative gradient method for numerical optimization.
+	    In particular, in GB at each boosting iteration a new base learner is fitted on the residuals obtained at the previous boosting iteration.
+	    GB has several desirable properties~\cite{mayr2014evolution}, such as its capability to learn nonlinear input-output relationship, its ability to embed a feature importance measure (as RF) and its stability in case of high-dimensional data~\cite{buehlmann2006boosting}. When used for feature selection, GB shows interesting performance when casted in the stability selection framework~\cite{meinshausen2010stability}, leading to an effective control of the false discovery rate.
 
-	    %The consistency of GB in high-dimensional problems was demonstrated in.
+	    As for most of the learning machine, GB may suffer of overfitting. The main regularization parameter to control is the number of boosting iterations $M$, \ie the number of base learners, fitted on the training data. This is typically optimized by cross-validated grid-search, or by information criteria-based heuristics~\cite{tutz2006generalized, tutz2007boosting}.
+	    Regularization in GB can also be controlled by shrinking the contribution of each base learner by a constant $0<\nu<1$ that controls the learning rate of the boosting procedure. In order to achieve comparable predictive power, smaller values of $\nu$ imply larger number of $M$, so there is a trade-off between them.
+	    As usually the base learners are decision trees and another important parameter to tune is their maximum depth~\cite{hastie2009elements}.
 
-	    As for any learning machine, boosting methods may suffer of overfitting. The main regularization parameter to control is the number of boosting iterations $M$, \ie the number of base learners, fitted on the training data. This is typically optimized by cross-validated grid-search, or by information criteria-based heuristics~\citep{tutz2006generalized, tutz2007boosting} (see Section~\ref{subsec:model_selection}).
+	    In a recent paper~\cite{lusa2015boosting}, the authors show that in high-dimensional balanced binary classification problems, if the base learner is likely to overfit the training data, the use of \textit{Stochastic GB}~\cite{friedman2002stochastic} is preferable. The latter is a modified version of the original method, where each base learner is fitted on a random extraction without resubmission of a fraction $\eta$ of the training data, where $\eta$ is another regularization parameter to choose.
+	    
+	    Let's see what happens when GB is used to tackle the aging problem (see Section~\ref{sec:ols}).
+	    The experimental setup is identical to the one previously applied for Elastic-Net regression (see Section~\ref{sec:elastic_net}), where the two parameters optimized via grid-search cross-validation are the maximum depth (in a range from $3$ to $20$) of the trees and the number of boosting iterations (with a maximum value of $500$).
+	    The selected tree depth is $8$ and the number of boosting iterations is $31$.
+		The GB model on the test set achieves $\text{MAE} = 7.955$ and Explained Variance $\text{EV} = 84.88\%$.
+	    Figure~\ref{fig:gb_feature_importance} shows the feature importance measure estimated by this model.
+	    \begin{figure}[!h]
+	    \centering
+	    \includegraphics[width=0.8\textwidth]{part1/gb_feature_importance.png}
+    	\caption{A pictorial representation of the feature importance achieved by a GB model with learning rate $0.1$ after $31$ boosting iterations. Each tree has maximum depth of $11$ and it grows on $4$, out of $12$, features.} \label{fig:gb_feature_importance}
+	    \end{figure}
+   		As we can see, the features that are most relevant for GB are comparable to the ones relevant for RF (see Figure~\ref{fig:rf_feature_importance}).
+	    As we have already seen for RF, we shall investigate on the effect of increasing boosting iterations for GB. As shown in Figure~\ref{fig:gb_increasing}, after approximately $50$ boosting iterations the model reaches perfect overfit of the training set, \ie zero training error (Figure~\ref{fig:gb_mae}) and $100\%$ trained explained variance (Figure~\ref{fig:gb_ev}).
+        \begin{figure}[!h]
+    	\centering
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/gb_increasing_MAE.png}
+    		\label{fig:gb_mae}%
+    	}%
+    	%			\hfill%
+    	\subfloat[]{%
+    		\includegraphics[width=0.5\textwidth]{part1/gb_increasing_EV.png}
+    		\label{fig:gb_ev}%
+    	}%
+    	\caption{The effect of the number of boosting iterations in a GB model (learning rate $0.1$) in terms of MAE, panel (a), and EV, panel (b). As expected, increasingly large boosting iterations lead to perfect overfit, \ie zero training error.}\label{fig:gb_increasing}
+	    \end{figure}
+	    
 
-	    Regularization in gradient boosting can also be controlled by shrinking the contribution of each base learner by a constant $0<\nu<1$ that controls the learning rate of the boosting procedure~\citep{hastie2009elements}. In order to achieve comparable predictive power, smaller values of $\nu$ imply larger number of $M$, so there is a tradeoff between them.
-	    As usually the base learners are decision trees, another important parameter to tune is their maximum depth~\citep{hastie2009elements}.
+%	    Approaches based on gradient boosting classification are used to detect \textit{de novo} mutations showing an improved specificity and sensitivity with respect to state-of-the-art methods~\cite{liu2014gradient}.
+%	    When combined with stability selection~\cite{meinshausen2010stability}, gradient boosting has demonstrated to be a very resourceful method for variable selection, leading to an effective control of the false discovery rate. This strategy was followed to associate overall survival with single-nucleotide polymorphisms of patients affected by cutaneous melanoma~\cite{he2016component} and to detect differentially expressed amino acid pathways in autism spectrum disorder patients~\cite{hofner2015controlling}.
 
-	    In a recent paper~\citep{lusa2015boosting}, the authors show that in high-dimensional balanced binary classification problems, if the base learner is likely to overfit the training data, the use of \textit{Stochastic gradient boosting}~\citep{friedman2002stochastic} is preferable. The latter is a modified version of the original method, where each base learner is fitted on a random extraction without resubmission of a fraction $\eta$ of the training data, where $\eta$ is de-facto a regularization parameter to choose.
+%	    \todo{consider adding boosting method for cox models...}
 
-	    Approaches based on gradient boosting classification are used to detect \textit{de novo} mutations showing an improved specificity and sensitivity with respect to state-of-the-art methods~\citep{liu2014gradient}.
-	    When combined with stability selection~\citep{meinshausen2010stability}, gradient boosting has demonstrated to be a very resourceful method for variable selection, leading to an effective control of the false discovery rate. This strategy was followed to associate overall survival with single-nucleotide polymorphisms of patients affected by cutaneous melanoma~\citep{he2016component} and to detect differentially expressed amino acid pathways in autism spectrum disorder patients~\citep{hofner2015controlling}.
-
-	    \todo{consider adding boosting method for cox models...}
-
-
-
-	%%
-
-
-
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Deep learning}
 	    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
 	    Deep Learning (DL) methods are a broad class of machine learning techniques that, starting from raw data, aim at learning a suitable feature representation (see Section~\ref{sec:unsupervised}) and a prediction function, at the same time~\cite{lecun2015deep}. DL methods can be seen as an extension of classical Neural Networks, where the final prediction is achieved by composing several layers of non-linear transformations.
