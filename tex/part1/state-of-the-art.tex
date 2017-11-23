@@ -938,13 +938,32 @@ As of today ML is the workhorse of data science.
 		Compared to standard RNNs, LSTMs can be trained via gradient descent as they do not suffer from the vanishing/exploding gradient problem~\cite{bengio1994learning}.
 		In the recent past, this deep learning architectures demonstrated to achieve promising results in several sequences learning tasks, such as speech recognition~\cite{graves2005framewise}, image captioning~\cite{vinyals2015show}, or time-series forecast~\cite{schmidhuber2005evolino}. 
 		
-
+  \section{Feature selection} \label{subsec:feature_selection}
 
   \section{Unsupervised learning} \label{subsec:unsupervised_learning}
-    \subsection{Manifold learning}
-    \subsection{Clustering}
+  In Section~\ref{subsec:supervised_learning} we started the discussion of supervised learning methods with a metaphorical comparison with the human ability of learning from examples.
+  Actually, in order to understand some concept, human beings need way less supervision than modern learning algorithms.
+  In some circumstances it may be even the case that little/no supervision at all is needed to accomplish a task.
+  For instance, let's say that a kid growing with a Brittany dog at home visit some friend having a Bernese Mountain Dog.
+  The kid, so far, has only being taught what his dog looks like and these two dog breeds definitely look different one another.
+  Nevertheless, the kid will certainly be able to understand that both of them are animals and, in particular, dogs.
+  Who taught the kid the appearance of every possible dog breed?
+  
+  The learning paradigm in which we try to infer some interesting properties, or recurrent patterns from unlabeled samples is known as unsupervised learning.
+  Quoting Kevin P. Murphy: "\textit{Unsupervised learning is arguably more typical of human and animal learning}."~\cite{murphy2012machine}.
+  
+  In this section, given a set of input data $\mathcal{D}=\{\bm{x}_i\}_{i=1}^n$, with samples represented as $d$-dimensional vectors $\bm{x}_i \in \mathbb{R}^d$ ($\forall i=1,\dots,n$), our interest will be directed toward two different goals:
+  \begin{enumerate*}[label=(\roman*)]
+  	\item grouping similar objects together (Section~\ref{sec:clustering}) and
+  	\item achieving a meaningful low-dimensional representation of our data (Section~\ref{sec:dimred}).
+  \end{enumerate*}
+  
 
-  \section{Feature selection} \label{subsec:feature_selection}
+    \subsection{Clustering} \label{sec:clustering}  
+    \subsection{Dimensionality reduction and feature learning} \label{sec:dimred}
+
+
+
 
   \section{Model selection and evaluation} \label{subsec:model_selection}
     \subsection{Model selection strategies}
