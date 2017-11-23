@@ -651,7 +651,7 @@ As of today ML is the workhorse of data science.
 
 			The advantage of the kernel trick is not only statistical, but also computational. Indeed, we may notice that solving the primal problem (\ie in $\bm{w}$) requires $O(n^3)$ operations, while solving the dual (\ie in $\bm{\alpha}$) requires $O(d^3)$ operations which is better for large scale and relatively low-dimensional problem.
 
-		 \begin{table}[htb]
+    	 \begin{table}[htb]
 				\centering
 				\caption{Popular kernel functions. \ac{RBF} stands for Radial Basis Function.}
 				\label{tab:kernels}
@@ -666,6 +666,18 @@ As of today ML is the workhorse of data science.
 			\end{table}
 
 			A similar derivation can also be obtained applying the kernel trick to logistic regression and SVM~\cite{bishop2006pattern, shawe2004kernel}.
+			
+    	\begin{table}[htb]
+			\centering
+			\caption{Overview of the matrix norms used for multiple-output regression.}\label{tab:norms}
+			\begin{tabular}{l|l|l}
+				\toprule
+				Matrix norm  & Notation         & Definition                      \\  \midrule
+				Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
+				Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
+				Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
+			\end{tabular}
+		\end{table}	
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		\subsection{Decision trees} \label{sec:decision_trees} 
@@ -851,51 +863,81 @@ As of today ML is the workhorse of data science.
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	    \subsection{Deep learning}
+	    
+		Deep Learning (DL) is a branch of ML that, in the recent past, is becoming extremely appealing thanks to the high predictive power that it has empirically shown on real-world problems.
+		This section is definitely not an attempt to summarize the heterogeneous plethora of the DL methods presented in literature so far. Indeed, even a dedicated PhD thesis may not be enough to accomplish this task.
+		In this section we will only get a grasp on the mechanisms behind the supervised DL methods applied in Part II\footnote{unsupervised DL methods are available as well, but as they are not used in Part II, their discussion is not presented here. We recall to~\cite{lecun2015deep, goodfellow2016deep, chollet2018deep} for a more comprehensive overview.}.
+	    
 	    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
-	    Deep Learning (DL) methods are a broad class of machine learning techniques that, starting from raw data, aim at learning a suitable feature representation (see Section~\ref{sec:unsupervised}) and a prediction function, at the same time~\cite{lecun2015deep}. DL methods can be seen as an extension of classical Neural Networks, where the final prediction is achieved by composing several layers of non-linear transformations.
-	    %The intuition behind DL method is that, starting from raw data, their multi-layer architecture can achieve representations at a more abstract level, capable of achieving high performance in prediction tasks.
-	    DL architectures can be devised to tackle binary/multi-category classification~\cite{angermueller2016deep, leung2014deep} as well as single/multiple-output regression~\cite{Chen2016GeneEI, ma2015deep} tasks.
+	    One of the main characteristics of DL methods is that, starting from raw data, they aim at learning a suitable feature representation (see Section~\ref{subsec:unsupervised_learning}) and a prediction function, at the same time.
+	    DL methods stand on the shoulders of the classical, and shallow, Neural Networks of the $80$s, and they can actually be seen as their extension.
+	    In DL the the final prediction is achieved by composing several layers of non-linear transformations.
+	    The intuition behind DL method is that, starting from raw data, their multi-layer architecture can achieve representations at a more abstract level, leading to top performance in prediction tasks.
+	    DL architectures can be devised to tackle binary or multiclass classification~\cite{angermueller2016deep, leung2014deep} as well as single or multiple output regression~\cite{Chen2016GeneEI, ma2015deep} tasks.
 	    %\todo{microarray gene xpression multi-task regression }
 
-	    Many methods fall in this class~\cite{lecun2015deep}, in order to understand them in general, we sketch here the main ideas behind the most basic one: the Multi-Layer Perceptron (MLP), also known as deep feedforward network.
-	    Typically, MLPs are structured as fully connected graphs organized in \textit{layers} that can be of three different types: \textit{input},  \textit{hidden} and \textit{output} (see Figure~\ref{fig:mlp}). Each node of the graph is called \textit{unit}. The number of units in the input layer matches the dimensionality of the raw data ($d$), while number and type of output units are related to the learning task. The size of the hidden layer, and their number, can be arbitrarily chosen according to the prediction task and the available computational resources.
-	    In MLPs the information flows through the graph from the input to the output. Each layer $l$ transforms its input data $\bm{x}^{l-1}$ by composing an affine transformation and an activation function $f(\cdot)$ that acts element-wise on its input vector. In other words, defining as $p_{l-i}$ the number of units in the layer $l-i$, the layer $l$ applies the transformation $\bm{x}^{l} = f(\bm{x}^{(l-1)}W_l+b_l)$, where $W_l \in \mathbb{R}^{p_{l-1} \times p_l}$ and $\bm{b} \in \mathbb{R}^{p_l}$ are the weights of the model that are learned from the data. The function $f(\cdot)$ is known as \textit{activation function} and it can be defined in different ways. In classical neural networks, activation functions are modeled as sigmoids (\eg $f(x)=\tanh(x)$, $f(x)=(1+e^{-x})^{-1}$) whilst in modern DL architectures the most used activation function is the Rectified Linear Unit (\ie $f(x)=\max(0,x)$)~\cite{lecun2015deep} .
+		\subsubsection{Multi-Layer Perceptron} \label{sec:mlp}
+		In order to understand the principles guiding DL methods, we sketch here the ideas behind the most basic one: the Multi-Layer Perceptron (\ac{MLP}), also known as deep Feedforward Neural Network.
+	    Typically, MLPs are structured as fully connected graphs organized in \textit{layers} that can be of three different types: \textit{input}, \textit{hidden} and \textit{output} (see Figure~\ref{fig:mlp}).
+	    Each node of the graph is called \textit{unit}.
+	    The number of units in the input layer matches the dimensionality of the raw data ($d$), while number and type of output units are related to the learning task.
+	    For multiclass classification problems, with $K$ classes, the output layer has $K$ units, each one representing the probability of the input sample to be assigned to one specific class.
+	    On the same line, for multiple-output regression problems, with $K$ tasks, each one of the $K$ unit corresponds to the prediction for a given task.
+	    Size and number of the hidden layers can be arbitrarily chosen according to prediction task and available computational resources.
+	    
+   	    \input{part1/nn_tikz.tex}
+	    
+	    In MLPs the information flows through the graph from the input to the output.
+	    Each layer $l$ transforms its input data $\bm{x}^{l-1}$ by composing an affine transformation and an activation function $\sigma(\bm{x})$ that acts element-wise on its input vector.
+	    In other words, defining as $p_{l-i}$ the number of units in the layer $l-i$, the layer $l$ applies the transformation
+	    $$
+	    \bm{x}^{l} = \sigma(\bm{x}^{(l-1)}W_l+b_l)
+	    $$
+	    where $W_l \in \mathbb{R}^{p_{l-1} \times p_l}$ and $\bm{b} \in \mathbb{R}^{p_l}$ are the weights of the model that are learned from the data.
+	    
+	    The function $\sigma(\bm{x})$ is known as \textit{activation function} and it can be defined in different ways.
+	    In classical neural networks, activation functions are modeled as sigmoids (\eg $\sigma(x)=\tanh(x)$, $\sigma(x)=(1+e^{-x})^{-1}$) whilst in modern DL architectures the most used activation function is the Rectified Linear Unit: $f(x)=\max(0,x)$.
 	    % \begin{equation}\label{eq:relu}
 	    % 	f(\bm{x})=\begin{cases} 0  &\text{for}~~  x <0 \\ x  &\text{for~}~x \geq 0 \end{cases}
 	    % \end{equation}
-
-	    \input{part1/nn_tikz.tex}
 
 	    % \todo{output layers + regularization + works}
 	    Particular attention must be paid when fitting deep models as they can be prone to overfit the training set~\cite{angermueller2016deep}.
 	    The network topology itself defines the \textit{degrees of freedom} of the model: deeper and wider networks can approximate well very complicated input-output relationship, but also the noise affecting the data.
 	    Although, tuning the number of hidden layers and their size is not the recommended strategy to prevent from overfitting, as it may lead to suboptimal solutions.
 
-	    Regularization in MLPs can be controlled by penalizing the weights of the network (see Section~\ref{subsec:regularization_penalties}). The most common regularization strategy consists in adding an $\ell_2$-norm penalty in the objective function, as in Equation~\eqref{eq:losspen}. In the DL community this procedure is known as weight decay~\cite{krogh1992simple}.
-
-	    This strategy is adopted in \cite{Chen2015TransspeciesLO} to train a deep architecture on rat cell responses to given stimuli with the final aim to predict human cell responses in the same conditions.
-	    Moreover, weight decay is also adopted in \cite{Yuan2016DeepGeneAA} to train \textit{DeepGene}, \ie an MLP which is designed to classify the tumor type from a set of somatic point mutations.
-	    Furthermore, weight decay is used in~\cite{Fakhry2016DeepMF} to train a DL architecture for brain electron microscopy image segmentation.
+	    Regularization in MLPs can be controlled by penalizing the weights of the network. A common regularization strategy consists in adding an $\ell_2$-norm penalty in the objective function, as in Equation~\eqref{eq:losspen}. In the DL community this procedure is known as weight decay~\cite{krogh1992simple}.
 	    Although less common, the $\ell_1$-norm can also be adopted as regularization penalty, as in~\cite{leung2014deep}.
-
-	    Training MLPs, and deep networks in general, consists in solving a minimization problem via suitable optimization algorithms~\cite{ruder2016overview}. All these methods iteratively update the weights of the network in order to decrease the training error. A popular regularization strategy, known as  \textit{Early stopping}~\cite{prechelt1998early}, consists in interrupting the fitting process as soon as the error on an external validation set increases~\cite{angermueller2016deep}.
+%	    This strategy is adopted in \cite{Chen2015TransspeciesLO} to train a deep architecture on rat cell responses to given stimuli with the final aim to predict human cell responses in the same conditions.
+%	    Moreover, weight decay is also adopted in \cite{Yuan2016DeepGeneAA} to train \textit{DeepGene}, \ie an MLP which is designed to classify the tumor type from a set of somatic point mutations.
+%	    Furthermore, weight decay is used in~\cite{Fakhry2016DeepMF} to train a DL architecture for brain electron microscopy image segmentation.
+	    
+	    Training MLPs, and deep networks in general, consists in solving a minimization problem via suitable optimization algorithms~\cite{ruder2016overview}. All these methods iteratively update the weights of the network in order to decrease the training error. Another fundamental regularization strategy is the \textit{Early stopping}~\cite{prechelt1998early}. This consists in interrupting the fitting process as soon as the error on an external validation set increases~\cite{angermueller2016deep}.
 
 	    Another common regularization strategy in DL is \textit{Dropout}~\cite{srivastava2014dropout}. This techniques consists in temporarily deactivating a defined number of randomly chosen units of the network at training phase. This reduces the degrees of freedom of the model and it implicitly allows to achieve an ensemble of several smaller networks whose predictions are combined.
-	    The use of dropout alone can improve the generalization properties, as in~\cite{Chen2016GeneEI}, where the authors propose a \textit{D-GEX}, DL regression architecture trained to predict the expression of a number of target genes. Dropout can also be used in combination with weight decay or other forms of regularization, as in~\cite{leung2014deep}, where the authors propose to use a deep network to achieve splicing pattern prediction.
+	    The use of dropout alone can improve the generalization properties, as in~\cite{Chen2016GeneEI}, but it is usually adopted in combination with weight decay or other forms of regularization, as in~\cite{leung2014deep}.
+	    
+	    Training MLP may imply dealing with non-convex optimization problems which are usually tackled via stochastic gradient descend, or similar methods~\cite{ruder2016overview, sra2012optimization}.
+%	    , where the authors propose to use a deep network to predict splicing patterns.
+%	    where the authors propose a \textit{D-GEX}, DL regression architecture trained to predict the expression of a number of target genes. Dropout
 
-		\begin{table}[htb]
-			\centering
-			\caption{Overview of the matrix norms used for multiple-output regression.}\label{tab:norms}
-			\begin{tabular}{l|l|l}
-				\toprule
-				Matrix norm  & Notation         & Definition                      \\  \midrule
-				Frobenius        & $\norm{A}_F$     & $\sqrt{\text{trace}(A^TA)}$     \\ [0.05cm]
-				Nuclear          & $\norm{A}_*$     & $\text{trace}\sqrt{(A^TA)}$     \\ [0.05cm]
-				Mixed $\text{L}_{2,1}$        & $\norm{A}_{2,1}$ & $\sum_{j}\norm{\bm{a}_j}_2$ \\ \bottomrule
-			\end{tabular}
-		\end{table}
+		MLP architectures are also used as final layers of another class of DL methods called: Convolutional Neural Network (\ac{CNN}).
+		CNN are a different class of DL methods that exploit convolutional masks with weights estimated from the data to learn a suitable feature representation. This class of methods is largely applied to computer vision and image recognition problems.
+		Describing CNN architectures is beyond the scope of this thesis, as they are not mentioned in the Part II. A thorough description of CNN can be found here~\cite{goodfellow2016deep}.
 
-
+		Let's see what happens when a relatively simple MLP is applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is the same used for RF in Section~\ref{sec:random_forests}, where the only parameter optimized via grid-search cross-validation is the weight decay constant.
+		The resulting MLP has $1$ hidden layer with $1024$ units, ReLu activation and weight decay constant $0.001$.
+		Such MLP is trained with early stopping and, after $XX$ iterations reaches $\text{MAE} = 9.14$ explaining the $78.84\%$ of the variance of the test set.
+		The relatively worse performance of this method, compared, for instance, to RF, may be due to the fact that this dataset has a reduced number of samples. It is known that DL methods, in order to reach optimal solutions, need more training samples than conventional learning machines.
+		
+		\subsubsection{Long-Short Term Memory Network} \label{sec:lstm}
+		Long-Short Term Memory Network (LSTM) belongs to the class of Recurrent Neural Network (\ac{RNN})~\cite{goodfellow2016deep}.
+		LSTM use special units, called {\sl memory cells}, which have the ability to learn long-term dependencies \cite{lecun2015deep}. 
+		Instead of just applying an element-wise nonlinear function, such as sigmoid or hyperbolic tangent, to the affine transformation of inputs and recurrent units.
+		LSTM cells have an internal self-loop together with a system of {\sl input}, {\sl output} and {\sl forget gates}~\cite{goodfellow2016deep}.
+		Compared to standard RNNs, LSTMs can be trained via gradient descent as they do not suffer from the vanishing/exploding gradient problem~\cite{bengio1994learning}.
+		In the recent past, this deep learning architectures demonstrated to achieve promising results in several sequences learning tasks, such as speech recognition~\cite{graves2005framewise}, image captioning~\cite{vinyals2015show}, or time-series forecast~\cite{schmidhuber2005evolino}. 
+		
 
 
   \section{Unsupervised learning} \label{subsec:unsupervised_learning}
