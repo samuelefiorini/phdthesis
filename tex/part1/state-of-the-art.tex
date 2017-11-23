@@ -444,7 +444,7 @@ As of today ML is the workhorse of data science.
 
 			The Elastic-Net penalty is not the only method in which sparsity is enforced on a group level. For example, (overlapping) group Lasso and graph Lasso penalties can be applied when the variables are naturally partitioned in (overlapping) groups, or when their interaction can be modeled by a graph. A detailed description of these methods is beyond the scope of this thesis and we refer to~\cite{jacob2009group, witten2009covariance} and references therein for their comprehensive description.
 
-			\begin{figure}[h!]
+			\begin{figure}[]
 				\centering
 				\subfloat[]{%
 					\includegraphics[width=0.5\textwidth]{part1/w_ols.png}
@@ -546,7 +546,7 @@ As of today ML is the workhorse of data science.
 			The weights $\bm{\hat w}_{\text{SVR}}$ are represented in Figure~\ref{fig:coefs_svr}. As expected, none of the is exactly zero and they look similar to ridge coefficients in Figure~\ref{fig:coefs_ridge}, as the two model share the same regularization penalty.
 			\begin{figure}[!h]
 				\centering
-				\includegraphics[width=0.8\textwidth]{part1/coefs_enet.png}
+				\includegraphics[width=0.8\textwidth]{part1/coefs_svr.png}
 				\caption{A pictorial representation of the vector $\bm{\hat w}_{\text{SVR}}$ obtained fitting a SVR model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_svr}
 			\end{figure}
 			Evaluating $\bm{\hat w}_{\text{SVR}}$ on the test set, the SVR model has $\text{MAE}=9.280$ and explains the $77.74\%$ of the variance.
@@ -688,10 +688,26 @@ As of today ML is the workhorse of data science.
 		In particular, when decision trees are applied to classification problems, the feature space partitioning aims at keeping samples with the same labels grouped together.
 		In this thesis, we refer to one of the most popular method for decision tree-based classification and regression, known as \ac{CART}~\cite{breiman1984classification}.
 		
+		An example of application of this technique for classification and regression is shown in Figure~\ref{fig:decision_trees}.
+		
+		\begin{figure}[!ht]
+			\centering
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_classification.png}
+				\label{fig:dt_clf}%
+			}%
+			%			\hfill%
+			\subfloat[]{%
+				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_regression.png}
+				\label{fig:dt_rgr}%
+			}%
+			\caption{Two examples of decision tree applications for: (a) 2D multiclass classification problem, (b) 1D regression problem.}\label{fig:decision_trees}
+		\end{figure}
+		
 		Fitting a decision tree implies learning from the data the structure of the tree itself, including the selection of the input variable for each splitting recursion, as well as the optimal splitting threshold. Moreover, it must also be defined the value of the prediction for each region.
 		Let's take into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$. Even when the number of nodes is fixed, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
 		
-		Let the data at the node $m$ be denoted by $Q_m$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j$-th feature and the threshold $s_m$, we define two half-planes as follows.
+		Let the data at the node $m$ be denoted by $Q_m$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j^{\text{th}}$ feature and the threshold $s_m$, we define two half-planes as follows.
 		$$
 		Q_{m_1}(\theta) = (\bm{x}_i, y_i) | \bm{x}_i^j \leq s_m~\text{and}~Q_{m_2}(\theta) = (\bm{x}_i, y_i) | \bm{x}_i^j > s_m
 		$$
@@ -726,26 +742,10 @@ As of today ML is the workhorse of data science.
 		which is an impurity measure heavily also applied as loss function for other  learning machines (see Appendix~\ref{appendix:A}).
 		
 		The main free parameter of this model is the maximum depth of the tree, \ie its size. Deeper trees are capable of modeling complex input-output relationships with respect to shallow ones. Obviously, too deep trees can overfit the training data. Therefore, the optimal depth of the tree should be estimated from the data via, for instance, grid-search cross-validation.
-		
-		An example of application of this technique for classification and regression is shown in Figure~\ref{fig:decision_trees}.
-		
-	    \begin{figure}[!h]
-			\centering
-			\subfloat[]{%
-				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_classification.png}
-				\label{fig:dt_clf}%
-			}%
-%			\hfill%
-			\subfloat[]{%
-				\includegraphics[width=0.5\textwidth]{part1/decsion_tree_regression.png}
-				\label{fig:dt_rgr}%
-			}%
-			\caption{Two examples of decision tree applications for: (a) 2D multiclass classification problem, (b) 1D regression problem.}\label{fig:decision_trees}
-		\end{figure}
-		
+				
 		Decision trees are important in biomedical data science applications as they are easily interpretable and capable of modeling nonlinear input-output relationships. Indeed, the prediction is given following a number of binary decisions which, in some cases, may mimic the way doctors perform diagnosis on their patients. Relatively small decision trees can actually be represented graphically. For instance, applying a this method to the aging problem presented in Section~\ref{sec:ols}, we obtain the tree shown in Figure~\ref{fig:tree_graph}. As usually, the main free parameter of the model, \ie the maximum depth of the tree,  is chosen via grid-search cross-validation (and it is $3$, in this case).
 		
-		\begin{figure}[!h]
+		\begin{figure}[!hb]
 			\centering
 			\includegraphics[width=0.8\textwidth]{part1/decsion_tree_graph.png}
 			\caption{The graph structure learned from the aging problem (see Section~\ref{sec:ols}). The maximum depth of the tree is $3$ and it is chosen via grid-search cross-validation.} \label{fig:tree_graph}
@@ -957,9 +957,42 @@ As of today ML is the workhorse of data science.
   	\item grouping similar objects together (Section~\ref{sec:clustering}) and
   	\item achieving a meaningful low-dimensional representation of our data (Section~\ref{sec:dimred}).
   \end{enumerate*}
+  In both cases we will try to infer the properties of the probability distribution $p(\bm{x})$ from which the collected data are assumed to be drawn.
   
+    \subsection{Cluster analysis} \label{sec:clustering}
+    In ML jargon, with \textit{cluster analysis}, \aka \textit{data segmentation} or \textit{clustering}, one typically means the class of unsupervised learning algorithm which aim at grouping together similar objects, by some definition of \textit{similarity}.
+    
+    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures (such as gene expression, blood exams, \etc). In this section an overview on the most popular clustering algorithms is presented.\footnote{a good reference for the clustering algorithms proposed in literature is section \textit{2.3. Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering.html}.}
 
-    \subsection{Clustering} \label{sec:clustering}  
+    \subsubsection{The $k$-means algorithm} \label{sec:k-means}
+    The $k$-means algorithm is, for cluster analysis, what $k$-nearest neighbor and OLS are for supervised classification and regression, respectively: the most intuitive strategy.
+
+	Given $n$ samples $\bm{x}_i \in \mathbb{R}^d$, the goal of $k$-means is to partition the data into $K$ non-overlapping groups clusters. Intuitively, samples falling in the same cluster will be more similar one another.
+    Let $\bm{\mu}_k \in \mathbb{R}^d$ be the \textit{prototypical} vector associated with the $k^{\text{th}}$ cluster, we can think of this as the center of mass of the cluster, \ie its centroid.
+    Fixed the number of cluster, the output of the $k$-means algorithm is a set of cluster centroids as well as the assignment of each sample to a single cluster.
+    For ease of notation, we introduce a binary indicator function $r_k$ defined as
+    $$
+ 	r_k(\bm{x}_i)=\begin{cases} 1  &\text{if}~\bm{x}_i~\text{is assigned to cluster}~k \\ 0  & \text{otherwise} \end{cases}
+    $$
+    (this is known as 1-of-$K$ encoding). Therefore we can define the objective function
+    $$
+    J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) d(\bm{x}_i, \bm{\mu}_k)
+    $$
+    where $d(a,b)$ is some distance measure. In case $d(a,b)$ is the squared Euclidean distance the objective function can be rewritten as in Equation~\eqref{eq:kmeans}.
+    \begin{equation} \label{eq:kmeans}
+    J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) \norm{\bm{x}_i- \bm{\mu}_k}_2^2
+    \end{equation}
+    Therefore, our goal is to find the centroids $\bm{\mu}_k$ for $k=1,\dots,K$ that minimize $J(\bm{\mu})$.
+    We may observe that, given the best centroids, the samples will be associated to the cluster with the nearest centroid. So, let's focus on the problem of finding the centroids.
+    
+    \todo{starting from random centroids do as page 425 of bishop}
+    
+    
+    \subsubsection{Spectral clustering} \label{sec:spectral_clustering}
+    \subsubsection{Hierarchical clustering} \label{sec:hierarchical_clustering}
+    
+    
+    
     \subsection{Dimensionality reduction and feature learning} \label{sec:dimred}
 
 
