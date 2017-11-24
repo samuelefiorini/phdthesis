@@ -1031,9 +1031,9 @@ As of today ML is the workhorse of data science.
 	\begin{algorithmic}[1]
 		\State fix a symmetric and non-negative similarity function $s(\bm{x}_i, \bm{x}_j)$ and compute the similarity matrix $S=
 		\begin{bmatrix}
-		s_{11}       & \dots & s_{1n} \\
-		\vdots & & \vdots \\
-		s_{n1}       & \dots & s_{nn}
+		1       & \dots & s_{1n} \\
+		\vdots & \ddots & \vdots \\
+		s_{1n}       & \dots & 1
 		\end{bmatrix}
 		$
 		\State construct a similarity graph $\mathcal{G}$ from $S$, let $W$ be its adjacency matrix and $D$ be its degree matrix
@@ -1049,8 +1049,34 @@ As of today ML is the workhorse of data science.
 	As for the $k$-means algorithm, finding $K$ is a difficult problem. A common solution for spectral clustering is the \textit{eigengap heuristics}, described in~\cite{von2007tutorial}.
     
     \subsubsection{Hierarchical clustering} \label{sec:hierarchical_clustering}
-    
-    
+	As suggested by the name, hierarchical clustering techniques produces hierarchical (tree) representation of a given dataset, where each level of the hierarchy consist in groups of samples (clusters). Individual data points can be found at the leaves of the learned tree, while all the data points are grouped in a single cluster at the root level.
+	
+	There are two main families of hierarchical clustering: \textit{agglomerative} (bottom-up) and \textit{divisive} (top-down).
+	Both of them are iterative techniques. The first, at each iteration, groups together the most similar points, hence creating more and more large clusters, while the divisive strategy works the other way around: by iteratively dividing groups of points. From now on we will refer to agglomerative clustering only.
+	
+	Hierarchical clustering techniques have two main degrees of freedom: the choice for the similarity of points, \aka \textit{affinity}, and groups of points, \aka \textit{linkage}. The first is used to compute the initial value of the similarity matrix
+	$$
+	S_0 = \begin{bmatrix}
+	0       & \dots & s_{1n} \\
+	\vdots & \ddots & \vdots \\
+	s_{1n}       & \dots & 0
+	\end{bmatrix}
+	$$
+	while the second is used to update $S_0 \in \mathbb{R}_+^{n \times n} \rightarrow S_1 \in \mathbb{R}_+^{n-1\,\times\,n-1}$ once the two most similar data points are collapsed into a single cluster.
+	While any symmetric and non-negative function is a valid affinity, the choices of the linkage function are more interesting and worth mentioning.
+	Let $G$ and $H$ be two clusters, there are four main linkage options:
+	\begin{enumerate}
+		\item[] \textbf{Single} $~~~~~~~~l(G,H) = \max_{\substack{\bm{x}_i \in G \\ \bm{x}_j \in H}} s(\bm{x}_i, \bm{x}_j)$
+
+		\item[] \textbf{Complete} $~~l(G,H) = \min_{\substack{\bm{x}_i \in G \\ \bm{x}_j \in H}} s(\bm{x}_i, \bm{x}_j)$
+		
+		\item[] \textbf{Average} $~~~~l(G,H) = \frac{1}{n_G n_H} \sum_{\bm{x}_i \in G} \sum_{\bm{x}_j \in H} s(\bm{x}_i, \bm{x}_j)$
+		
+		\item[] \textbf{Ward} $~~~~~~~~l(G,H) = \frac{n_G n_H}{n_G + n_H} \norm{\bm{\mu}_G - \bm{\mu}_K}^2$
+	\end{enumerate}
+	where $n_A$ and $\bm{\mu}_A$ are number of points and centroid of the cluster $A$, respectively.
+	
+	Interestingly, finding the number of clusters $K$ in this context translates into the problem selecting at which level the tree should stop growing.
     
     \subsection{Dimensionality reduction and feature learning} \label{sec:dimred}
 
