@@ -978,17 +978,33 @@ As of today ML is the workhorse of data science.
     $$
     J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) d(\bm{x}_i, \bm{\mu}_k)
     $$
-    where $d(a,b)$ is some distance measure. In case $d(a,b)$ is the squared Euclidean distance the objective function can be rewritten as in Equation~\eqref{eq:kmeans}.
+    where $d(a,b)$ is some distance measure. In case $d(a,b)$ is the squared Euclidean distance, which is the typical choice for $k$-means, the objective function can be rewritten as in Equation~\eqref{eq:kmeans}.
     \begin{equation} \label{eq:kmeans}
     J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) \norm{\bm{x}_i- \bm{\mu}_k}_2^2
     \end{equation}
     Therefore, our goal is to find the centroids $\bm{\mu}_k$ for $k=1,\dots,K$ that minimize $J(\bm{\mu})$.
-    We may observe that, given the best centroids, the samples will be associated to the cluster with the nearest centroid. So, let's focus on the problem of finding the centroids.
+    We may observe that, given the best centroids, the samples will be associated to the cluster with the nearest centroid. So, let's focus on the problem of finding $\bm{\mu}_k$.
+    Fixing $r_k(\bm{x})$ for all $k$, the objective function in Equation~\eqref{eq:kmeans} is quadratic in $\bm{\mu}$, therefore the minimization problem can be easily solved setting its derivative to zero (see Equation~\eqref{eq:kmeans_solved}).
+    \begin{equation} \label{eq:kmeans_solved}
+	2\sum_{i=1}^n r_k(\bm{x}_i)(\bm{x}_i - \bm{\mu}_k) = 0 \Rightarrow \bm{\mu}_k = \frac{\sum_{i=1}^n r_k(\bm{x}_i)\bm{x}_i}{\sum_{i=1}^nr_k(\bm{x}_i)}
+    \end{equation}
+    Intuitively, $\bm{\mu}_k$ corresponds to the mean of the points assigned to the cluster $k$.
+    The $k$-means algorithm starts with random centroid. Then, iteratively assigns the points to the cluster having the nearest centroid and updates the centroids position. At each step the value of $J(\bm{\mu})$ is reduced, therefore the convergence of $k$-means is assured. Nevertheless, it may converge to a local minimum, hence leading to a suboptimal solution.
     
-    \todo{starting from random centroids do as page 425 of bishop}
-    
+    As shown in~\cite{arthur2007k}, smart choices of the initial position of the clusters can substantially improve the result. For instance the initial $\bm{\mu}_k$ can be chosen to be \textit{far away} from each other.
+    This solution is called $k$-means$++$ and it follows these simple steps:
+    \begin{enumerate}
+    	\item choose the first centroid $\bm{\mu}_1$ at random from the samples in the dataset,
+    	\item compute the distance between $\bm{\mu}_1$ and all the other points in the dataset: $D = d(\bm{x}_i, \bm{\mu}_1)$ $\forall i=1,\dots,n$,
+    	\item choose a new data point as centroid $\bm{\mu}_2$ following a weighted probability distribution $\propto~D^2$,
+    	\item update the distance vector as $D = \min[d(\bm{x}_i, \bm{\mu}_1), d(\bm{x}_i, \bm{\mu}_2)]$ $\forall i=1,\dots,n$,
+    	\item repeat steps 3 and 4 until $k$ centroids are defined,
+    	\item use this centroids initialization to run standard $k$-means.
+    \end{enumerate}
+	Even though this initial seeding comes with an computational time at the beginning, then the $k$-means algorithm converges super fast actually leading to a decreased overall computational time. Moreover, the achieved solution has considerably lower final cluster reconstruction, compared to standard $k$-means.
     
     \subsubsection{Spectral clustering} \label{sec:spectral_clustering}
+    
     \subsubsection{Hierarchical clustering} \label{sec:hierarchical_clustering}
     
     
