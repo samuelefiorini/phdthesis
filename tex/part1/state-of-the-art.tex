@@ -162,7 +162,7 @@ As of today ML is the workhorse of data science.
 				\includegraphics[width=0.5\textwidth]{part1/classification_fit.png}
 				\label{fig:regression}%
 			}%
-			\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the t-SNE algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
+			\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the \ac{t-SNE} algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
 	  \end{figure}
 
 
@@ -1081,6 +1081,20 @@ As of today ML is the workhorse of data science.
 	Interestingly, finding the number of clusters $K$ in this context translates into the problem selecting at which level the tree should stop growing.
     
     \subsection{Dimensionality reduction and feature learning} \label{sec:dimred}
+	As extensively presented in this thesis, most of the ML methods aim at learning some hidden relationship in a set of data.
+	Typically, the dataset we want to analyze consists in a collection of $d$ measures from $n$ samples $\bm{x}_i \in \mathcal{X} \in \mathbb{R}^d$ and we want our ML algorithms to crunch such data in order to perform some learning task, \eg classification, regression, clustering and so on.
+	
+	It is often the case that the feature space $\mathcal{X}$ is not the most suitable to our purposes. Sometimes projecting the data in a different space $\mathcal{X}' \in \mathbb{R}^p$, maybe with $p<d$ or even $p \ll d$, can greatly ease the successive learning step. We have already explored this concept talking about the kernel trick in Section~\ref{sec:kernel_trick}.
+	
+	Heavily decreasing the dimensionality of the data is also helpful as it reduces computational times and eases data visualization. These two aspects are really important when dealing with large scale biomedical data.
+	
+	This section presents a compact overview of the dimensionality reduction and unsupervised feature learning algorithms that are most relevant with the biomedical data science projects presented in the second part of this thesis.
+	
+	\subsubsection{Principal component analysis}
+	\subsubsection{Multi-dimensional scaling}
+	\subsubsection{Isomap}
+	\subsubsection{t-Distributed Stochastic Neighbor Embedding}
+	\todo{maybe}
     
     
 
