@@ -960,21 +960,22 @@ As of today ML is the workhorse of data science.
   In both cases we will try to infer the properties of the probability distribution $p(\bm{x})$ from which the collected data are assumed to be drawn.
   
     \subsection{Cluster analysis} \label{sec:clustering}
-    In ML jargon, with \textit{cluster analysis}, \aka \textit{data segmentation} or \textit{clustering}, one typically means the class of unsupervised learning algorithm which aim at grouping together similar objects, by some definition of \textit{similarity}.
+    \textit{Cluster analysis}, \aka \textit{data segmentation} or \textit{clustering}, is the class of unsupervised learning algorithm which aim at grouping together similar objects, by some definition of \textit{similarity}.
         
-    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures (such as gene expression, blood exams, \etc). In this section an overview on the most popular clustering algorithms is presented.\footnote{a good reference for the clustering algorithms proposed in literature is section \textit{2.3. Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering.html}.}
+    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures, such as gene expression, blood exams, and so on. This section presents an overview on the most popular clustering algorithms.\footnote{a good reference for the clustering algorithms proposed in literature is section \textit{2.3. Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering.html}.}
 
     \subsubsection{The $k$-means algorithm} \label{sec:k-means}
-    The $k$-means algorithm is, for cluster analysis, what $k$-nearest neighbor and OLS are for supervised classification and regression, respectively: the most intuitive strategy.
-
-	Given $n$ samples $\bm{x}_i \in \mathbb{R}^d$, the goal of $k$-means is to partition the data into $K$ non-overlapping groups clusters. Intuitively, samples falling in the same cluster will be more similar one another.
+    $k$-means is the most intuitive strategy for cluster analysis.
+    
+%    It is basically what $k$-nearest neighbor and OLS are for supervised classification and regression, respectively.
+	Given $n$ samples $\bm{x}_i \in \mathbb{R}^d$, the goal of $k$-means partitions the data space into $K$ non-overlapping groups containing similar samples.
     Let $\bm{\mu}_k \in \mathbb{R}^d$ be the \textit{prototypical} vector associated with the $k^{\text{th}}$ cluster, we can think of this as the center of mass of the cluster, \ie its centroid.
-    Fixed the number of cluster, the output of the $k$-means algorithm is a set of cluster centroids as well as the assignment of each sample to a single cluster.
+    Fixed the number of cluster $K$, the output of the $k$-means algorithm is a set of cluster centroids as well as the assignment of each sample to a single cluster.
     For ease of notation, we introduce a binary indicator function $r_k$ defined as
     $$
  	r_k(\bm{x}_i)=\begin{cases} 1  &\text{if}~\bm{x}_i~\text{is assigned to cluster}~k \\ 0  & \text{otherwise} \end{cases}
     $$
-    (this is known as 1-of-$K$ encoding). Therefore we can define the objective function
+    (this is known as 1-of-$K$ encoding). Therefore, we can define the objective function
     $$
     J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) d(\bm{x}_i, \bm{\mu}_k)
     $$
@@ -982,20 +983,20 @@ As of today ML is the workhorse of data science.
     \begin{equation} \label{eq:kmeans}
     J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) \norm{\bm{x}_i- \bm{\mu}_k}_2^2
     \end{equation}
-    Therefore, our goal is to find the centroids $\bm{\mu}_k$ for $k=1,\dots,K$ that minimize $J(\bm{\mu})$.
+    Our goal is to find the centroids $\bm{\mu}_k$ for $k=1,\dots,K$ that minimize $J(\bm{\mu})$.
     We may observe that, given the best centroids, the samples will be associated to the cluster with the nearest centroid. So, let's focus on the problem of finding $\bm{\mu}_k$.
-    Fixing $r_k(\bm{x})$ for all $k$, the objective function in Equation~\eqref{eq:kmeans} is quadratic in $\bm{\mu}$, therefore the minimization problem can be easily solved setting its derivative to zero (see Equation~\eqref{eq:kmeans_solved}).
+    Fixing $r_k(\bm{x})$ for all $k$, the objective function in Equation~\eqref{eq:kmeans} is quadratic in $\bm{\mu}$, thus the minimization problem can be easily solved setting its derivative to zero, see Equation~\eqref{eq:kmeans_solved}.
     \begin{equation} \label{eq:kmeans_solved}
 	2\sum_{i=1}^n r_k(\bm{x}_i)(\bm{x}_i - \bm{\mu}_k) = 0 \Rightarrow \bm{\mu}_k = \frac{\sum_{i=1}^n r_k(\bm{x}_i)\bm{x}_i}{\sum_{i=1}^nr_k(\bm{x}_i)}
     \end{equation}
     Intuitively, $\bm{\mu}_k$ corresponds to the mean of the points assigned to the cluster $k$.
-    The $k$-means algorithm starts with random centroid. Then, iteratively assigns the points to the cluster having the nearest centroid and updates the centroids position. At each step the value of $J(\bm{\mu})$ is reduced, therefore the convergence of $k$-means is assured. Nevertheless, it may converge to a local minimum, hence leading to a suboptimal solution.
+    The $k$-means algorithm starts with random centroids. Then, the points are assigned to the cluster having the nearest centroid. Successively, the centroids position is updated. At each step the value of $J(\bm{\mu})$ is reduced, hence the convergence of $k$-means is assured. Nevertheless, the algorithm may converge to a local minimum, achieving a suboptimal solution.
     
     For a given dataset, defining an optimal value for $K$ is still an open problem. The $k$-means algorithm works with a number of cluster fixed a priori\footnote{some relevant work on automatic cluster discovery is presented in~\cite{ball1967clustering, pelleg2000x, muhr2009automatic}}.
-    Sometimes this can be provided from some prior knowledge on the problem, or it can be estimated following some heuristics. Otherwise an estimate of $K$ can be defined by optimizing data-driven coefficients like the silhouette score~\cite{rousseeuw1987silhouettes}, or some information criteria, such as \ac{AIC} or \ac{BIC}~\cite{bishop2006pattern}.
+    This is be given from some prior knowledge on the problem, or it can be estimated following some heuristics. Otherwise, an estimate of $K$ can be defined by optimizing data-driven coefficients like the silhouette score~\cite{rousseeuw1987silhouettes}, or some information criteria, such as \ac{AIC} or \ac{BIC}~\cite{bishop2006pattern}.
     These estimates can be done with or without cross-validation~\cite{fiorini2017adenine}.
     
-    As shown in~\cite{arthur2007k}, smart choices of the initial position of the clusters can substantially improve the result. For instance the initial $\bm{\mu}_k$ can be chosen to be \textit{far away} from each other.
+    As shown in~\cite{arthur2007k}, smart choices of the initial position of the clusters can substantially improve the result. For instance the initial $\bm{\mu}_k$, for $k=1,\dots,K$, can be chosen to be \textit{far away} from each other.
     This solution is called $k$-means$++$ and it follows the steps summarized below.
 %    \begin{enumerate}
 %    	\item choose the first centroid $\bm{\mu}_1$ at random from the samples in the dataset;
@@ -1018,13 +1019,13 @@ As of today ML is the workhorse of data science.
 	\end{algorithm}
 
 
-	Even though this initial seeding comes with an computational time at the beginning, then the $k$-means algorithm converges super fast actually leading to a decreased overall computational time. Moreover, the achieved solution has considerably lower final cluster reconstruction, compared to standard $k$-means.
+	Even though this initial seeding comes with an increased computational time at the beginning, then the $k$-means algorithm converges super fast actually leading to a decreased overall computational time. Moreover, the achieved solution has considerably lower final cluster reconstruction, compared to standard $k$-means, hence $k$-means$++$ is usually preferable.
     
     \subsubsection{Spectral clustering} \label{sec:spectral_clustering}
 	Spectral clustering is a popular clustering algorithm initially proposed in~\cite{shi2000normalized} and then further analyzed and explained in~\cite{ng2002spectral, von2007tutorial}.
 	Assuming the usual setup, the problem of clustering can be translated in the problem of inferring a \textit{similarity graph} $\mathcal{G} = (V, E)$, where each data point $\bm{x}_i$ corresponds to a vertex and the weight $s_{ij}$ of the edge connecting $\bm{x}_i$ and $\bm{x}_j$, is proportional to the similarity between the two points.
 	For instance, in the so-called $\varepsilon$-neighborhood graph, the vertexes corresponding to $\bm{x}_i$ and $\bm{x}_j$ are connected if $s(\bm{x}_i, \bm{x}_j) > \varepsilon$, for a given $\varepsilon$.
-	Our hope is then to achieve a graph structure where the edges between points of a group is high and it is low between points belonging to different groups.
+	Our hope is then to achieve a graph structure where the edges between points of the same group is high and it is low between points belonging to different groups.
 
 	Therefore, let's consider a set of points $\mathcal{D}=\{\bm{x}_i\}_{i=1}^n$, the steps of the unnormalized spectral algorithm are summarized as follows.
 	\begin{algorithm}[h!]
@@ -1044,7 +1045,8 @@ As of today ML is the workhorse of data science.
 		\State cluster the points $\{\bm{\psi}_i\}_{i=1}^n$ using $k$-means into $K$ clusters
 	\end{algorithmic}
 	\end{algorithm}
-	Normalized version this algorithm is identical but the formulation of $L$ which is substituted by the normalized graph Laplacian.
+
+	Normalized version this algorithm is identical but the formulation of $L$ which is substituted by the normalized graph Laplacian~\cite{von2007tutorial}.
 	
 	As for the $k$-means algorithm, finding $K$ is a difficult problem. A common solution for spectral clustering is the \textit{eigengap heuristics}, described in~\cite{von2007tutorial}.
     
@@ -1079,6 +1081,8 @@ As of today ML is the workhorse of data science.
 	Interestingly, finding the number of clusters $K$ in this context translates into the problem selecting at which level the tree should stop growing.
     
     \subsection{Dimensionality reduction and feature learning} \label{sec:dimred}
+    
+    
 
 
   \section{Model selection and evaluation} \label{subsec:model_selection}
