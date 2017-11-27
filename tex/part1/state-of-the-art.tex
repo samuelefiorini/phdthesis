@@ -1108,6 +1108,104 @@ As of today ML is the workhorse of data science.
     \subsection{Performance metrics}
     % sup and unsup
     % acc, f1, mcc, ...
+    Dealing with real-world datasets, having a quantitative and robust way to assess the performance of the applied algorithm is very important. Of course, according to the learning task, different performance metrics should be used. We have already met some of them in the previous section. Here, comprehensive overview of the most representative performance metrics is provided. To ease readability, the performance metrics are organized according to the correspondent learning task.
+    
+    \begin{enumerate}
+    	\item[] \textbf{Regression}
+    	\begin{enumerate}[label=(\roman*)]
+    		\item MAE
+    		\begin{equation} \label{eq:metrics_mae}
+    			x
+    		\end{equation}
+    		
+    		\item MSE
+    		\begin{equation} \label{eq:metrics_mse}
+    		x
+    		\end{equation}
+    		
+    		\item RSS
+    		\begin{equation} \label{eq:metrics_rss}
+    		x
+    		\end{equation}
+    		
+    		\item R2
+    		\begin{equation} \label{eq:metrics_r2}
+    		x
+    		\end{equation}
+    		
+    		\item explained variance
+    		\begin{equation} \label{eq:metrics_ev}
+    		x
+    		\end{equation}
+    	\end{enumerate}
+    	
+    	\item[] \textbf{Classification}
+	    	\begin{enumerate}[label=(\roman*)]
+    			\item accuracy
+    			\begin{equation} \label{eq:metrics_accuracy}
+    			x
+    			\end{equation}
+    			
+    			\item balanced accuracy
+    			\begin{equation} \label{eq:metrics_balanced_accuracy}
+    			x
+    			\end{equation}
+    			
+    			\item precision
+    			\begin{equation} \label{eq:metrics_precision}
+    			x
+    			\end{equation}
+    			
+    			\item recall
+    			\begin{equation} \label{eq:metrics_recall}
+    			x
+    			\end{equation}
+    			
+    			\item f1-score
+    			\begin{equation} \label{eq:metrics_f1_score}
+    			x
+    			\end{equation}
+
+    			\item mcc
+    			\begin{equation} \label{eq:metrics_mcc}
+    			x
+    			\end{equation}
+    		\end{enumerate}
+    	
+        \item[] \textbf{Clustering}
+        \begin{enumerate}[label=(\roman*)]
+        	\item Silhouette
+        	\begin{equation} \label{eq:metrics_silhouette}
+        	x
+        	\end{equation}
+        	
+        	\item homogeneity
+        	\begin{equation} \label{eq:metrics_homogeneity}
+        	x
+        	\end{equation}
+        	
+        	\item completeness
+        	\begin{equation} \label{eq:metrics_completeness}
+        	x
+        	\end{equation}
+        	
+        	\item v-measure
+        	\begin{equation} \label{eq:metrics_v_measure}
+        	x
+        	\end{equation}
+        	
+        	\item ARI
+        	\begin{equation} \label{eq:metrics_ari}
+        	x
+        	\end{equation}
+        	
+        	\item AMI
+        	\begin{equation} \label{eq:metrics_ami}
+        	x
+        	\end{equation}
+        \end{enumerate}
+    
+    \end{enumerate}
 
 
 \section{Computational requirements and implementations} \label{sec:implementation}
