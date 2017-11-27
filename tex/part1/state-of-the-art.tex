@@ -1112,66 +1112,99 @@ As of today ML is the workhorse of data science.
     
     \begin{enumerate}
     	\item[] \textbf{Regression}
+    	The ideal metric for a regression task is a quantitative measure of how distant the predictions $\bm{\hat  y}$ are with respect to the actual output values $\bm{y}$. The following list shows different ways to measure such distance.
     	\begin{enumerate}[label=(\roman*)]
-    		\item MAE
+    		\item \textit{Mean Absolute Error} (\ac{MAE}): this is probably the most intuitive way to assess the regression performance. MAE is very well suited for single task regression and time-series forecasting problems. MAE is scale-dependent, hence not suitable for comparisons across different domains.
     		\begin{equation} \label{eq:metrics_mae}
-    			x
+    			\text{MAE}(\bm{\hat y}, \bm{y}) = \frac{1}{n}\sum_{i=1}^n|\hat y_i - y_i|
     		\end{equation}
     		
-    		\item MSE
+    		\item \textit{Mean Squared Error} (\ac{MSE}): widely applied to assess the regression performance, MSE is a second order measure, hence it incorporate bias and variance of the model. MSE of an unbiased estimator corresponds to its variance. MSE is scale-dependent (as MAE).
     		\begin{equation} \label{eq:metrics_mse}
-    		x
+	   			\text{MSE}(\bm{\hat y}, \bm{y}) = \frac{1}{n}\sum_{i=1}^n(\hat y_i - y_i)^2
     		\end{equation}
     		
-    		\item RSS
+    		\item \textit{Residual Sum of Squares} (\ac{RSS}): this data discrepancy measure is mainly used to measure the performance of least squares methods, as it corresponds to the square loss function.
     		\begin{equation} \label{eq:metrics_rss}
-    		x
+    			\text{RSS}(\bm{\hat y}, \bm{y}) = \sum_{i=1}^n(\hat y_i - y_i)^2
     		\end{equation}
     		
-    		\item R2
+    		\item \textit{Coefficient of determination} (\ac{R2}): this metric measures the proportion of the variation of the output that is correctly predicted.
+    		This metric is not scale dependent, the best possible score is $\text{R}^2 = 1.0$, a constant model predicting the average of the output achieves $\text{R}^2 = 0.0$.
+    		\ac{R2} is defined as below, where $\bar y$ is the average output, $\bar y = \frac{1}{n}\sum_{j=1}^n y_j$. 
     		\begin{equation} \label{eq:metrics_r2}
-    		x
+	    		\text{R}^2(\bm{\hat y}, \bm{y}) = 1 - \frac{\sum_{i=1}^n(\hat y_i - y_i)^2}{\sum_{i=1}^n (y_i - \bar y)^2}
     		\end{equation}
     		
-    		\item explained variance
+    		\item \textit{Explained Variance} (\ac{EV}): similar to \ac{R2}, this metric is not scale-dependent and it can be used to compare the outcome of different regression problems.
+    		EV is often expressed as percentage, best possible value is $100\%$, lower is worse.
+    		EV is defined as below, where $\text{Var}(\bm{y}) = \frac{1}{n} \sum_{i=1}^n (y_i - \bar y)^2$.
     		\begin{equation} \label{eq:metrics_ev}
-    		x
+	    		\text{EV}(\bm{\hat y}, \bm{y}) = 1 - \frac{\text{Var}(\bm{y} - \bm{\hat y})}{\text{Var}(\bm{y})}
     		\end{equation}
     	\end{enumerate}
     	
-    	\item[] \textbf{Classification}
+    	\item[] \textbf{Classification} Compared to regression, assessing the performance of a classifier seems like a much trivial task. It turns out that this is actually not true; assessing the classification performance by different metrics may let you draw very different conclusions about the quality of $\bm{\hat y}$.
+    	What follows is a list of most important classification metrics, where the meaning of True Positives (TP), False Positives (FP), True Negatives (TN) and False Negatives (FN) is illustrated in the prototypical confusion matrix (for binary classification) represented in Table~\ref{tab:tptnfpfn}.
+    	
+    	\begin{table}[]
+    		\centering
+    		\caption{A prototypical confusion matrix for a binary classification problem. The two classes are encoded as $\pm 1$, the number of true positive examples is $n_+$, whereas the number of true negative examples is $n_-$; hats denote estimated values. The extension for multiclass problems is straightforward, once a positive class is defined.} \label{tab:tptnfpfn}
+		\begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
+			\multirow{10}{*}{\parbox{1.1cm}{\bfseries\raggedleft True\\ value}} & 
+			& \multicolumn{2}{c}{\bfseries Predicted value} & \\
+			& & $\bm{\hat n_{+1}}$ & $\bm{\hat n_{-1}}$ \\
+			& $\bm{n_{+1}}$ & \MyBox{True}{Positive} & \MyBox{False}{Negative}  \\[2.1em]
+			& $\bm{n_{-1}}$ & \MyBox{False}{Positive} & \MyBox{True}{Negative} \\
+		\end{tabular}
+		\end{table}
+    	
+    	
 	    	\begin{enumerate}[label=(\roman*)]
-    			\item accuracy
+    			\item \textit{Accuracy}: this is the most intuitive classification metric, it simply consists in the fraction of correct predictions. The accuracy measure can be used for binary as well as multiclass classification tasks. The best possible score is $1.0$, while the expected score of a random classifier is the fraction of the most represented class.
     			\begin{equation} \label{eq:metrics_accuracy}
-    			x
+    			\text{Acc}(\bm{\hat y}, \bm{y}) = \frac{1}{n} \sum_{i=1}^n \mathds{1}(\hat y_i = y_i)
     			\end{equation}
     			
-    			\item balanced accuracy
+    			\item \textit{Balanced accuracy}: for heavily unbalanced binary classification problems this metric is preferable with respect to the standard classification accuracy, as the balanced accuracy of the random classifier is $0.5$ by construction.
     			\begin{equation} \label{eq:metrics_balanced_accuracy}
-    			x
+    			\text{Bacc}(\bm{\hat y}, \bm{y}) = \frac{1}{2} \cdot \bigg[\frac{\text{TP}}{\text{TP}+\text{TN}} + \frac{\text{TN}}{\text{TN}+\text{FP}}\bigg]
     			\end{equation}
     			
-    			\item precision
+    			\item \textit{Precision} (\aka positive predictive value): is the fraction of TP over the total number of samples classified as positive. Precision is defined for binary classification, but it can be extended to multiclass problems selecting the positive class.
     			\begin{equation} \label{eq:metrics_precision}
-    			x
+    			\text{Prec} (\bm{\hat y}, \bm{y}) = \frac{\text{TP}}{\text{TP} + \text{FP}}
     			\end{equation}
     			
-    			\item recall
+    			\item \textit{Recall} (\aka sensitivity, True Positive Rate (\ac{TPR})): is the fraction of TP over the total number of actually positive samples. Recall is defined for binary classification, but it can be extended to multiclass problems selecting the positive class.
     			\begin{equation} \label{eq:metrics_recall}
-    			x
+    			\text{Rec}(\bm{\hat y}, \bm{y}) = \frac{\text{TP}}{\text{TP} + \text{FN}}
     			\end{equation}
     			
-    			\item f1-score
+    			\item \textit{F\textsubscript{$1$}-score} (\aka F-measure): is the harmonic mean of precision and recall and it can be used to control both of them at the same time.
     			\begin{equation} \label{eq:metrics_f1_score}
-    			x
+    			\text{F}_1(\bm{\hat y}, \bm{y}) = \frac{2 \text{TP}}{2 \text{TP} + \text{FN} + \text{FP}}
     			\end{equation}
 
-    			\item mcc
+    			\item \textit{Matthews correlation coefficient} (\ac{MCC}, \aka $\varphi$-coefficient): MCC values ranges from $-1$ to $+1$, where $\text{MCC} = 1$ is the optimal classification,  $\text{MCC} = 0$ is the score achieved by the random classifier even in cases of unbalanced problems and $\text{MCC} = -1$ is the inverse prediction.
+    			MCC is defined for binary classification, but it can be extended to multiclass problems selecting the positive class.
     			\begin{equation} \label{eq:metrics_mcc}
-    			x
+    			\text{MCC}(\bm{\hat y}, \bm{y}) = \frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP) \cdot (TP + FN) \cdot (TN + FP) \cdot (TN + FN)}}
     			\end{equation}
+    			
+    			\item \textit{Area Under Receiver Operating Curve} (\ac{AUC}): the Receiver Operating characteristic Curve (\ac{ROC}) is a plot used to assess the performance of a binary classifier as its classification threshold is varied. In ROC analysis, the horizontal axis is the False Positive Rate (\ac{FPR}, \aka fall-out), defined as,
+    			\begin{equation} \label{eq:metrics_fpr}
+    			\text{FPR}(\bm{\hat y}, \bm{y}) = \frac{\text{FP}}{\text{FP} + \text{TN}}
+    			\end{equation}
+				while the vertical axis is the recall, defined in Equation~\eqref{eq:metrics_recall}. An example of ROC analysis is reported in Figure~\ref{fig:roc}. The ROC of a random classifier is simply the bottom-left to top-right diagonal, plots in the upper triangular area indicate \textit{good} classifiers, and viceversa. A fundamental metric for classification problems is the AUC. AUC ranges from $0$ to $1$, where optimal classification leads to $\text{AUC} = 1$ and the random classifier achieves $\text{AUC} = 0.5$.
     		\end{enumerate}
     	
+        \begin{figure}[!h]
+    		\centering
+    		\includegraphics[width=0.8\textwidth]{part1/roc.png}
+    		\caption{An example of ROC analysis on the digits dataset. In this example a linear SVM is trained on only $1\%$ of the dataset, where $200$ additional noisy features were added to make the classification problem harder.} \label{fig:roc}
+    	\end{figure}
+
         \item[] \textbf{Clustering}
         \begin{enumerate}[label=(\roman*)]
         	\item Silhouette

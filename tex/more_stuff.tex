@@ -147,3 +147,13 @@
 
 % ACRONYMS
 \input{acronyms}
+
+% tikz stuff
+\newcommand\MyBox[2]{
+	\fbox{\lower0.75cm
+		\vbox to 1.7cm{\vfil
+			\hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+			\vfil}%
+	}%
+}
+
