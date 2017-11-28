@@ -1196,49 +1196,64 @@ As of today ML is the workhorse of data science.
     			\begin{equation} \label{eq:metrics_fpr}
     			\text{FPR}(\bm{\hat y}, \bm{y}) = \frac{\text{FP}}{\text{FP} + \text{TN}}
     			\end{equation}
-				while the vertical axis is the recall, defined in Equation~\eqref{eq:metrics_recall}. An example of ROC analysis is reported in Figure~\ref{fig:roc}. The ROC of a random classifier is simply the bottom-left to top-right diagonal, plots in the upper triangular area indicate \textit{good} classifiers, and viceversa. A fundamental metric for classification problems is the AUC. AUC ranges from $0$ to $1$, where optimal classification leads to $\text{AUC} = 1$ and the random classifier achieves $\text{AUC} = 0.5$.
+				while the vertical axis is the recall, defined in Equation~\eqref{eq:metrics_recall}. An example of ROC analysis is reported in Figure~\ref{fig:roc}. The ROC of a random classifier is simply the bottom-left to top-right diagonal, plots in the upper triangular area indicate \textit{good} classifiers, and vice-versa. A fundamental metric for classification problems is the AUC. AUC ranges from $0$ to $1$, where optimal classification leads to $\text{AUC} = 1$ and the random classifier achieves $\text{AUC} = 0.5$.
     		\end{enumerate}
     	
         \begin{figure}[!h]
     		\centering
     		\includegraphics[width=0.8\textwidth]{part1/roc.png}
-    		\caption{An example of ROC analysis on the digits dataset. In this example a linear SVM is trained on only $1\%$ of the dataset, where $200$ additional noisy features were added to make the classification problem harder.} \label{fig:roc}
+    		\caption{An example of ROC analysis on the MNIST dataset~\cite{lecun2010mnist}. In this example a linear SVM is trained on only $1\%$ of the dataset, where $200$ additional noisy features were added to make the classification problem harder.} \label{fig:roc}
     	\end{figure}
 
-        \item[] \textbf{Clustering}
+        \item[] \textbf{Clustering} Quantitatively measuring the output of a clustering algorithm is not a trivial task, in particular when no ground truth on the clusters is provided. We report here a list of the most common clustering performance metrics.
         \begin{enumerate}[label=(\roman*)]
-        	\item Silhouette
+        	\item \textit{Silhouette}: the main characteristic of this metric is that it can be used when no ground truth on the clustering is provided~\cite{rousseeuw1987silhouettes}.
+        	The silhouette coefficient ranges from $-1$ to $1$ and it is higher for compact and well-separated clusters. Silhouette score around $0$ are associated to partially overlapping clusters.
+        	Let $a(\bm{x}_i)$ be the average dissimilarity of $\bm{x}_i$ with all the other points in the same cluster; let also be $b(\bm{x}_i)$ be the average distance of $\bm{x}_i$ to all the points in the nearest cluster. We can interpret $a(\bm{x}_i)$ as a measure of point-to-cluster assignment, where the higher $a(\bm{x}_i)$ is, the more the point $\bm{x}_i$ is correctly assigned. On the other hand, $b(\bm{x}_i)$ can be seen as a clusters separability index.
+        	The silhouette coefficient is defined as follows.
         	\begin{equation} \label{eq:metrics_silhouette}
-        	x
+        	s(\bm{x}_i) = \frac{b(\bm{x}_i) - a(\bm{x}_i)}{\max[a(\bm{x_i}), b(\bm{x}_i)]}
         	\end{equation}
+        	The quality of the achieved clustering can be graphically assessed visualizing the silhouette coefficient for each sample, as in Figure~\ref{fig:silhouette}\footnote{image created with \ade, see Chapter~\ref{chap:adenine}.}, or it can be globally measured by its average score $\bar s = \frac{1}{n}\sum_{i=1}^n s(\bm{x}_i)$.
         	
-        	\item homogeneity
-        	\begin{equation} \label{eq:metrics_homogeneity}
-        	x
-        	\end{equation}
+        	\item \textit{Homogeneity}: a clustering satisfies the homogeneity property if each cluster contains only members of a single class.
+        	In order to evaluate the homogeneity, the clustering ground truth must be provided. In this sense, this can be seen as a supervised measure.
         	
-        	\item completeness
-        	\begin{equation} \label{eq:metrics_completeness}
-        	x
-        	\end{equation}
+        	\item \textit{Completeness}: a clustering satisfies the completeness property if all members of a given class are assigned to the same cluster.
+        	As for the homogeneity, this is a supervised measure.
         	
-        	\item v-measure
-        	\begin{equation} \label{eq:metrics_v_measure}
-        	x
-        	\end{equation}
+        	\item \textit{V-measure}: this is simply defined as the harmonic mean of completeness and homogeneity.
         	
-        	\item ARI
+        	\item \textit{Adjusted Rand Index} (\ac{ARI}): this index is a chance normalized measure of the similarity between two cluster assignments which is robust with respect to permutations of the cluster identifier. This index ranges from $-1$ and $1$, where $-1$ stands for independent cluster assignments and $1$ is perfect match. As it requires the clusters ground truth, this is a supervised metric. Let $\bm{y}$ and $\bm{\hat y}$ be a ground truth and an estimated cluster assignment, respectively, ARI is defined as follows.
         	\begin{equation} \label{eq:metrics_ari}
-        	x
+        	\text{ARI} (\bm{\hat y}, \bm{y}) = \frac{\text{RI} - E[\text{RI}]}{\max(\text{RI}) - E[\text{RI}]}
         	\end{equation}
+        	where $\text{RI}$ (the unadjusted Rand Index) is given by
+        	$$
+        	\text{RI} = \frac{g+h}{\psi}
+        	$$
+        	where $g$ is the number of pairs of elements that are in the same set both in $\bm{y}$ and $\bm{\hat y}$; $h$ is the number of pairs of elements that are in different sets in both $\bm{y}$ and $\bm{\hat y}$ and $\psi$ is the total number of pairs (without ordering).
         	
-        	\item AMI
+        	\item \textit{Adjusted Mutual Information} (\ac{AMI}): similar to ARI, this is an information theory-based metric to measure the similarity between two cluster assignments. Let $Y = \{\bm{y}_1, \dots, \bm{y}_R \}$ and $\hat Y = \{ \bm{\hat y}_1, \dots, \bm{\hat y}_S \}$ be a ground truth and an estimated clustering partitions, respectively, AMI is given by
         	\begin{equation} \label{eq:metrics_ami}
-        	x
+        	\text{AMI} (\hat Y, Y) = \frac{\text{MI} - E[\text{MI}]}{\max[H(\hat Y), H(Y)]- E[\text{MI}]}
         	\end{equation}
+        	where $H$ is the entropy and $\text{MI}$ is the Mutual Information, defined as
+        	$$
+        	\text{MI}(\hat Y, Y) = \sum_{i=1}^{R} \sum_{j=1}^{S} P(i,j) \log\bigg[ \frac{P(i,j)}{P(i)P'(j)} \bigg]
+%        	\text{MI}(\bm{\hat y}, \bm{y}) = \sum_{i=1}^{|\bm{\hat y}|} \sum_{j=1}^{|\bm{y}|} \frac{|\hat y_i \cap y_j|}{n} \log\bigg[ \frac{n\cdot|\hat y_i \cap y_j|}{|\hat y_i||y_j|} \bigg]
+        	$$
+        	where $P(i)$ is the probability that a randomly picked sample falls in $\bm{y}_i$, likewise for $\bm{\hat y}$ and $P'(j)$. While, $P(i,j)$ is the probability that a random sample falls in both clusters $\bm{y}_i,\bm{\hat y}_j$.
+        	
         \end{enumerate}
     
     \end{enumerate}
+
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=0.8\textwidth]{part1/silhouette.png}
+		\caption{An example of Silhouette analysis where a $10$ clusters $k$-means runs on a randomly sampled $80\%$ of the MNIST dataset~\cite{lecun2010mnist}.} \label{fig:silhouette}
+	\end{figure}
 
 
 \section{Computational requirements and implementations} \label{sec:implementation}
