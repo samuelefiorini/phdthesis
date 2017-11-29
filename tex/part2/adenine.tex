@@ -122,25 +122,25 @@ In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on
   \item dimensionality reduction and
   \item unsupervised clustering.
 \end{enumerate}
-For each task, is it possible to use the off-the-shelf algorithms in Table~\ref{tab:blocks}, as well as any other custom algorithm as long as it is implemented in Python as a \sklearn~{\tt Transformer} object.
-
-A {\tt Transformer} is simply a Python class which is provided with a {\tt fit\_transform} method, as the one in the snippet below.
+For each task, is it possible to use the off-the-shelf algorithms in Table~\ref{tab:blocks}, as well as any other custom algorithm as long as it is implemented in Python as a \sklearn~{\tt Transformer} object. A {\tt Transformer} is simply a Python class having a {\tt fit\_transform} method, see for instance snippet below.
 
 \input{part2/snippets/transformer.tex}
 
+\sklearn also provides an utility object called {\tt FunctionTransformer} that returns a {\tt Transformer} given any arbitrary input callable (\ie function).
+
 Data collected in biomedical research studies often present missing values.
 Devising imputing strategies is a common practice~\cite{de2015impact} to deal with such issue.
-\ade offers an improved version of the {\footnotesize \texttt{Imputer}} class provided by {\sc scikit-learn}. In addition to the pre-existent feature-wise \emph{mean}, \emph{median} and \emph{most frequent} strategies, this extension presents the $k$-nearest neighbors imputing method proposed for microarray data in~\cite{troyanskaya2001missing}.
+\ade offers an improved version of the {\tt Imputer} class provided by \sklearn. In addition to the pre-existent feature-wise {\color{string} {\tt "mean"}}, {\color{string} {\tt "median"}} and {\color{string} {\tt "most\_frequent"}} strategies, this extension presents {\color{string} {\tt "nearest\_neighbors"}}, \ie an implementation of the $k$-nearest neighbors imputing method proposed for microarray data in~\cite{troyanskaya2001missing}.
 
 % \ade presents different data preprocessing strategies to tackle undesired effects that may arise from heterogeneous measures possibly lying in very different numerical range.
  % when dealing with data collected from heterogeneous sources.
 Collecting data from heterogeneous sources may imply dealing with variables lying in very different numerical ranges and this could have a negative influence on the behavior of data analysis techniques. To tackle this issue \ade offers different strategies to preprocess data, such as re-centering, standardizing or rescaling.
 
-The presented software includes a set of linear and nonlinear dimensionality reduction and manifold learning algorithms that are particularly suited for exploration and visualization of high-dimensional data. Such techniques rely on the fact that it is often possible to \emph{decrease} the dimensionality of the problem estimating a low-dimensional embedding in which the data lie.
+\ade includes a set of linear and nonlinear dimensionality reduction and manifold learning algorithms that are particularly suited for projection and visualization of high-dimensional data. Such techniques rely on the fact that it is often possible to \emph{decrease} the dimensionality of the problem estimating a low-dimensional embedding in which the data lie, as described in Section~\ref{sec:dimred}.
 
 Besides offering a wide range of clustering techniques,
 \ade implements strategies and heuristics to automatically estimate parameters that yield the most suitable cluster separation.
-The optimal parameter selection of centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,y)$ is the mean silhouette coefficient \cite{rousseeuw1987silhouettes} for all input samples.
+The optimal parameter selection of centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
 
 \begin{algorithm}[]
   \caption{Automatic discovery of the optimal clustering parameter.}\label{alg:clusters}
