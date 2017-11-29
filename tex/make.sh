@@ -9,11 +9,11 @@ function ctrl_c() {
 }
 
 mkdir ./_build
-pdflatex -file-line-error -halt-on-error -output-directory=./_build main.tex
+pdflatex -shell-escape -file-line-error -halt-on-error -output-directory=./_build main.tex
 bibtex ./_build/main.aux
 
 for i in `seq 1 2`; do
-	pdflatex -file-line-error -halt-on-error -output-directory=./_build main.tex > /dev/null
+	pdflatex -shell-escape -file-line-error -halt-on-error -output-directory=./_build main.tex > /dev/null
         echo -n "."
 done
 echo
