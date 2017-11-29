@@ -114,7 +114,7 @@ Thanks to this hybrid parallel architecture, with \ade it is possible to get a g
 In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on) can be given as input. Moreover, as genomic is one of the major sources of data in the biological world, \ade also natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}; which data sets can be retrieved specifying their GEO accession number.
 
 
-\section{\ade implementation} \label{sec:adenine_implementation}
+\section{Software description} \label{sec:adenine_implementation}
 \ade is developed around the data analysis concept of \emph{pipeline}. A pipeline is a sequence of the following fundamental steps:
 \begin{enumerate}
   \item missing values imputing;
@@ -140,7 +140,7 @@ Collecting data from heterogeneous sources may imply dealing with variables lyin
 
 Besides offering a wide range of clustering techniques,
 \ade implements strategies and heuristics to automatically estimate parameters that yield the most suitable cluster separation.
-The optimal parameter selection of centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
+The optimal number of clusters selection of centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
 
 \begin{algorithm}[]
   \caption{Automatic discovery of the optimal clustering parameter.}\label{alg:clusters}
@@ -164,7 +164,13 @@ Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an 
 For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and eigenvalues of the Laplacian of the affinity matrix plots, respectively.
 % \todo{@fede DBSCAN}
 
-\todo{more on hpc stuff}
+In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc numpy} and {\sc scipy} and it comes \textit{for free}. So, let's focus on multiprocessing.
+This parallel program paradigm consists in dividing the workload among different tasks which can possibly run on different nodes of some HPC cluster.
+The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of distributed computing schemes.
+In particular, \ade has an MPI-based master/slave strategy. A single master task creates a queue of jobs that are assigned to a pool of slaves.
+When a slave has completed its task, it communicates the results to the master which assigns to the now idle slave the next task of the queue. This procedure is repeated several times, until the queue is empty.
+The number of slaves can be controlled using the options of the {\tt mpirun} command. Such number must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
+Thanks to MPI, where each task is running is completely transparent to the user. When all the computation is done, the results are simply stored in the results folder.
 
 \section{Usage example} \label{sec:usage_example}
 In this section we show how \ade can be used to perform two EDAs on a gene expression microarray data set obtained from the GEO repository (accession number GSE87211).
