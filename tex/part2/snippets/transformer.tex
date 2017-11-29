@@ -1,16 +1,36 @@
+% !TEX root = ../../main.tex
+
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{k}{class} \PY{n+nc}{DummyTransformer}\PY{p}{(}\PY{n+nb}{object}\PY{p}{)}\PY{p}{:}
-             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}A dummy transformer class that transforms an object in itself.\PYZdq{}\PYZdq{}\PYZdq{}}
+{\color{incolor}} \PY{k}{class} \PY{n+nc}{DummyTransformer}\PY{p}{(}\PY{n+nb}{object}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}A dummy transformer class.\PYZdq{}\PYZdq{}\PYZdq{}}
+    
+    \PY{k}{def} \PY{n+nf}{fit}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit DummyTransformer.\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{k}{return} \PY{n+nb+bp}{self}
              
-             \PY{k}{def} \PY{n+nf}{fit}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{p}{:}
-                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit DummyTransformer.\PYZdq{}\PYZdq{}\PYZdq{}}
-                 \PY{k}{return} \PY{n+nb+bp}{self}
-             
-             \PY{k}{def} \PY{n+nf}{transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
-                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Transform X.\PYZdq{}\PYZdq{}\PYZdq{}}
-                 \PY{k}{return} \PY{n}{X}
+    \PY{k}{def} \PY{n+nf}{transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Transform X.\PYZdq{}\PYZdq{}\PYZdq{}}
+        \PY{k}{return} \PY{n}{X}
                  
-             \PY{k}{def} \PY{n+nf}{fit\PYZus{}transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}\PY{p}{:}
-                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit to data, then transform it.\PYZdq{}\PYZdq{}\PYZdq{}}
-                 \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+     \PY{k}{def} \PY{n+nf}{fit\PYZus{}transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}\PY{p}{:}
+     \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit to data, then transform it.\PYZdq{}\PYZdq{}\PYZdq{}}
+         \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{X}\PY{p}{)}
 \end{Verbatim}
+
+
+%\begin{Verbatim}[commandchars=\\\{\}]
+%{\color{incolor}In [{\color{incolor}11}]:} \PY{k}{class} \PY{n+nc}{DummyTransformer}\PY{p}{(}\PY{n+nb}{object}\PY{p}{)}\PY{p}{:}
+%             \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}A dummy transformer class that transforms an object in itself.\PYZdq{}\PYZdq{}\PYZdq{}}
+%             
+%             \PY{k}{def} \PY{n+nf}{fit}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{p}{:}
+%                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit DummyTransformer.\PYZdq{}\PYZdq{}\PYZdq{}}
+%                 \PY{k}{return} \PY{n+nb+bp}{self}
+%             
+%             \PY{k}{def} \PY{n+nf}{transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+%                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Transform X.\PYZdq{}\PYZdq{}\PYZdq{}}
+%                 \PY{k}{return} \PY{n}{X}
+%                 
+%             \PY{k}{def} \PY{n+nf}{fit\PYZus{}transform}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n+nb+bp}{None}\PY{p}{)}\PY{p}{:}
+%                 \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Fit to data, then transform it.\PYZdq{}\PYZdq{}\PYZdq{}}
+%                 \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{)}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+%\end{Verbatim}
