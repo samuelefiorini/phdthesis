@@ -9,31 +9,20 @@ The goal of such framework is to help biomedical data scientists achieving a fir
 % researchers and data scientists
 % and choosing the most suitable unsupervised learning pipeline for the problem at hand.
 This software tool encompasses state of the art techniques for missing values imputing, data preprocessing, dimensionality reduction and clustering.
-\ade has a scalable architecture which seamlessly work on single workstations as well as on high-performance computing facilities.
+\ade has a scalable architecture which seamlessly work on a single workstation as well as on a high-performance computing facility.
 % \ade exploits both process- and thread-level parallelism and
 \ade is capable of generating publication-ready plots along with quantitative descriptions of the results.
 At the end of the chapter, few examples of exploratory analysis with \ade on biological datasets are presented.}
 \end{displayquote}
 
-%\ade is a machine learning framework designed for biological data exploration and visualization.
-%Its goal is to help bioinformaticians achieving a first and quick overview of the main structures underlying their data.
-%% researchers and data scientists
-% % and choosing the most suitable unsupervised learning pipeline for the problem at hand.
-%This software tool encompasses state-of-the-art techniques for missing values imputing, data preprocessing, dimensionality reduction and clustering.
-%\ade has a scalable architecture which seamlessly work on single workstations as well as on high-performance computing facilities.
-%% \ade exploits both process- and thread-level parallelism and
-%\ade is capable of generating publication-ready plots along with quantitative descriptions of the results.
-%In this paper we provide an example of exploratory analysis on a publicly available gene expression data set of colorectal cancer samples.
-%The software and its documentation are available at  {\footnotesize \texttt{https://github.com/slipguru/adenine}} under FreeBSD license.
 
 \section{Exploratory data analysis} \label{sec:data_exploration}
-
 In biology, as well as in any other scientific domain, exploring and visualizing the collected measures is an insightful starting point for every data analysis process.
 For instance, the aim of a biomedical study can be detecting groups of patients that respond differently to a given treatment, or inferring possible molecular relationships among all, or a subset, of the measured variables.
 In both cases, data scientists will be asked to extract meaningful information from collections of complex and possibly high-dimensional measures, such as gene sequencing data, biomedical imaging, patients assessment questionnaires, and so on.
 
-In these cases, a preliminary Exploratory Data Analysis (\ac{EDA}) is not only a good practice, but also fundamental before further and deeper investigations can take place.
-To accomplish this task, several machine learning and data mining techniques were developed over the years (see Section~\ref{chap:state-of-the-art}).
+In these cases, a preliminary Exploratory Data Analysis (\ac{EDA}) is not only a good practice, but also a fundamental step to run before further and deeper investigations can take place.
+To accomplish this task, several machine learning and data mining techniques were proposed over the years (see Section~\ref{chap:state-of-the-art}).
 Among those, we recall the combined use of the following classes of methods:
 \begin{enumerate}
   \item missing values imputing;
@@ -43,72 +32,87 @@ Among those, we recall the combined use of the following classes of methods:
 \end{enumerate}
 
 Running EDA, despite being a valuable and widely applied data science practice, is definitely a nontrivial task.
-For instance, given a dataset, it is usually unclear which algorithm will provide the most insightful results. A common practice is to empirically test some of them and compare their results from a qualitative/quantitative standpoint.
+Indeed, for a given a dataset, it is usually unclear which algorithm will provide the most insightful results. A common practice is to empirically test some of them and compare their results from a qualitative/quantitative standpoint.
 Moreover, applying EDA methods on large-scale data can be burdensome or even computationally unfeasible.
 
 %\section{Popular data exploration tools} \label{sec:data_exploration_tools}
 
 In the last few years, a fair number of data exploration software and libraries were released. Such tools may be grouped in two families: \ac{GUI}-based and command-line applications.
-Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however,
-its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{hastie2009elements} and it does not offer strategies to perform automatic discovery of the number of clusters.
-The most notable project that spans between the two families is \emph{Orange} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
-Moreover, large data sets are difficult to analyze with both \emph{Divvy} and \emph{Orange} as they can run only on a single workstation, lacking of distributed computing support.
+
+Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however, its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{hastie2009elements}, it does not offer strategies to perform automatic discovery of the number of clusters and it is only available for macOS.
+One of the most popular GUI-based data analysis software is {\sc KNIME} (source: \url{www.knime.com}). {\sc KNIME} has a rather user-friendly interface where creating EDA pipelines is as simple as drawing small trees, where each node is a box representing some algorithm. {\sc KNIME} is also suitable for large datasets as it can distribute the computation on Oracle Grid Engine clusters.
+The main drawback of such GUI-based softwares is that they do not allow to automatically generate EDA pipelines. Moreover, plugging in hand-crafted algorithm is not easy. One possibility is to use {\sc KNIME} Meta Nodes, but programming relatively complex algorithms just using them can be cumbersome.
+
+\textit{Nextflow} (source: \url{www.nextflow.io}) is a command-line workflow framework that allows to easily distribute the computations of complex pipelines. One of the strength of \textit{Nextflow} pipelines is that they are made by chaining together differently many processes that can even be written in differently many languages. \textit{Nextflow} is not just a simple computational framework, it is also a proper Domain Specific Language (\ac{DSL}) which extends Groovy.
+Although very powerful, \textit{Nextflow} is more tailored toward the bioinformatics and computational biology area than a more general data science audience.
+Using \textit{Nextflow}, everything must be hard-coded, therefore plugging in custom algorithms is as hard as using standard libraries.
+Similar considerations can be made for Snakemake (source \url{https://snakemake.bitbucket.io}), which is a pythonic workflow management system which is mainly tailored for the parallelization of the analysis of DNA data.
+
+
+The most notable project that spans between the two families is \emph{Orange}\footnote{if I have to pick one, this is definitely my favorite -- Ed.} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
+Moreover, large data sets are difficult to analyze as it can run only on a single workstation, lacking of distributed computing support.
 
 \section{\ade overview} \label{sec:adenine_overview}
 
-\begin{table}[h!]
-  \footnotesize
-% \begin{longtable}{|>{\bfseries}l|>{\bfseries}l|>{\bfseries}l}
-    \centering
-    \begin{tabular}{lll}
-        \toprule
-        \bfseries Step &   \bfseries Algorithm & \bfseries Reference\\
-
-        \multirow{2}{*}{Imputing} & mean &  \\
-        & median & \\
-        & most frequent & \\
-        & $k$-nearest neighbors & \cite{troyanskaya2001missing} \\
-        \midrule
-
-        \multirow{4}{*}{Preprocessing} & recentering &  \\
-        & standardize &  \\
-        & normalize &  \\
-        & min-max &  \\
-        \midrule
-
-        \multirow{9}{*}{\begin{tabular}{@{}c@{}}Dimensionality \\ reduction\end{tabular}} & principal component analysis (PCA)& \cite{jolliffe2002principal} \\
-        & incremental PCA & \cite{ross2008incremental} \\
-        & randomized PCA & \cite{halko2011finding} \\
-        & kernel PCA & \cite{scholkopf1997kernel} \\
-        & isomap & \cite{tenenbaum2000global} \\
-        & locally linear embedding & \cite{roweis2000nonlinear} \\
-        & spectral embedding & \cite{ng2002spectral} \\
-        & multi-dimensional scaling & \cite{borg2005modern} \\
-        & \begin{tabular}{@{}l@{}}t-distributed stochastic \\ neighbor embedding \end{tabular}   & \cite{van2008visualizing} \\
-        \midrule
-
-        \multirow{5}{*}{Clustering} & $k$-means &  \cite{bishop2006pattern}\\
-        & affinity propagation & \cite{frey2007clustering} \\
-        & mean shift & \cite{comaniciu2002mean} \\
-        & spectral & \cite{shi2000normalized} \\
-        & hierarchical & \cite{hastie2009elements} \\
-        & DBSCAN & \cite{ester1996density} \\
-        \bottomrule
-    \end{tabular}
-    \caption{Pipeline building blocks available in \ade.}\label{tab:blocks}
-\end{table}
-
-
-This chapter describes \ade, a command-line Python tool for biological data exploration and visualization that, combining different EDA methods, creates textual and graphical analytical reports of large scale, data collections.
+This chapter introduces \ade (source : \url{http://slipguru.github.io/adenine}), a command-line Python tool for data exploration and visualization that, combining different EDA methods, creates textual and graphical analytical reports of large scale, data collections.
 %of an arbitrary number of pipelines.
 
-Missing data imputing, preprocessing, dimensionality reduction and clustering strategies are considered as building blocks for constructing data analysis pipelines (see Section~\ref{sec:adenine_implementation}). The user is simply required to specify the input data and to select the desired blocks. \ade, then, takes care of generating and running the pipelines obtained by all possible combinations of the selected blocks. Every algorithm implementation of the presented software tool is inherited, or extended, from \sklearn \cite{scikit-learn} which is, to the best of our knowledge, the most complete machine learning open source Python library available online.
+Missing data imputing, preprocessing, dimensionality reduction and clustering strategies are considered as building blocks for data analysis pipelines. The user is simply required to specify the input data and to select the desired blocks. \ade, then, takes care of generating and running the pipelines obtained by all possible combinations of the selected blocks.
+Table~\ref{tab:blocks} shows the list of building blocks currently available.
+Every algorithm implementation in \ade is inherited, or extended, from \sklearn \cite{scikit-learn} which, as of today, is definitely the most complete ML open source Python library available.
+Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeline, as long as it is implemented following the \sklearn standard.
 
-\ade natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}, which data sets can be retrieved specifying their GEO accession number.
 
-Thanks to its scalable architecture, \ade pipelines can seamlessly run in parallel as separate Python processes on single workstations or MPI\footnote{\url{http://mpi-forum.org/}} tasks in high-performance computing (HPC) cluster facilities. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
+\begin{table}[h!]
+	\footnotesize
+	% \begin{longtable}{|>{\bfseries}l|>{\bfseries}l|>{\bfseries}l}
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\bfseries Step &   \bfseries Algorithm & \bfseries Reference\\
+		\midrule
+		\multirow{2}{*}{Imputing} & mean &  \\
+		& median & \\
+		& most frequent & \\
+		& $k$-nearest neighbors & \cite{troyanskaya2001missing} \\
+		\midrule
+		
+		\multirow{4}{*}{Preprocessing} & recentering &  \\
+		& standardize &  \\
+		& normalize &  \\
+		& min-max &  \\
+		\midrule
+		
+		\multirow{9}{*}{\begin{tabular}{@{}c@{}}Dimensionality \\ reduction\end{tabular}} & principal component analysis (PCA)& \cite{jolliffe2002principal} \\
+		& incremental PCA & \cite{ross2008incremental} \\
+		& randomized PCA & \cite{halko2011finding} \\
+		& kernel PCA & \cite{scholkopf1997kernel} \\
+		& isomap & \cite{tenenbaum2000global} \\
+		& locally linear embedding & \cite{roweis2000nonlinear} \\
+		& spectral embedding & \cite{ng2002spectral} \\
+		& multi-dimensional scaling & \cite{borg2005modern} \\
+		& \begin{tabular}{@{}l@{}}t-distributed stochastic \\ neighbor embedding \end{tabular}   & \cite{van2008visualizing} \\
+		\midrule
+		
+		\multirow{5}{*}{Clustering} & $k$-means &  \cite{bishop2006pattern}\\
+		& affinity propagation & \cite{frey2007clustering} \\
+		& mean shift & \cite{comaniciu2002mean} \\
+		& spectral & \cite{shi2000normalized} \\
+		& hierarchical & \cite{hastie2009elements} \\
+		& DBSCAN & \cite{ester1996density} \\
+		\bottomrule
+	\end{tabular}
+	\caption{Pipeline building blocks currently available in \ade.}\label{tab:blocks}
+\end{table}
+
+\ade is developed with the aim of speeding-up EDA on large biomedical data collections.
+Therefore it has a scalable architecture, that allows its pipelines to seamlessly run in parallel as separate Python processes on a single workstation or as MPI\footnote{\url{http://mpi-forum.org/}} tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
 % \ade pipelines are designed to be independent from each other, therefore they all run in parallel as separate Python processes on different cores/machines.
 Moreover, as \ade makes large use of {\sc numpy} and {\sc scipy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
+Thanks to this hybrid parallel architecture, with \ade it is possible to get a grasp on the main structures underlying your data in a reasonable computational time.
+
+In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on) can be given as input. Moreover, as genomic is one of the major sources of data in the biological world, \ade also natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}; which data sets can be retrieved specifying their GEO accession number.
+
 
 \section{\ade implementation} \label{sec:adenine_implementation}
 \ade is developed around the data analysis concept of \emph{pipeline}. A pipeline is a sequence of the following fundamental steps:
@@ -118,7 +122,12 @@ Moreover, as \ade makes large use of {\sc numpy} and {\sc scipy}, it automatical
   \item dimensionality reduction and
   \item unsupervised clustering.
 \end{enumerate}
-For each task, different off-the-shelf algorithms can be used (see Table~\ref{tab:blocks}).
+For each task, is it possible to use the off-the-shelf algorithms in Table~\ref{tab:blocks}, as well as any other custom algorithm as long as it is implemented in Python as a \sklearn~{\tt Transformer} object.
+
+A {\tt Transformer} is simply a Python class which is provided with a {\tt fit\_transform} method, as the one in 
+
+
+
 
 Data collected in biomedical research studies often present missing values.
 Devising imputing strategies is a common practice~\cite{de2015impact} to deal with such issue.
