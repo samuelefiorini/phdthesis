@@ -5,7 +5,7 @@
 
 \begin{displayquote}
 \textit{This chapter presents the first original contribution of the thesis, which is the 	 development of a machine learning framework designed for biological data exploration and visualization called \ade.
-The goal of such framework is to help biomedical data scientists achieving a first and quick overview of the main structures underlying their data.
+The goal of this framework is to help biomedical data scientists achieving a first and quick overview of the main structures underlying their data.
 % researchers and data scientists
 % and choosing the most suitable unsupervised learning pipeline for the problem at hand.
 This software tool encompasses state of the art techniques for missing values imputing, data preprocessing, dimensionality reduction and clustering.
@@ -22,14 +22,7 @@ For instance, the aim of a biomedical study can be detecting groups of patients 
 In both cases, data scientists will be asked to extract meaningful information from collections of complex and possibly high-dimensional measures, such as gene sequencing data, biomedical imaging, patients assessment questionnaires, and so on.
 
 In these cases, a preliminary Exploratory Data Analysis (\ac{EDA}) is not only a good practice, but also a fundamental step to run before further and deeper investigations can take place.
-To accomplish this task, several machine learning and data mining techniques were proposed over the years (see Section~\ref{chap:state-of-the-art}).
-Among those, we recall the combined use of the following classes of methods:
-\begin{enumerate}
-  \item missing values imputing;
-  \item data preprocessing;
-  \item dimensionality reduction;
-  \item unsupervised clustering.
-\end{enumerate}
+Representative examples are, for instance, Kaggle competitions (source: \url{www.kaggle.com}). Kaggle is the most popular community-based data science challenge platform online. Browsing through the hosted competitions, we can see that people runs EDAs to get a grasp on the datasets before testing their own prediction strategy.
 
 Running EDA, despite being a valuable and widely applied data science practice, is definitely a nontrivial task.
 Indeed, for a given a dataset, it is usually unclear which algorithm will provide the most insightful results. A common practice is to empirically test some of them and compare their results from a qualitative/quantitative standpoint.
@@ -56,6 +49,16 @@ Moreover, large data sets are difficult to analyze as it can run only on a singl
 
 This chapter introduces \ade (source : \url{http://slipguru.github.io/adenine}), a command-line Python tool for data exploration and visualization that, combining different EDA methods, creates textual and graphical analytical reports of large scale, data collections.
 %of an arbitrary number of pipelines.
+
+%To run EDAs, several ML and data mining techniques are used (see Section~\ref{chap:state-of-the-art}).
+%Among those, \ade focuses on the combined use of the following classes of methods:
+%\begin{enumerate}
+%	\item missing values imputing;
+%	\item data preprocessing;
+%	\item dimensionality reduction;
+%	\item unsupervised clustering.
+%\end{enumerate}
+
 
 Missing data imputing, preprocessing, dimensionality reduction and clustering strategies are considered as building blocks for data analysis pipelines. The user is simply required to specify the input data and to select the desired blocks. \ade, then, takes care of generating and running the pipelines obtained by all possible combinations of the selected blocks.
 Table~\ref{tab:blocks} shows the list of building blocks currently available.
@@ -122,25 +125,25 @@ In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on
   \item dimensionality reduction and
   \item unsupervised clustering.
 \end{enumerate}
-For each task, is it possible to use the off-the-shelf algorithms in Table~\ref{tab:blocks}, as well as any other custom algorithm as long as it is implemented in Python as a \sklearn~{\tt Transformer} object. A {\tt Transformer} is simply a Python class having a {\tt fit\_transform} method, see for instance snippet below.
+For each task, is it possible to use either the off-the-shelf algorithms in Table~\ref{tab:blocks}, either any other custom algorithm as long as it is implemented in Python as a \sklearn~{\tt Transformer} object. A {\tt Transformer} is simply a Python class having a {\tt fit\_transform} method, see for instance snippet below.
 
 \input{part2/snippets/transformer.tex}
 
-\sklearn also provides an utility object called {\tt FunctionTransformer} that returns a {\tt Transformer} given any arbitrary input callable (\ie function).
+\sklearn also provides an utility object called {\tt FunctionTransformer} that returns a {\tt Transformer} given any arbitrary input callable (\ie function), which can be very resourceful for our purposes.
 
 Data collected in biomedical research studies often present missing values.
-Devising imputing strategies is a common practice~\cite{de2015impact} to deal with such issue.
-\ade offers an improved version of the {\tt Imputer} class provided by \sklearn. In addition to the pre-existent feature-wise {\color{string} {\tt "mean"}}, {\color{string} {\tt "median"}} and {\color{string} {\tt "most\_frequent"}} strategies, this extension presents {\color{string} {\tt "nearest\_neighbors"}}, \ie an implementation of the $k$-nearest neighbors imputing method proposed for microarray data in~\cite{troyanskaya2001missing}.
+Devising imputing strategies is a common practice to deal with such issue~\cite{de2015impact}.
+\ade offers an improved version of the {\tt Imputer} class provided by \sklearn. In addition to the pre-existent feature-wise {\color{string} {\tt "mean"}}, {\color{string} {\tt "median"}} and {\color{string} {\tt "most\_frequent"}} strategies, this extension adds {\color{string} {\tt "nearest\_neighbors"}}, \ie an implementation of the $k$-nearest neighbors imputing method proposed for microarray data in~\cite{troyanskaya2001missing}.
 
 % \ade presents different data preprocessing strategies to tackle undesired effects that may arise from heterogeneous measures possibly lying in very different numerical range.
  % when dealing with data collected from heterogeneous sources.
-Collecting data from heterogeneous sources may imply dealing with variables lying in very different numerical ranges and this could have a negative influence on the behavior of data analysis techniques. To tackle this issue \ade offers different strategies to preprocess data, such as re-centering, standardizing or rescaling.
+Collecting data from heterogeneous sources may imply dealing with variables lying in very different numerical ranges and this could have a negative influence on the behavior of data analysis techniques. To tackle this issue \ade offers different strategies to preprocess data, such as re-centering, standardizing or rescaling. We recall here that any other preprocessing step, such as feature exclusion, log-transformation and so on, can be implemented as {\tt Transformer} to be easily chained in an \ade pipeline.
 
 \ade includes a set of linear and nonlinear dimensionality reduction and manifold learning algorithms that are particularly suited for projection and visualization of high-dimensional data. Such techniques rely on the fact that it is often possible to \emph{decrease} the dimensionality of the problem estimating a low-dimensional embedding in which the data lie, as described in Section~\ref{sec:dimred}.
 
 Besides offering a wide range of clustering techniques,
 \ade implements strategies and heuristics to automatically estimate parameters that yield the most suitable cluster separation.
-The optimal number of clusters selection of centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
+The selection of the optimal number of clusters in centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
 
 \begin{algorithm}[]
   \caption{Automatic discovery of the optimal clustering parameter.}\label{alg:clusters}
@@ -158,19 +161,21 @@ The optimal number of clusters selection of centroid-based algorithms follows th
     \end{algorithmic}
 \end{algorithm}
 
-For affinity propagation \cite{frey2007clustering} and $k$-means \cite{bishop2006pattern} clustering parameters can be automatically defined (\emph{preference} and \emph{number of clusters}, respectively).
+For affinity propagation \cite{frey2007clustering} and $k$-means \cite{bishop2006pattern} clustering parameters can be automatically defined ({\color{string} {\tt "preference"}}  and {\color{string} {\tt "n\_clusters}}, respectively).
 % Clustering parameters for affinity propagation \cite{frey2007clustering} and k-means \cite{bishop2006pattern}, that are \emph{preference} and \emph{number of clusters}, can be automatically defined.
 Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an implicit cluster discovery.
-For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and eigenvalues of the Laplacian of the affinity matrix plots, respectively.
+For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{see the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
 % \todo{@fede DBSCAN}
 
 In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc numpy} and {\sc scipy} and it comes \textit{for free}. So, let's focus on multiprocessing.
-This parallel program paradigm consists in dividing the workload among different tasks which can possibly run on different nodes of some HPC cluster.
+This parallel program paradigm consists in dividing the workload among different tasks which can possibly run on different nodes of an HPC infrastructure.
 The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of distributed computing schemes.
-In particular, \ade has an MPI-based master/slave strategy. A single master task creates a queue of jobs that are assigned to a pool of slaves.
-When a slave has completed its task, it communicates the results to the master which assigns to the now idle slave the next task of the queue. This procedure is repeated several times, until the queue is empty.
-The number of slaves can be controlled using the options of the {\tt mpirun} command. Such number must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
-Thanks to MPI, where each task is running is completely transparent to the user. When all the computation is done, the results are simply stored in the results folder.
+In particular, in \ade an MPI-based master/slave job distribution strategy is implemented.
+
+A single master task $T_0$ creates a queue of jobs $Q = \{J_1, \dots, J_M\}$, where $M$ is the number of pipelines. The jobs in $Q$ are assigned to a pool of slaves $S = \{T_1, \dots, T_S\}$.
+Once the slave $T_j$ (with $j>0$) has completed its task, it communicates the results to $T_0$ and becomes idle. At this point, $T_0$ assigns to $T_j$ the next task in $Q$. This procedure is repeated several times, until $Q$ is empty.
+The number of slaves $S$ can be controlled by the user with the parameter {\tt -np} of the {\tt mpirun} command. $S$ must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
+Thanks to MPI, the assignment of each task to its node is completely transparent to the user. When all the computation is done, the results are simply stored in a single result folder.
 
 \section{Usage example} \label{sec:usage_example}
 In this section we show how \ade can be used to perform two EDAs on a gene expression microarray data set obtained from the GEO repository (accession number GSE87211).
