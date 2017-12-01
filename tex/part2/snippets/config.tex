@@ -1,0 +1,25 @@
+% !TEX root = ../../main.tex
+
+{\small
+	\begin{Verbatim}[commandchars=\\\{\}, frame=single]
+{\color{incolor}} \PY{k+kn}{from} \PY{n+nn}{adenine.utils} \PY{k+kn}{import} \PY{n}{data\PYZus{}source}
+ \PY{n}{data\PYZus{}file} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GSE87211\PYZus{}data.csv}\PY{l+s+s1}{\PYZsq{}}
+ \PY{n}{labels\PYZus{}file} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GSE87211\PYZus{}labels.csv}\PY{l+s+s1}{\PYZsq{}}
+ \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{feat\PYZus{}names}\PY{p}{,} \PY{n}{index} \PY{o}{=} \PY{n}{data\PYZus{}source}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+ \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{custom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data\PYZus{}file}\PY{p}{,} \PY{n}{labels\PYZus{}file}\PY{p}{,} \PY{n}{samples\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+ \PY{n}{step1} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recenter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{]}\PY{p}{\PYZcb{}}
+ \PY{n}{step2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KernelPCA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{kernel}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{linear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rbf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{poly}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{,}
+          \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Isomap}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}neighbors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+  \PY{n}{step3} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KMeans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}clusters}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{auto}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+}
+%
+%{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{from} \PY{n+nn}{adenine.utils} \PY{k+kn}{import} \PY{n}{data\PYZus{}source}
+%\PY{n}{data\PYZus{}file} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GSE87211\PYZus{}data.csv}\PY{l+s+s1}{\PYZsq{}}
+%\PY{n}{labels\PYZus{}file} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GSE87211\PYZus{}labels.csv}\PY{l+s+s1}{\PYZsq{}}
+%\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{feat\PYZus{}names}\PY{p}{,} \PY{n}{index} \PY{o}{=} \PY{n}{data\PYZus{}source}\PY{o}{.}\PY{n}{load}\PY{p}{(}
+%\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{custom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{data\PYZus{}file}\PY{p}{,} \PY{n}{labels\PYZus{}file}\PY{p}{,} \PY{n}{samples\PYZus{}on}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rows}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+%\PY{n}{step1} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Recenter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{]}\PY{p}{\PYZcb{}}
+%\PY{n}{step2} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KernelPCA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{kernel}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{linear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rbf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{poly}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{,}
+%\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Isomap}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}neighbors}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{5}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+%\PY{n}{step3} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{KMeans}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{n+nb+bp}{True}\PY{p}{,} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}clusters}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{auto}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{]}\PY{p}{\PYZcb{}}

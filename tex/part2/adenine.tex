@@ -109,7 +109,9 @@ Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeli
 \end{table}
 
 \ade is developed with the aim of speeding-up EDA on large biomedical data collections.
-Therefore it has a scalable architecture, that allows its pipelines to seamlessly run in parallel as separate Python processes on a single workstation or as MPI\footnote{\url{http://mpi-forum.org/}} tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
+It has a scalable architecture, that allows its pipelines to seamlessly run in parallel as separate Python processes on a single workstation or as 
+%MPI\footnote{\url{http://mpi-forum.org/}}
+separate tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
 % \ade pipelines are designed to be independent from each other, therefore they all run in parallel as separate Python processes on different cores/machines.
 Moreover, as \ade makes large use of {\sc numpy} and {\sc scipy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
 Thanks to this hybrid parallel architecture, with \ade it is possible to get a grasp on the main structures underlying your data in a reasonable computational time.
@@ -170,12 +172,28 @@ For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000
 In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc numpy} and {\sc scipy} and it comes \textit{for free}. So, let's focus on multiprocessing.
 This parallel program paradigm consists in dividing the workload among different tasks which can possibly run on different nodes of an HPC infrastructure.
 The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of distributed computing schemes.
-In particular, in \ade an MPI-based master/slave job distribution strategy is implemented.
+\ade offers different job distribution strategies.
+\begin{enumerate}
+	\item When \ade is running on a single workstation (or on a single node of an HPC architecture), each pipeline is parallelized by using the standard multiprocessing Python library.
+	Each pipeline run is mapped to a job. All the jobs are organized in a queue and the multiprocessing library automatically assigns the cores available to the next job.
+	In this way, \ade is capable of exploiting all the cores of the machine in which it is running.
+	
+	\item When an HPC architecture is available, \ade is capable of distributing its pipelines across multiple nodes. In particular, the following two options are available.
+	\begin{enumerate}
+		\item[\textbf{MPI}] \ade implements an MPI-based (source: \url{http://mpi-forum.org/}) master/slave job distribution strategy.
+		A single master task $T_0$ creates a queue of jobs $Q = \{J_1, \dots, J_M\}$, where $M$ is the number of pipelines. The jobs in $Q$ are assigned to a pool of slaves $S = \{T_1, \dots, T_S\}$.
+		Once the slave $T_j$ (with $j>0$) has completed its task, it communicates the results to $T_0$ and becomes idle. At this point, $T_0$ assigns to $T_j$ the next task in $Q$. This procedure is repeated several times, until $Q$ is empty.
+		The number of slaves $S$ can be controlled by the user with the parameter {\tt -np} of the {\tt mpirun} command. $S$ must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
+		Thanks to MPI, the assignment of each task to its node is completely transparent to the user. When all the computation is done, the results are simply stored in a single result folder.
 
-A single master task $T_0$ creates a queue of jobs $Q = \{J_1, \dots, J_M\}$, where $M$ is the number of pipelines. The jobs in $Q$ are assigned to a pool of slaves $S = \{T_1, \dots, T_S\}$.
-Once the slave $T_j$ (with $j>0$) has completed its task, it communicates the results to $T_0$ and becomes idle. At this point, $T_0$ assigns to $T_j$ the next task in $Q$. This procedure is repeated several times, until $Q$ is empty.
-The number of slaves $S$ can be controlled by the user with the parameter {\tt -np} of the {\tt mpirun} command. $S$ must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
-Thanks to MPI, the assignment of each task to its node is completely transparent to the user. When all the computation is done, the results are simply stored in a single result folder.
+		\item[\textbf{Dask}] \ade can also exploit the Dask parallel computing library (source: \url{https://dask.pydata.org}). While MPI is a recognized standard in the HPC world, Dask is relatively recent project developed for dynamic task scheduling focused on big data applications. In particular, \ade exploits the Dask-based backend of Joblib (source: \url{https://pythonhosted.org/joblib/}), which is the parallel computing library mainly used in \sklearn to parallelize independent tasks.
+		Dask can be used by simply running a {\tt dask-scheduler} executable process on one node and the {\tt dask-worker} executable on several processes, which can run on other nodes of the HPC architecture.
+		After an initial hand-shake between the scheduler and its workers, a list of jobs to run can be sent to the scheduler which automatically distributes the workload among its workers and collects the results.
+		Using Dask in ML applications, where communications between tasks is usually negligible, can be easier with respect to MPI.
+		
+	\end{enumerate}
+\end{enumerate}
+
 
 \section{Usage example} \label{sec:usage_example}
 In this section we show how \ade can be used to perform two EDAs on a gene expression microarray data set obtained from the GEO repository (accession number GSE87211).
@@ -185,25 +203,25 @@ It is composed of $203$ colorectal cancer samples and $160$ matched mucosa contr
 \ade offers a handy tool to automatically download the data set from the GEO repository given only its accession name.
 It also let the user select phenotypes and/or probe sets of interest. Given these preferences, \ade automatically converts the data set from the \textit{SOFT} format to a comma-separated values text file. To download the remote GEO data set specifying the tissue type as phenotype of interest we used the following command.
 
-{\footnotesize
-\begin{lstlisting}[language=bash,caption={ }]
+{\small
+\begin{lstlisting}[language=bash,caption={ },basicstyle=\ttfamily]
 $ ade_GEO2csv.py GSE87211 --label_field characteristics_ch1.3.tissue
 \end{lstlisting}
 }
 
-\noindent This automatically creates \texttt{{\footnotesize GSE87211\_data.csv}} and \texttt{{\footnotesize GSE87211\_labels.csv}} which contain gene expression levels and tissue type of each sample, respectively.
+\noindent This automatically creates {\tt GSE87211\_data.csv} and {\tt GSE87211\_labels.csv} which contain gene expression levels and tissue type of each sample, respectively.
 
 The first EDA aims at stratifying the samples according to their tissue type (mucosa or rectal tumor) this can be performed by executing the following command.
 
-{\footnotesize
-\begin{lstlisting}[language=bash,caption={ }]
-$ ade_run.py ade_config.py
+{\small
+\begin{lstlisting}[language=bash,caption={ },basicstyle=\ttfamily]
+$ ade_run.py config.py
 \end{lstlisting}
 }
 
-\noindent Where \texttt{{\footnotesize ade\_config.py}} is a configuration file which should look like the snippet below.
+\noindent Where {\tt config.py} is a configuration file which should look like the snippet below.
 
-\todo{config here}
+\input{part2/snippets/config.tex}
 
 % Figure~\ref{fig:scatter} shows one of several possible comparisons between three pipelines on an RNA-Seq gene expression data set available both on UCI Machine Learning Repository and \ade documentation webpage.
 % First \ade is installed via the Python Package Index, then
@@ -213,8 +231,8 @@ $ ade_run.py ade_config.py
 The configuration snippet above generates eight pipelines with similar structure. The first and the second halves have recentered and $\ell_2$-normalized samples, respectively. Each sample is then projected on a 2D space by isomap or by linear, Gaussian or polynomial kernel PCA. $k$-means clustering with automatic cluster discovery is eventually performed on each dimensionality-reduced data set, as in Algorithm~\ref{alg:clusters}.
 Results of such pipelines are all stored in a single output folder. Once this process is completed, plots and reports can be automatically generated running the following command.
 
-{\footnotesize
-\begin{lstlisting}[language=bash,caption={ }]
+{\small
+\begin{lstlisting}[language=bash,caption={ },basicstyle=\ttfamily]
   $ ade_analysis.py results/ade_output_folder_YYYY-MM-DD_hh:mm:ss
 \end{lstlisting}
 }
@@ -232,12 +250,12 @@ Three partially overlapping sublists compose this signature.
   \item[\emph{S3)}] Genes involved in hereditary syndromes which predispose to CRC (\ie~\apc, \msh, \mlh, \pms, \pten, \smad, \stk)~\cite{schulz2005molecular}.
 \end{enumerate}
 
-A reduced version of the GEO data set that comprises only such genes can be easily created calling \texttt{{\footnotesize ade\_GEO2csv.py}} with the option \texttt{{\footnotesize -{}-signature GENE\_1,GENE\_2,...,GENE\_N}}. On the same line, the option \texttt{{\footnotesize -{}-phenotypes P\_1,P\_2,...,P\_M}} can be used to keep only mucosa or rectal tumor samples.
+A reduced version of the GEO data set that comprises only such genes can be easily created calling {\tt ade\_GEO2csv.py} with the option {\tt -{}-signature GENE\_1,GENE\_2,...,GENE\_N}. On the same line, the option {\tt -{}-phenotypes P\_1,P\_2,...,P\_M} can be used to keep only mucosa or rectal tumor samples.
 To run such experiment, one simply needs to select and activate the hierarchical clustering building block and to follow the same steps presented above.
 % procedures that are similar to the one described above can be followed.
 
 
-For \ade installation instructions and for a comprehensive description of all the options available in the configuration file we refer to the online documentation and tutorials\footnote{\url{http://slipguru.github.io/adenine}}.
+%For \ade installation instructions and for a comprehensive description of all the options available in the configuration file we refer to the online documentation and tutorials\footnote{\url{http://slipguru.github.io/adenine}}.
 
 \section{Results} \label{sec:results}
 
@@ -314,13 +332,13 @@ Two interesting differences between the two trees can also be noticed. First, mo
 % Pip3
 % median Impute-NaN $\to$ Recenter $\to$ rbf KernelPCA $\to$ 2-clusts KMeans
 
-\todo{...}
-In this paper we presented \ade, a biomedical data exploration and visualization tool that can seamlessly run on single workstations as well as on HPC clusters.
-Thanks to its scalable architecture, \ade is suitable for the analysis of large and high-dimensional data collections, that are nowadays ubiquitous in biomedicine.
-
-\ade natively supports the integration with the GEO repository. Therefore, a user provided with the accession number of the data set of interest can select target phenotypes and genotypes and \ade takes care of automatically downloading the data and plugging them into the computational framework.
-\ade offers a wide range of missing values imputing, data preprocessing, dimensionality reduction and clustering techniques that can be easily selected and applied to any input data.
-
-In this paper we showed \ade capabilities performing two EDAs on a CRC gene expression data set. From the obtained results we can observe that a clear discrimination between CRC and control samples can be achieved by unsupervised data analysis pipeline.
-% \apc and \ctnnb,
-Moreover, a meaningful description of the relationships among the group of genes strongly associated with CRC can be represented as hierarchical trees.
+%
+%In this Chapter we presented \ade, a biomedical data exploration and visualization tool that can seamlessly run on single workstations as well as on HPC clusters.
+%Thanks to its scalable architecture, \ade is suitable for the analysis of large and high-dimensional data collections, that are nowadays ubiquitous in biomedicine.
+%
+%\ade natively supports the integration with the GEO repository. Therefore, a user provided with the accession number of the data set of interest can select target phenotypes and genotypes and \ade takes care of automatically downloading the data and plugging them into the computational framework.
+%\ade offers a wide range of missing values imputing, data preprocessing, dimensionality reduction and clustering techniques that can be easily selected and applied to any input data.
+%
+%In this paper we showed \ade capabilities performing two EDAs on a CRC gene expression data set. From the obtained results we can observe that a clear discrimination between CRC and control samples can be achieved by unsupervised data analysis pipeline.
+%% \apc and \ctnnb,
+%Moreover, a meaningful description of the relationships among the group of genes strongly associated with CRC can be represented as hierarchical trees.
