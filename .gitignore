@@ -1,6 +1,7 @@
 # Some local files
 **/__local
 **/results
+**/__partial
 
 ## OSX meaningless files
 **/*.DS_Store
