@@ -106,19 +106,77 @@ The data collection process entirely ran on voluntary basis. So, it is interesti
 	\caption{Age distribution of the $118$ individuals involved in the study.} \label{fig:frassoni_agehist}
 \end{figure}
 
-Next, we aim at investigating on how the distribution of the molecular biomarker is influenced by the age of the individuals. To this aim we group the measures per decade and we represent the distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
-As we can see, most of the biomarkers show a clear trend with the age. In particular, focusing our attention on the \atpamp ratio ($3^{\text{rd}}$ row, $3^{\text{rd}}$ column of Figure~\ref{fig:frassoni_boxplot}), which is known to be an energy status monitor of the cells, we can see that the values decrease progressively with the decades, with a drastic decrease between $40$ and $50$ years. Moreover, from an observation of \atp and \amp intracellular concentration ($3^{\text{rd}}$ row, $1^\text{st}$ and $2^\text{nd}$ column, respectively) we can sense how the increase of their ratio is mainly due to the grow of \amp in the aging process.
-
+Next, we aim at investigating on how the distribution of the molecular biomarker is influenced by the age of the individuals. To this aim we group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
+As we can see, most of the biomarkers are clearly influenced by the age.
+Let's start the visual inspection focusing on the variables related to the mitochondrial aerobic metabolism (from Figure~\ref{fig:frassoni_boxplot_copyrmal} to \ref{fig:frassoni_boxplot_atpamp}).
+In particular, focusing our attention on the \atpamp ratio (Figure~\ref{fig:frassoni_boxplot_atpamp}), which is known to be an energy status monitor of the cells, we can see that the values decrease progressively with the decades, with a drastic drop between $40$ and $50$ years. Moreover, from an observation of \atp and \amp intracellular concentration (Figure~\ref{fig:frassoni_boxplot_atp} and Figure~\ref{fig:frassoni_boxplot_amp}, respectively) we can sense how the decrease of the \atpamp ratio is mainly due to the growth of \amp in the aging process.
+Similar considerations can be made for the efficiency of oxidative phosphorylation, evaluated by \popyrmal and \posucc. In particular, \popyrmal oscillates around its reference level of $2.5~\text{nmol~O}_2/(\text{min}\cdot\text{mg})$~\cite{hinkle2005p} in subjects having from $0$ to $30$ years; it starts to decrease afterwards. Moreover, \popyrmal, similarly to \atpamp, is fairly stable at its lowest level for elderly (age $\geq 70$).
+Let's now focus on the activity of LDH (Figure~\ref{fig:frassoni_boxplot_ldh}). As we can see, this metabolic biomarker almost monotonically increases with the aging process.
+This is mainly due to the fact that LDH is involved in the glycolysis metabolism, which is a metabolic pathway chosen by the cell to compensate its altered aerobic metabolism.
+Finally, let's focus on the distributions of the \mda (Figure~\ref{fig:frassoni_boxplot_mda}). As expected, \mda has an opposite trend with respect to \atpamp and \popyrmal. In fact, it increases from $21$ to $80$ years. This can be due to the increase of the oxidative stress production induced by an uncoupled oxidative phosphorylation~\cite{dai2014mitochondrial}.
+\mda is more stable for elderly, mainly because their physiological metabolic slowdown.
 
 \begin{figure}[]
 	\centering
-	\includegraphics[width=0.8\textwidth]{part2/aging_boxplot.png}
-	\caption{Distribution of the collected biomarkers grouped per decade.} \label{fig:frassoni_boxplot}
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_CO-PyrMal.png}
+		\label{fig:frassoni_boxplot_copyrmal}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_CO-Succinate.png}
+		\label{fig:frassoni_boxplot_cosucc}%
+	}%
+%	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_ATP-PyrMal.png}
+		\label{fig:frassoni_boxplot_atppyrmal}%
+	}%
+	\hfill% %%%% ROW 2
+	\subfloat[]{%
+	   \includegraphics[width=0.33\textwidth]{part2/aging_boxplot_ATP-Succinate.png}
+       \label{fig:frassoni_boxplot_atpsucc}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_PO-PyrMal.png}
+		\label{fig:frassoni_boxplot_popyrmal}%
+	}%
+	%	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_PO-Succinate.png}
+		\label{fig:frassoni_boxplot_posucc}%
+	}%
+	\hfill%%%% ROW 3
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_ATP.png}
+		\label{fig:frassoni_boxplot_atp}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_AMP.png}
+		\label{fig:frassoni_boxplot_amp}%
+	}%
+	%	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_ATPAMP.png}
+		\label{fig:frassoni_boxplot_atpamp}%
+	}%
+	\hfill%%%% ROW 4
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_MDA.png}
+		\label{fig:frassoni_boxplot_mda}%
+	}%
+	%	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.33\textwidth]{part2/aging_boxplot_LDH.png}
+		\label{fig:frassoni_boxplot_ldh}%
+	}%
+	\caption{Distribution of the collected molecular biomarker values grouped per decade.} \label{fig:frassoni_boxplot}
 \end{figure}
 
+Let's now try to visualize the collected data in a scatterplot. In order to do that, we shall first reduce the dimensionality of the problem (as described in Section~\ref{sec:dimred}).
 
 \section{Metabolic age prediction} \label{sec:frassoni_regression}
 % pipeline + assessment + model challenge
+
 
 \section{Results} \label{sec:frassoni_results}
 % tabella dei risultati
