@@ -1,2 +1,11 @@
-TODO:
-- When Section 4 is completed, make the names of the files in this section consistent with the PDF
+
+Default preamble.
+
+```
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+plt.style.use('seaborn-paper')
+plt.rc('text', usetex=False)
+```

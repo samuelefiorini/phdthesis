@@ -7,13 +7,15 @@ import os
 import time
 import warnings
 
+import distributed.joblib
+from joblib import Parallel, parallel_backend
+
 import cPickle as pkl
 import numpy as np
 import pandas as pd
 
 from fancyimpute import KNN
 from hurry.filesize import size
-from palladio.model_assessment import ModelAssessment
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import ElasticNet
@@ -21,6 +23,7 @@ from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.kernel_ridge import KernelRidge
 from sklearn.linear_model import Ridge
+from sklearn.model_selection import cross_validate
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import ShuffleSplit
 from sklearn.neural_network import MLPRegressor
@@ -125,6 +128,7 @@ def dump(object_to_dump, filename):
         pkl.dump(object_to_dump, f)
     print('- {} dumped now {}'.format(filename, size(os.path.getsize(filename))))
 
+
 def main():
     """Model challenge main routine."""
     print('--------------------------------------')
@@ -147,37 +151,34 @@ def main():
 
     # 3. Perform the model challenge twice, one for linear
     # and the other for polynomial features
-    for toggle_poly_feat in [True, False]:
-        print('\n----- POLYNOMIAL FEATURES {} -----'.format('ON' if toggle_poly_feat else 'OFF'))
+    cross_val_scores = ('r2', 'mean_absolute_error', 'explained_variance', 'mean_squared_error')
+    with parallel_backend('dask.distributed', scheduler_host='megazord:8786'):
 
-        # 3.1 Preprocess data
-        data = preprocess(raw_data, poly_feat=toggle_poly_feat)
-        print('- preprocessing done.')
-        print('- {} samples / {} features.\n'.format(*data.shape))
+        for toggle_poly_feat in [True, False]:
+            print('\n----- POLYNOMIAL FEATURES {} -----'.format('ON' if toggle_poly_feat else 'OFF'))
 
-         # use a different name for the two versions of the dataset
-        tail = 'poly' if toggle_poly_feat else ''
+            # 3.1 Preprocess data
+            data = preprocess(raw_data, poly_feat=toggle_poly_feat)
+            print('- preprocessing done.')
+            print('- {} samples / {} features.\n'.format(*data.shape))
 
-        # Individually evaluate the performance of each pipeline
-        times = {}
-        fitted_ma = {}
-        for pipe in pipes.keys():
-            print('Fitting {}...'.format(pipe))
-            ma = ModelAssessment(estimator=pipes[pipe],
-                                 cv=ShuffleSplit(n_splits=100, test_size=.25),
-                                 scoring='neg_mean_absolute_error',
-                                 n_jobs=-1)
+             # use a different name for the two versions of the dataset
+            tail = 'poly' if toggle_poly_feat else ''
 
-            # Fit the model evaluation object
-            tic = time.time()
-            ma.fit(data.values, labels.values.ravel())
-            toc = time.time()
+            # Individually evaluate the performance of each pipeline
+            scores_dump = {}
+            for pipe in pipes.keys():
+                print('Fitting {}...'.format(pipe))
+                scores = cross_validate(estimator=pipes[pipe],
+                                        X=data.values, y=labels.values.ravel(),
+                                        scoring=cross_val_scores,
+                                        cv=ShuffleSplit(n_splits=500, test_size=.25),
+                                        n_jobs=-1, verbose=1)
 
-            times[pipe] = toc - tic # save time
-            dump(times, 'times_'+tail+'.pkl')
-            fitted_ma[pipe] = ma # save results
-            dump(fitted_ma, 'fitted_ma_'+tail+'.pkl')
-            print('Done in {:3.5} sec.\n'.format(times[pipe]))
+
+                scores_dump[pipe] =  scores # save results
+                dump(scores_dump, 'scores_'+tail+'.pkl')
+                print('Done in {:3.5} sec.\n'.format(np.sum(scores['fit_time'])))
 
 
 ################################################################################
