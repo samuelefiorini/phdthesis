@@ -36,7 +36,7 @@ As shown in~\cite{mckerrell2015leukemia}, mononuclear cells isolated from periph
 
 \section{Data collection} \label{sec:frassoni_data_collection}
 
-The study presented in this chapter is performed on mononuclear cells isolated from peripheral blood obtained from a population of $118$ volunteers\footnote{all participants provided their written informed consent to participate in this study, which was approved by the Ethics Committee of the IRCCS Istituto G. Gaslini, Genoa, IT, \todo{(N°)}} with age between $5$ and $106$ years.
+The study presented in this chapter is performed on mononuclear cells isolated from peripheral blood obtained from a population of $118$ volunteers\footnote{all participants provided their written informed consent to participate in this study, which was approved by the Ethics Committee of the IRCCS Istituto G. Gaslini, Genoa, IT, \todo{(N°)}} with age between $8$ and $106$ years.
 In order to preserve the collected blood samples, the vacutainer tubes were transferred into the laboratory and analyzed within $24$ hours from collection.
 All chemicals were purchased from Sigma Aldrich (St. Louis, MO, USA), unless otherwise indicated. Ultrapure water (Milli-Q; Millipore, Billerica, MA, USA) was used throughout. All other reagents were of analytical grade.
 Data collection and further analysis were managed by a team of specialized biologists at the IRCCS Istituto G. Gaslini, Genoa, IT. On each blood sample, we performed the following measures.
@@ -44,11 +44,11 @@ Data collection and further analysis were managed by a team of specialized biolo
 \begin{itemize}
 	\item[] \textbf{ATP} This complex molecule is the main responsible for storing and exchanging energy in cells and it is often referred to as the \textit{energy currency} of the cell. From a chemical point of view, ATP is made of an adenine base attached to a ribose sugar, which, in turn, is attached to three phosphate groups.
 	ATP is heavily involved in different cellular aerobic respiration pathways. High levels of ATP correspond to high energetic state.
-	ATP intracellular concentration, measured in $\text{mM}/\text{m}$, is an important molecular biomarker to evaluate the energetic state of a cell.
+	ATP intracellular concentration, measured in $\text{mM}/\text{ml}$, is an important molecular biomarker to evaluate the energetic state of a cell.
 	
 	\item[] \textbf{AMP} This molecule is one of the main derivatives of ATP. In fact, AMP ca be obtained when two phosphate groups are removed from ATP, releasing energy that can be transferred to other molecules to trigger some further cell reaction.
 	Therefore, when a cell is in good health, \ie high energetic level, AMP is low (and ATP is high).
-	AMP cellular concentration is measured in $\text{mM}/\text{m}$ and it is considered as an important molecular biomarker for the cellular energetic state. ATP and AMP quantification was based on the enzyme coupling method presented in~\cite{ravera2013tricarboxylic}.
+	AMP cellular concentration is measured in $\text{mM}/\text{ml}$ and it is considered as an important molecular biomarker for the cellular energetic state. ATP and AMP quantification was based on the enzyme coupling method presented in~\cite{ravera2013tricarboxylic}.
 %	as a side product of the ATP synthesis process or 
 	
 	\item[] \textbf{ATP/AMP ratio} With the aim of predicting the age of an individual by assessing the energetic state of the peripheral blood cells, measuring ATP and AMP cellular concentration may not be enough. A more representative and interesting quantity can be their ratio, so ATP/AMP ratio was calculated and added to the feature set.
@@ -64,7 +64,7 @@ Data collection and further analysis were managed by a team of specialized biolo
 	
 	\item[] \textbf{P/O ratio} In order to assess the efficiency of oxidative phosphorylation, we also evaluated the ratio between ATP synthesis and oxygen consumption under both the substrates. We call the two obtained features as \popyrmal and \posucc, respectively.
 	
-	\item[] \textbf{Glycolytic flux} In order to assay the glycolytic flux, we measured the activity of the Lactate Dehydrogenase (\ac{LDH}), expressed in $\text{mU}/\text{mg}$. This enzyme is important to evaluate the other metabolic pathway not mentioned so far, \ie the anaerobic respiration.
+	\item[] \textbf{Glycolytic flux} In order to assay the glycolytic flux, we measured the activity of the Lactate Dehydrogenase (\ac{LDH}), expressed in $\text{U}/\text{mg}$. This enzyme is important to evaluate the other metabolic pathway not mentioned so far, \ie the anaerobic respiration.
 	
 	\item[] \textbf{Lipid peroxidation} The uncoupled oxidative phosphorylation metabolism is often associated with an increment in the oxidative stress production~\cite{dai2014mitochondrial}, which induces damages on proteins, nucleic acid and membrane. Therefore, we evaluated the level of malondialdehyde (\ac{MDA}) as a marker of lipid peroxidation. The measure of \mda follows the protocol in~\cite{ravera2015oxidative}.	
 \end{itemize}
@@ -96,6 +96,26 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 
 \section{Exploratory data analysis} \label{sec:frassoni_EDA}
 % BOXPLOT - PCA - HEATMAP etc
+In this section we investigate on the relationship between the collected molecular biomarker and the age of the 118 healthy individuals involved in this study.
+
+The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, not each decade is equally represented. Ideally, we would have collected samples with uniformly distributed, but this was unfortunately not possible. Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step.
+
+\begin{figure}[]
+	\centering
+	\includegraphics[width=0.8\textwidth]{part2/aging_agehist.png}
+	\caption{Age distribution of the $118$ individuals involved in the study.} \label{fig:frassoni_agehist}
+\end{figure}
+
+Next, we aim at investigating on how the distribution of the molecular biomarker is influenced by the age of the individuals. To this aim we group the measures per decade and we represent the distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
+As we can see, most of the biomarkers show a clear trend with the age. In particular, focusing our attention on the \atpamp ratio ($3^{\text{rd}}$ row, $3^{\text{rd}}$ column of Figure~\ref{fig:frassoni_boxplot}), which is known to be an energy status monitor of the cells, we can see that the values decrease progressively with the decades, with a drastic decrease between $40$ and $50$ years. Moreover, from an observation of \atp and \amp intracellular concentration ($3^{\text{rd}}$ row, $1^\text{st}$ and $2^\text{nd}$ columns, respectively) we can sense how the increase of their ratio is mainly due to the grow of \amp in the aging process.
+
+
+\begin{figure}[]
+	\centering
+	\includegraphics[width=0.8\textwidth]{part2/aging_boxplot.png}
+	\caption{Distribution of the collected biomarkers grouped per decade.} \label{fig:frassoni_boxplot}
+\end{figure}
+
 
 \section{Metabolic age prediction} \label{sec:frassoni_regression}
 % pipeline + assessment + model challenge
@@ -106,5 +126,6 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 \section{Conclusions and future works} \label{sec:frassoni_conclusions}
 % CCS
 
+future: collect more data in order to have a uniformly distributed dataset
 
 %%
