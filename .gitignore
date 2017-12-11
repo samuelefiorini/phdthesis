@@ -4,7 +4,7 @@
 **/__partial
 
 ## Notebooks checkpoints
-*.ipynb_checkpoints
+**/*.ipynb_checkpoints
 
 ## OSX meaningless files
 **/*.DS_Store
