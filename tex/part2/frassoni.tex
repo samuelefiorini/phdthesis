@@ -172,6 +172,46 @@ Finally, let's focus on the distributions of the \mda (Figure~\ref{fig:frassoni_
 	\caption{Distribution of the collected molecular biomarker values grouped per decade.} \label{fig:frassoni_boxplot}
 \end{figure}
 
+So far, we have investigated on the relationship between the collected measures and the age of the individuals. Let's now focus on the relationship between the variables themselves. In order to investigate on possible collinearities in the data, we evaluated the Pearson correlation coefficient
+\begin{equation}
+	\rho(a, b) = \frac{\sum_{i=1}^n (a_i - \bar a)(b_i - \bar b)}{\sqrt{\sum_{i=1}^n(a_i-\bar a)^2 \sum_{i=1}^n(b_i-\bar b)^2}}
+\end{equation}
+(where $\bar c = \frac{1}{n}\sum_{i=1} c_i$ is the empirical mean of the variable $c$) for each pair of variables. This results in a symmetric $11 \times 11$ heatmap in which dark red cells are associated with strong positive correlation, white cells represent no correlation and dark blue cells correspond to strong negative correlation.
+%In order to evaluate a specific age fingerprint,
+Then, we split the data in $5$ groups, one for each two-decades, and we represent the collinearity in each group with a symmetric heatmap, see Figure~\ref{fig:heatmaps}.
+Thanks to this visualization, we can see that \atpamp and \popyrmal have positive correlation until the $6^{\text{th}}$ decade, while showing a negative correlation for elderly.
+This suggests that up to approximately $60$ years, most of the cellular energy is produced by the mitochondria, while in older subjects this contribution decreases. The same observed can be made for \atpamp and \posucc, although in this case it is less evident. On the other hand, the correlation between \atpamp and \mda or \ldh activity is negative in young subjects, while flipping it sign after approximately $60$ years.
+This is in line with the cellular need to increase the anaerobic metabolism that compensates the inefficiency of aerobic metabolism and the increment of oxidative stress with age.
+
+\begin{figure}[]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_heatmap_years range_0.png}
+		\label{fig:heatmaps1}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_heatmap_years range_1.png}
+		\label{fig:heatmaps2}%
+	}%
+		\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_heatmap_years range_2.png}
+		\label{fig:heatmaps3}%
+	}%
+%	\hfill% %%%% 
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_heatmap_years range_3.png}
+		\label{fig:heatmaps4}%
+	}%
+   \hfill
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_heatmap_years range_4.png}
+		\label{fig:heatmaps5}%
+	}%
+	\caption{The $11 \times 11$ symmetric heatmaps representing the Pearson correlation coefficient of the collected variables in the $5$ age groups: $[1-20]$ (a), $[21-40]$ (b), $[41-60]$ (c), $[61-80]$ (d), $>81$ (e).} \label{fig:heatmaps}
+\end{figure}
+
+
 Let's now try to visualize the collected data in a scatterplot. In order to do that, we shall first reduce the dimensionality of the problem (as described in Section~\ref{sec:dimred}).
 At first, we try to reduce the dimensionality of the problem via linear PCA.
 
