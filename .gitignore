@@ -1,7 +1,10 @@
-# Some local files
+## Some local files
 **/__local
 **/results
 **/__partial
+
+## Notebooks checkpoints
+*.ipynb_checkpoints
 
 ## OSX meaningless files
 **/*.DS_Store
