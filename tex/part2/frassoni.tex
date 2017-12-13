@@ -13,13 +13,15 @@
 %- LDH: attività della lattico deidrogenasi, ultimo enzima del pathway della glicolisi anaerobia (antagonista della fosforilazione ossidativa che noi valutiamo tramite i consumo d'ossigeno e la sintesi di ATP).
 
 \begin{displayquote}
-	\textit{In this chapter, we evaluate the changes of energy metabolism during the physiological aging. To this aim we will develop a ML model that predicts the age of an individual starting from the following molecular biomarkers: oxidative phosphorylation efficiency, the \ac{ATP}/\ac{AMP} ratio, the lactate dehydrogenase activity and the level of malondialdehyde.  For this purpose we employed mononuclear cells obtained from healthy population with age between $5$ and $106$ years.}
+	\textit{In this chapter, we evaluate the changes of energy metabolism during the physiological aging. To this aim we will develop a ML model that predicts the age of an individual starting from the following molecular biomarkers: oxidative phosphorylation efficiency, the \ac{ATP}/\ac{AMP} ratio, the lactate dehydrogenase activity and the level of malondialdehyde.  For this purpose we employed mononuclear cells obtained from healthy population with age between $5$ and $106$ years.} \todo{rewrite the abstract}
 \end{displayquote}
 
 \section{Introduction: aging and metabolism} \label{sec:frassoni_intro}
 
-In this chapter we present the first biomedical data science problem of the thesis. The problem consists in analyzing a set of molecular biomarkers collected from $118$ volunteers with the final aim of devising a ML model capable of predicting the age of an individual\footnote{this was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}}. In order to achieve such model, extensive EDA  and thorough model selection will be performed.
-Before diving into the experimental setup, let's see some preliminary biological notions of how aging influences our metabolism.
+In this chapter we present the first biomedical data science challenge of the thesis.
+This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{this was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}}.
+This chapter describes the extensive EDA and the thorough model selection procedure which lead to the development of the final model.
+Before diving into the details of the experimental setup, let's see some preliminary biological notions of how aging influences our metabolism.
 
 Aging is a multifactorial process characterized by a progressive decline of physiological functions~\cite{campisi2013aging}, which leads to an increment of vulnerability and the relative risk of disease and death ~\cite{bratic2010mitochondrial}.
 
@@ -98,7 +100,7 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 % BOXPLOT - PCA - HEATMAP etc
 In this section we investigate on the relationship between the collected molecular biomarker and the age of the 118 healthy individuals involved in this study.
 
-The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, not each decade is equally represented. Ideally, we would have collected samples with uniformly distributed, but this was unfortunately not possible. Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step.
+The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, the decades are not equally represented. Ideally, we would have collected samples uniformly distributed, but this was unfortunately not possible. Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step.
 
 \begin{figure}[]
 	\centering
@@ -212,7 +214,7 @@ This is in line with the cellular need to increase the anaerobic metabolism that
 \end{figure}
 
 
-Let's now try to visualize the collected data in a scatterplot. In order to do that, we shall first reduce the dimensionality of the problem (as described in Section~\ref{sec:dimred}).
+Let's now try to visualize the collected data in a scatter plot. In order to do that, we shall first reduce the dimensionality of the problem (as described in Section~\ref{sec:dimred}).
 At first, we try to reduce the dimensionality of the problem via linear PCA.
 
 \section{Metabolic age prediction} \label{sec:frassoni_regression}
