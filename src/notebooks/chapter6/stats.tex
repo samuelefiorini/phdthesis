@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+
+\begin{table}
+\begin{tabular}{lllll}
+\toprule
+{} & p-value MAE & p-value MSE & p-value EV & p-value R2 \\
+\midrule
+Ridge              &    $4.44\cdot 10^{-14}$ &    $6.22\cdot 10^{-03}$ &   $5.06\cdot 10^{-03}$ &   $6.22\cdot 10^{-03}$ \\
+Lasso              &    $1.09\cdot 10^{-28}$ &    $3.39\cdot 10^{-12}$ &   $8.49\cdot 10^{-12}$ &   $3.27\cdot 10^{-11}$ \\
+Elastic-Net        &    $1.76\cdot 10^{-22}$ &    $9.92\cdot 10^{-10}$ &   $9.92\cdot 10^{-10}$ &   $4.96\cdot 10^{-09}$ \\
+Linear SVM         &    $6.20\cdot 10^{-26}$ &    $5.07\cdot 10^{-11}$ &   $4.33\cdot 10^{-10}$ &   $2.84\cdot 10^{-10}$ \\
+RBF SVM            &    $4.65\cdot 10^{-01}$ &    $9.54\cdot 10^{-02}$ &   $1.96\cdot 10^{-02}$ &   $8.29\cdot 10^{-02}$ \\
+RBF Kernel Ridge   &    $3.28\cdot 10^{-02}$ &    $1.80\cdot 10^{-01}$ &   $2.75\cdot 10^{-01}$ &   $2.75\cdot 10^{-01}$ \\
+Random Forests     &    $2.75\cdot 10^{-01}$ &    $3.01\cdot 10^{-01}$ &   $3.28\cdot 10^{-01}$ &   $3.81\cdot 10^{-01}$ \\
+Gradient Boosting  &    $1.60\cdot 10^{-01}$ &    $7.18\cdot 10^{-02}$ &   $1.25\cdot 10^{-01}$ &   $7.18\cdot 10^{-02}$ \\
+MLP                &    $1.95\cdot 10^{-13}$ &    $2.33\cdot 10^{-08}$ &   $8.31\cdot 10^{-07}$ &   $8.31\cdot 10^{-07}$ \\
+\bottomrule
+\end{tabular}
+\caption{One-tailed p-value resulting from the two-sample Kolmogorov-Smirnov test. The bold values indicates the methods that benefit from the polynomial expansion with a confidence level of $0.01$.}
+\end{table}
+
+
+
+
+
+
+% linear\_regression &   2.25\cdot 10^{-221 &   2.25\cdot 10^{-221 &  2.25\cdot 10^{-221 &  2.25\cdot 10^{-221 \\

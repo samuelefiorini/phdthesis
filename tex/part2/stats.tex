@@ -1,0 +1,27 @@
+% !TEX root = ../main.tex
+
+\begin{table}
+\begin{tabular}{lllll}
+\toprule
+{} & p-value MAE & p-value MSE & p-value EV & p-value R2 \\
+\midrule
+Ridge              &    \cellcolor{green!25}$4.44\cdot 10^{-14}$ &    \cellcolor{green!25}$6.22\cdot 10^{-03}$ &   \cellcolor{green!25}$5.06\cdot 10^{-03}$ &   \cellcolor{green!25}$6.22\cdot 10^{-03}$ \\
+Lasso              &    \cellcolor{green!25}$1.09\cdot 10^{-28}$ &    \cellcolor{green!25}$3.39\cdot 10^{-12}$ &   \cellcolor{green!25}$8.49\cdot 10^{-12}$ &   \cellcolor{green!25}$3.27\cdot 10^{-11}$ \\
+Elastic-Net        &    \cellcolor{green!25}$1.76\cdot 10^{-22}$ &    \cellcolor{green!25}$9.92\cdot 10^{-10}$ &   \cellcolor{green!25}$9.92\cdot 10^{-10}$ &   \cellcolor{green!25}$4.96\cdot 10^{-09}$ \\
+Linear SVM         &    \cellcolor{green!25}$6.20\cdot 10^{-26}$ &    \cellcolor{green!25}$5.07\cdot 10^{-11}$ &   \cellcolor{green!25}$4.33\cdot 10^{-10}$ &   \cellcolor{green!25}$2.84\cdot 10^{-10}$ \\
+RBF SVM            &    \cellcolor{red!25}$4.65\cdot 10^{-01}$ &    \cellcolor{red!25}$9.54\cdot 10^{-02}$ &   \cellcolor{red!25}$1.96\cdot 10^{-02}$ &   \cellcolor{red!25}$8.29\cdot 10^{-02}$ \\
+RBF Kernel Ridge   &    \cellcolor{red!25}$3.28\cdot 10^{-02}$ &    \cellcolor{red!25}$1.80\cdot 10^{-01}$ &   \cellcolor{red!25}$2.75\cdot 10^{-01}$ &   \cellcolor{red!25}$2.75\cdot 10^{-01}$ \\
+Random Forests     &    \cellcolor{red!25}$2.75\cdot 10^{-01}$ &    \cellcolor{red!25}$3.01\cdot 10^{-01}$ &   \cellcolor{red!25}$3.28\cdot 10^{-01}$ &   \cellcolor{red!25}$3.81\cdot 10^{-01}$ \\
+Gradient Boosting  &    \cellcolor{red!25}$1.60\cdot 10^{-01}$ &    \cellcolor{red!25}$7.18\cdot 10^{-02}$ &   \cellcolor{red!25}$1.25\cdot 10^{-01}$ &   \cellcolor{red!25}$7.18\cdot 10^{-02}$ \\
+MLP                &    \cellcolor{green!25}$1.95\cdot 10^{-13}$ &    \cellcolor{green!25}$2.33\cdot 10^{-08}$ &   \cellcolor{green!25}$8.31\cdot 10^{-07}$ &   \cellcolor{green!25}$8.31\cdot 10^{-07}$ \\
+\bottomrule
+\end{tabular}
+\caption{One-tailed p-value resulting from the two-sample Kolmogorov-Smirnov test used to investigate whether or not these ML methods perform better after a second degree polynomial expansion. The green cells indicate the cases that benefit from the polynomial expansion (p-value $< 0.01$).}
+\end{table}
+
+
+
+
+
+
+% linear\_regression &   2.25\cdot 10^{-221 &   2.25\cdot 10^{-221 &  2.25\cdot 10^{-221 &  2.25\cdot 10^{-221 \\

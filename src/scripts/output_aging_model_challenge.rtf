@@ -1,0 +1,164 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf100
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\csgray\c0;\csgray\c100000;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \cb3 \CocoaLigature0 --------------------------------------                                                                   \uc0\u9474 \
+The aging problem model challenge                                                                        \uc0\u9474 \
+--------------------------------------                                                                   \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+- Raw data loaded.                                                                                       \uc0\u9474 \
+- 118 samples / 12 features.                                                                             \uc0\u9474 \
+- 10 pipelines created                                                                                   \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+----- POLYNOMIAL FEATURES ON -----                                                                       \uc0\u9474 \
+Imputing row 1/118 with 0 missing, elapsed time: 0.008                                                   \uc0\u9474 \
+Imputing row 101/118 with 0 missing, elapsed time: 0.023                                                 \uc0\u9474 \
+- preprocessing done.                                                                                    \uc0\u9474 \
+- 118 samples / 91 features.                                                                             \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting kernel_ridge...                                                                                  \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed: 68.2min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 171.8min                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 211.9min finished                                  \uc0\u9474 \
+- scores_poly.pkl dumped now 115K                                                                        \uc0\u9474 \
+Done in 4.0274e+05 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting ridge...                                                                                         \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  2.5min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  6.4min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  7.9min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 229K                                                                        \uc0\u9474 \
+Done in 1.4852e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting linear_regression...                                                                             \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 197 tasks      | elapsed:   12.1s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 447 tasks      | elapsed:   30.7s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   34.7s finished\
+Fitting linear_svr...                                                                                    \uc0\u9474 \'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:   47.4s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  2.1min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  2.6min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 468K                                                                        \uc0\u9474 \
+Done in 4887.2 sec.                                                                                      \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting random_forests...                                                                                \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  5.3min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 13.7min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 16.8min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 581K                                                                        \uc0\u9474 \
+Done in 3.1417e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting mlp...                                                                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed: 792.8min                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 2116.2min                                          \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 2646.8min finished                                 \uc0\u9474 \
+- scores_poly.pkl dumped now 696K                                                                        \uc0\u9474 \
+Done in 5.0378e+06 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting rbf_svr...                                                                                       \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  2.2min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  5.7min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  6.9min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 810K                                                                        \uc0\u9474 \
+Done in 1.3061e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting elasticnet...                                                                                    \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  3.5min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  9.1min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 11.1min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 924K                                                                        \uc0\u9474 \
+Done in 2.0897e+04 sec.\
+\
+Fitting gradient_boosting...                                                                             \uc0\u9474 \'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed: 18.0min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 46.7min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 57.0min finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 1M                                                                          \uc0\u9474 \
+Done in 1.0739e+05 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting lasso...                                                                                         \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:    7.0s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:   17.7s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   21.9s finished                                   \uc0\u9474 \
+- scores_poly.pkl dumped now 1M                                                                          \uc0\u9474 \
+Done in 673.47 sec.                                                                                      \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+----- POLYNOMIAL FEATURES OFF -----                                                                      \uc0\u9474 \
+Imputing row 1/118 with 0 missing, elapsed time: 0.006                                                   \uc0\u9474 \
+Imputing row 101/118 with 0 missing, elapsed time: 0.007                                                 \uc0\u9474 \
+- preprocessing done.                                                                                    \uc0\u9474 \
+- 118 samples / 12 features.                                                                             \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting kernel_ridge...                                                                                  \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed: 66.8min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 174.0min                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 217.9min finished                                  \uc0\u9474 \
+- scores_.pkl dumped now 115K                                                                            \uc0\u9474 \
+Done in 4.1493e+05 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting ridge...                                                                                         \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  2.3min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  5.8min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  7.3min finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 228K                                                                            \uc0\u9474 \
+Done in 1.3786e+04 sec.\
+\
+Fitting linear_regression...                                                                             \uc0\u9474 \'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\'b7\
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:   10.9s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:   27.9s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   31.9s finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 343K                                                                            \uc0\u9474 \
+Done in 299.99 sec.                                                                                      \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting linear_svr...                                                                                    \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:   12.3s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:   32.3s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   42.7s finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 458K                                                                            \uc0\u9474 \
+Done in 1267.8 sec.                                                                                      \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting random_forests...                                                                                \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  5.3min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 13.7min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 16.7min finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 571K                                                                            \uc0\u9474 \
+Done in 3.1275e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting mlp...                                                                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed: 390.7min                                           \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 1043.9min                                          \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 1270.6min finished                                 \uc0\u9474 \
+- scores_.pkl dumped now 684K                                                                            \uc0\u9474 \
+Done in 2.4056e+06 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting rbf_svr...                                                                                       \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  1.9min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  5.0min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  6.1min finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 798K                                                                            \uc0\u9474 \
+Done in 1.1594e+04 sec.\
+\
+Fitting elasticnet...                                                                                    \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  1.9min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:  4.8min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:  5.9min finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 911K                                                                            \uc0\u9474 \
+Done in 1.1109e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting gradient_boosting...                                                                             \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:  5.4min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed: 14.0min                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed: 17.1min finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 1M                                                                              \uc0\u9474 \
+Done in 3.2316e+04 sec.                                                                                  \uc0\u9474 \
+                                                                                                         \uc0\u9474 \
+Fitting lasso...                                                                                         \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 136 tasks      | elapsed:    3.9s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 386 tasks      | elapsed:   10.0s                                            \uc0\u9474 \
+[Parallel(n_jobs=-1)]: Done 500 out of 500 | elapsed:   12.4s finished                                   \uc0\u9474 \
+- scores_.pkl dumped now 1M                                                                              \uc0\u9474 \
+Done in 378.15 sec.           }
