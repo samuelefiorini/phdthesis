@@ -6,6 +6,9 @@
 ## Notebooks checkpoints
 **/*.ipynb_checkpoints
 
+## 
+*.pyc
+
 ## OSX meaningless files
 **/*.DS_Store
 

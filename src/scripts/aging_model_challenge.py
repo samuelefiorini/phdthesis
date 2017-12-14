@@ -4,11 +4,11 @@
 from __future__ import print_function
 
 import os
-import time
 import warnings
 
-import distributed.joblib
-from joblib import Parallel, parallel_backend
+import distributed.joblib # maybe useless
+from joblib import Parallel # maybe useless
+from joblib import parallel_backend # the only one actually relevant
 
 import cPickle as pkl
 import numpy as np
