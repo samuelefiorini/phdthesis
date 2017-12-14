@@ -175,7 +175,6 @@ def main():
                                         cv=ShuffleSplit(n_splits=500, test_size=.25),
                                         n_jobs=-1, verbose=1)
 
-
                 scores_dump[pipe] =  scores # save results
                 dump(scores_dump, 'scores_'+tail+'.pkl')
                 print('Done in {:3.5} sec.\n'.format(np.sum(scores['fit_time'])))
