@@ -79,7 +79,7 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 	\begin{tabular}{@{}ll@{}}
 		\toprule
 		\textbf{Measure}                                    & \textbf{Feature name}\\ \midrule
-		Gender of the individual                      & sex          \\
+		Gender of the individual                      & gender          \\
 		ATP intracellular concentration            & \atp         \\
 		AMP intracellular concentration            & \amp         \\
 		ATP/AMP ratio                              & \atpamp      \\
@@ -101,7 +101,8 @@ In this section we investigate on the relationship between the collected molecul
 Unfortunately, $7$ subjects presented missing values (in the features \ldh and sex). These subjects were excluded from EDA.
 
 
-The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, the decades of age are not equally represented. Ideally, we would have collected samples uniformly distributed with respect to their age, but this was unfortunately not possible. Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step \todo{false so far}.
+The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, the decades of age are not equally represented. Ideally, we would have collected samples uniformly distributed with respect to their age, but this was unfortunately not possible.
+%Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step \todo{false so far}.
 
 \begin{figure}[]
 	\centering
@@ -240,12 +241,14 @@ This section presents the development of the regression model for the age predic
 
 To this aim, we imputed the small fraction of missing values following the $k$-nearest neighbors (with $k=3$) proposed in~\cite{troyanskaya2001missing}. So, the development of the predictive model can take advantage of the total number of individuals ($n=118$).
 
-In the EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that most of the input variables have a strong linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
+In the EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that most of the input variables have a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
 To this aim, we devised the following experimental setting.
 
-A cross-validated estimate of four popular regression scores: $\text{R}^2$, MAE, MSE and EV (all these measured are defined in Section~\ref{sec:performance_metrics}) is evaluated.
-In order to achieve a better estimate of the empirical distribution of such scores, we opted for a Monte Carlo cross-validation strategy \todo{should have been stratified -> correggere}.
+A cross-validated estimate of four popular regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated.
+In order to achieve a better estimate of the empirical distribution of such scores, we opted for a Monte Carlo cross-validation strategy.
+%\todo{should have been stratified -> correggere}.
 This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples on which a supervised learning pipeline is fitted.
+%\todo{As not each age decade is equally represented, see Figure~\ref{fig:frassoni_agehist}, we opted for a cross-validation strategy that is stratified with respect to the decades. So, in each random extraction, the same proportion of samples}
 The five regression scores are then evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
 The adopted supervised pipeline has two steps:
 \begin{enumerate*}[label=(\roman*)]
