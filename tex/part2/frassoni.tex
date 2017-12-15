@@ -270,8 +270,12 @@ Moreover, for the second step of the pipeline we adopted the following regressio
 \end{enumerate*}
 The free parameter of each model, see Section~\ref{subsec:supervised_learning}, are optimized via grid search $5$-fold cross-validation scheme.
 
-We ran this entire procedure twice, with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
+This procedure is evaluated two times: with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
+Then, for each model and for each metric, we evaluated the p-value obtained from the one-tailed two-sample Kolmogorov–Smirnov test~\cite{everitt2002cambridge}. This allows to understand in which cases the scores obtained after a polynomial expansion are significantly better than their counterpart obtained only with the linear features.
 
+Our goal here is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
+So, we ranked the variables casting the top-performing model of the previous experiment in the so-called \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio}.
+In this
 
 
 \section{Results} \label{sec:frassoni_results}
