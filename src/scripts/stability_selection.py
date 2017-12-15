@@ -24,6 +24,7 @@ from aging_model_challenge import load_raw_data
 from aging_model_challenge import preprocess
 from aging_model_challenge import dump
 
+
 def evaluate(estimator, X, y):
     """Compute the selected metrics on the input (test) set."""
     y_pred = estimator.predict(X)
@@ -67,6 +68,7 @@ def main():
 
     # 2. Preprocess raw data
     data = preprocess(raw_data, poly_feat=True)
+    data = data.drop('gender^2', axis=1) # drop nonsense feature
 
     # 3. Define the cross-validated pipeline
     pipe = Pipeline([['preproc', StandardScaler()],

@@ -61,6 +61,7 @@ def preprocess(dfx, poly_feat=False):
 
     return dfx
 
+
 def create_pipelines():
     """Create all the models organized in a dictionary."""
 
@@ -152,32 +153,32 @@ def main():
     # 3. Perform the model challenge twice, one for linear
     # and the other for polynomial features
     cross_val_scores = ('r2', 'mean_absolute_error', 'explained_variance', 'mean_squared_error')
-    with parallel_backend('dask.distributed', scheduler_host='megazord:8786'):
+    # with parallel_backend('dask.distributed', scheduler_host='megazord:8786'):
 
-        for toggle_poly_feat in [True, False]:
-            print('\n----- POLYNOMIAL FEATURES {} -----'.format('ON' if toggle_poly_feat else 'OFF'))
+    for toggle_poly_feat in [True, False]:
+        print('\n----- POLYNOMIAL FEATURES {} -----'.format('ON' if toggle_poly_feat else 'OFF'))
 
-            # 3.1 Preprocess data
-            data = preprocess(raw_data, poly_feat=toggle_poly_feat)
-            print('- preprocessing done.')
-            print('- {} samples / {} features.\n'.format(*data.shape))
+        # 3.1 Preprocess data
+        data = preprocess(raw_data, poly_feat=toggle_poly_feat)
+        print('- preprocessing done.')
+        print('- {} samples / {} features.\n'.format(*data.shape))
 
-             # use a different name for the two versions of the dataset
-            tail = 'poly' if toggle_poly_feat else ''
+         # use a different name for the two versions of the dataset
+        tail = 'poly' if toggle_poly_feat else ''
 
-            # Individually evaluate the performance of each pipeline
-            scores_dump = {}
-            for pipe in pipes.keys():
-                print('Fitting {}...'.format(pipe))
-                scores = cross_validate(estimator=pipes[pipe],
-                                        X=data.values, y=labels.values.ravel(),
-                                        scoring=cross_val_scores,
-                                        cv=ShuffleSplit(n_splits=500, test_size=.25),
-                                        n_jobs=-1, verbose=1)
+        # Individually evaluate the performance of each pipeline
+        scores_dump = {}
+        for pipe in pipes.keys():
+            print('Fitting {}...'.format(pipe))
+            scores = cross_validate(estimator=pipes[pipe],
+                                    X=data.values, y=labels.values.ravel(),
+                                    scoring=cross_val_scores,
+                                    cv=ShuffleSplit(n_splits=500, test_size=.25),
+                                    n_jobs=-1, verbose=1)
 
-                scores_dump[pipe] =  scores # save results
-                dump(scores_dump, 'scores_'+tail+'.pkl')
-                print('Done in {:3.5} sec.\n'.format(np.sum(scores['fit_time'])))
+            scores_dump[pipe] =  scores # save results
+            dump(scores_dump, 'scores_'+tail+'.pkl')
+            print('Done in {:3.5} sec.\n'.format(np.sum(scores['fit_time'])))
 
 
 ################################################################################
