@@ -241,16 +241,18 @@ This section presents the development of the regression model for the age predic
 
 To this aim, we imputed the small fraction of missing values following the $k$-nearest neighbors (with $k=3$) proposed in~\cite{troyanskaya2001missing}. So, the development of the predictive model can take advantage of the total number of individuals ($n=118$).
 
-In the EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that most of the input variables have a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
-To this aim, we devised the following experimental setting.
+In EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that many molecular biomarkers present a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
+To this aim, we devised the following experimental design.
 
-A cross-validated estimate of four popular regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated.
-In order to achieve a better estimate of the empirical distribution of such scores, we opted for a Monte Carlo cross-validation strategy.
+\todo{++ learning curves ++}
+
+A cross-validated estimate of four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated.
+In order to achieve a reliable estimate of their empirical distribution, we opted for a Monte Carlo cross-validation strategy.
 %\todo{should have been stratified -> correggere}.
-This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples on which a supervised learning pipeline is fitted.
+This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times. On each obtained training set a supervised learning model is fitted. In our experiments, we ran a total of $500$ Monte Carlo resampling.
 %\todo{As not each age decade is equally represented, see Figure~\ref{fig:frassoni_agehist}, we opted for a cross-validation strategy that is stratified with respect to the decades. So, in each random extraction, the same proportion of samples}
-The five regression scores are then evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
-The adopted supervised pipeline has two steps:
+Once the model is fitted, the five regression scores are then evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
+The adopted supervised model consists in a pipeline having two steps:
 \begin{enumerate*}[label=(\roman*)]
 	\item data standardization and
 	\item regression model fitting.
@@ -271,12 +273,12 @@ Moreover, for the second step of the pipeline we adopted the following regressio
 The free parameter of each model, see Section~\ref{subsec:supervised_learning}, are optimized via grid search $5$-fold cross-validation scheme.
 
 This procedure is evaluated two times: with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
-Then, for each model and for each metric, we evaluated the p-value obtained from the one-tailed two-sample Kolmogorov–Smirnov test~\cite{everitt2002cambridge}. This allows to understand in which cases the scores obtained after a polynomial expansion are significantly better than their counterpart obtained only with the linear features.
+Then, for each model and for each metric, we evaluated the p-value obtained from the one-tailed two-sample Kolmogorov–Smirnov test~\cite{everitt2002cambridge}. This let us understand in which cases the scores obtained after a polynomial expansion are significantly better than their counterpart, obtained only with  linear features.
 
-Our goal here is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
-So, we ranked the variables casting the top-performing model of the previous experiment in the so-called \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio}.
-In this
+The final goal of this section is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
+So, as a side result of the previous analysis, we ranked the features according to their selection frequency. The most important features are more likely to be selected more often. This strategy is known in literature as  \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio} and, for our purposes, it let us get a preview of which features will appear in the final model.
 
+Finally, the best age predicting model is achieved by fitting the best regression strategy on the whole training set.
 
 \section{Results} \label{sec:frassoni_results}
 % tabella dei risultati
