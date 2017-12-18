@@ -241,15 +241,23 @@ This section presents the development of the regression model for the age predic
 
 To this aim, we imputed the small fraction of missing values following the $k$-nearest neighbors (with $k=3$) proposed in~\cite{troyanskaya2001missing}. So, the development of the predictive model can take advantage of the total number of individuals ($n=118$).
 
+The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate in this direction by evaluating the so-called \textit{learning curves}. Such graphical representation is obtained by iteratively fitting a given regression model on increasingly large chunks of the entire dataset.
+Horizontal axis corresponds to the number of training samples, while vertical axis represents mean values of some cross-validated regression metric (such as MAE).
+The shape of the obtained learning curve tells a lot about the prediction problem at hand. For instance, if the cross-validation error keeps decreasing we may sense that there may be (much) \textit{more} to learn about the input/output relationship. In this case, the regression performance would benefit from a larger dataset. Conversely, if the cross-validation error initially decreases eventually reaching a plateau it may be that the number of samples is large enough and collecting more data would only marginally improve the prediction performance. This may happen mainly because:
+\begin{enumerate*}[label=(\roman*)]
+	\item the available feature set only partially explains the input/output relationship and more/better variables should be observed to improve the regression performance, or
+	\item the selected model is incapable of capturing some of the input/output relationship already hidden in the data.
+\end{enumerate*}
+Learning curves plot gives also information on the amount of bias and variance affecting a given predictive model.
+Four our purpose, we rely on the use of standard Ridge regression model (see Section~\ref{sec:ridge_regression}) and 100-splits Monte Carlo cross-validated MAE to evaluate each point of our learning curves (see Section~\ref{sec:frassoni_results}).
+
 In EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that many molecular biomarkers present a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
 To this aim, we devised the following experimental design.
-
-\todo{++ learning curves ++}
 
 A cross-validated estimate of four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated.
 In order to achieve a reliable estimate of their empirical distribution, we opted for a Monte Carlo cross-validation strategy.
 %\todo{should have been stratified -> correggere}.
-This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times. On each obtained training set a supervised learning model is fitted. In our experiments, we ran a total of $500$ Monte Carlo resampling.
+This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{the fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}}. On each obtained training set a supervised learning model is fitted. In our experiments, we ran a total of $500$ Monte Carlo resampling.
 %\todo{As not each age decade is equally represented, see Figure~\ref{fig:frassoni_agehist}, we opted for a cross-validation strategy that is stratified with respect to the decades. So, in each random extraction, the same proportion of samples}
 Once the model is fitted, the five regression scores are then evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
 The adopted supervised model consists in a pipeline having two steps:
@@ -278,7 +286,7 @@ Then, for each model and for each metric, we evaluated the p-value obtained from
 The final goal of this section is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
 So, as a side result of the previous analysis, we ranked the features according to their selection frequency. The most important features are more likely to be selected more often. This strategy is known in literature as  \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio} and, for our purposes, it let us get a preview of which features will appear in the final model.
 
-Finally, the best age predicting model is achieved by fitting the best regression strategy on the whole training set.
+Finally, the proposed age predicting model is achieved by fitting the best regression strategy on a training set obtained by randomly extracting $75\%$ of the whole dataset. This model is eventually tested, by the usual metrics, on the remaining $25\%$. We expect to achieve regression metrics in line with the previous experiments.
 
 \section{Results} \label{sec:frassoni_results}
 % tabella dei risultati
@@ -288,10 +296,21 @@ Finally, the best age predicting model is achieved by fitting the best regressio
 
 \begin{figure}[]
 	\centering
+	\includegraphics[width=0.8\textwidth]{part2/aging_learning_curve_linfeat}
+	\caption{Learning curves} \label{fig:frassoni_learning_curves}
+\end{figure}
+
+
+\begin{figure}[]
+	\centering
 	\includegraphics[width=0.8\textwidth]{part2/aging_topfeatures.png}
 	\caption{The top features ... lasso ... stability selection.} \label{fig:frassoni_topfeat}
 \end{figure}
 
+%test MAE 5.904
+%test MSE 78.075
+%test R2 0.873
+%test EV 0.879
 
 \begin{figure}[]
 	\centering
