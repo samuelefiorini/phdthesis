@@ -13,13 +13,13 @@
 %- LDH: attività della lattico deidrogenasi, ultimo enzima del pathway della glicolisi anaerobia (antagonista della fosforilazione ossidativa che noi valutiamo tramite i consumo d'ossigeno e la sintesi di ATP).
 
 \begin{displayquote}
-	\textit{In this chapter, we evaluate the changes of energy metabolism during the physiological aging. To this aim we will develop a ML model that predicts the age of an individual starting from the following molecular biomarkers: oxidative phosphorylation efficiency, the \ac{ATP}/\ac{AMP} ratio, the lactate dehydrogenase activity and the level of malondialdehyde.  For this purpose we employed mononuclear cells obtained from healthy population with age between $5$ and $106$ years.} \todo{rewrite the abstract}
+	\textit{In this chapter, we evaluate the changes of energy metabolism during the physiological aging. To this aim we measure a set of molecular biomarkers from peripheral blood mononuclear cells obtained from healthy volunteers with age between $5$ and $106$ years. Such biomarkers aim at quantifying oxidative phosphorylation efficiency, \atpamp ratio, lactate dehydrogenase activity and level of malondialdehyde. After a thorough preliminary data exploration, we develop a regression model that, starting from such measures, is capable of predicting the age of an individual.}
 \end{displayquote}
 
 \section{Introduction: aging and metabolism} \label{sec:frassoni_intro}
 
 In this chapter we present the first biomedical data science challenge of the thesis.
-This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{this was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}}.
+This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{this was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}.}.
 This chapter describes the extensive EDA and the thorough model selection procedure which lead to the development of the final model.
 Before diving into the details of the experimental setup, let's see some preliminary biological notions of how aging influences our metabolism.
 
@@ -27,7 +27,8 @@ Aging is a multifactorial process characterized by a progressive decline of phys
 
 Aging represents the primary risk factor for several chronic pathologies, such as cancer, cardiovascular disorders, diabetes and neurodegeneration~\cite{lopez2013hallmarks}. Different molecular pathways seem involved in the aging process, including deregulated autophagy, mitochondrial dysfunction, telomere shortening, oxidative stress, systemic inflammation and metabolism dysfunction~\cite{lopez2013hallmarks, riera2016signaling}.
 
-Recently, an involvement of epigenetic modifications has been proposed~\cite{thompson2017epigenetic}, developing an \textit{aging clock} based on the degree of DNA methylation, which increases with the age~\cite{horvath2013dna}. However, for several years, aging has been considered the result of damages accumulation due to an excessive production of reactive oxygen species.
+For several years, aging has been considered the result of damages accumulation due to an excessive production of reactive oxygen species.
+Recently,  \cite{thompson2017epigenetic} proposed an involvement of epigenetic modifications. This led to the development of an \textit{aging clock} based on the degree of DNA methylation, which increases with age~\cite{horvath2013dna}. 
 
 The \textit{Mitochondrial Theory of Aging}~\cite{harman1972biologic, sastre2000mitochondrial} derives from the  concept that mitochondria are the main source of oxidative stress~\cite{cadenas2000mitochondrial, turrens2003mitochondrial, dai2014mitochondrial} and the fact that mitochondrial DNA displays a
 great rate of mutation together with a less efficient repair machinery with respect to nuclear DNA~\cite{short2005decline}. After some mitochondrial DNA mutation threshold, irreversible oxidative damages propagate throughout the genome. This phenomenon leads to dysfunction of mitochondrial metabolism~\cite{genova2004mitochondrial} accelerating the oxidative stress production~\cite{wallace2010mitochondrial}.
@@ -43,18 +44,18 @@ All chemicals were purchased from Sigma Aldrich (St. Louis, MO, USA) and Ultrapu
 Data collection and further analysis were managed by a team of specialized biologists at the IRCCS Istituto G. Gaslini, Genoa, IT. The following quantities were measured, on each blood sample.
 
 \begin{itemize}
-	\item[] \textbf{ATP} This complex molecule is the main responsible for storing and exchanging energy in cells and it is often referred to as the \textit{energy currency} of the cell. From a chemical point of view, ATP is made of an adenine base attached to a ribose sugar, which, in turn, is attached to three phosphate groups.
-	ATP is heavily involved in the cellular aerobic respiration pathway. High levels of ATP correspond to high energetic state.
-	ATP intracellular concentration, measured in $\text{mM}/\text{ml}$, is an important molecular biomarker to evaluate the energetic state of a cell.
+	\item[] \textbf{ATP} This complex molecule is the main responsible for storing and exchanging energy in cells and it is often referred to as the \textit{energy currency} of the cell. From a chemical point of view, \ATP is made of an adenine base attached to a ribose sugar, which, in turn, is attached to three phosphate groups.
+	\ATP is heavily involved in the cellular aerobic respiration pathway. High levels of \ATP correspond to high energetic state.
+	\ATP intracellular concentration, measured in $\text{mM}/\text{ml}$, is an important molecular biomarker to evaluate the energetic state of a cell.
 	
-	\item[] \textbf{AMP} This molecule is one of the main derivatives of ATP. In fact, AMP ca be obtained when two phosphate groups are removed from ATP, releasing energy that can be transferred to other molecules to trigger further cell reactions.
-	So, when a cell is in good health, \ie high energetic level, AMP is low and ATP is high.
-	AMP intracellular concentration is measured in $\text{mM}/\text{ml}$ and it is considered as an important molecular biomarker for the cellular energetic state. ATP and AMP quantification was based on the enzyme coupling method presented in~\cite{ravera2013tricarboxylic}.
+	\item[] \textbf{AMP} This molecule is one of the main derivatives of \ATP. In fact, \AMP ca be obtained when two phosphate groups are removed from \ATP, releasing energy that can be transferred to other molecules to trigger further cell reactions.
+	So, when a cell is in good health, \ie high energetic level, \AMP is low and \ATP is high.
+	\AMP intracellular concentration is measured in $\text{mM}/\text{ml}$ and it is considered as an important molecular biomarker for the cellular energetic state. \ATP and \AMP quantification was based on the enzyme coupling method presented in~\cite{ravera2013tricarboxylic}.
 %	as a side product of the ATP synthesis process or 
 	
-	\item[] \textbf{ATP/AMP ratio} Measuring ATP and AMP cellular concentration may not be enough to predict the age of an individual by assessing the energetic state of the peripheral blood cells. A more representative and interesting quantity can be their ratio, so ATP/AMP ratio was calculated and added to the feature set.
+	\item[] \textbf{ATP/AMP ratio} Measuring \ATP and \AMP cellular concentration may not be enough to predict the age of an individual by assessing the energetic state of the peripheral blood cells. A more representative and interesting quantity can be their ratio, so \atpamp ratio was calculated and added to the feature set.
 	
-	\item[] \textbf{Oxygen consumption} Aerobic cellular respiration requires oxygen to produce ATP. Therefore, the cellular oximetric level is an important molecular biomarker for the metabolic assessment. Oxygen consumption was measured with an amperometric electrode in a closed chamber, magnetically stirred, at 37°C. The oxygen consumption measure, expressed in $\text{nmol~O}_2/(\text{min}\cdot\text{mg})$, is repeated in two versions, adding two different substrates, \ie:
+	\item[] \textbf{Oxygen consumption} Aerobic cellular respiration requires oxygen to produce \ATP. Therefore, the cellular oximetric level is an important molecular biomarker for the metabolic assessment. Oxygen consumption was measured with an amperometric electrode in a closed chamber, magnetically stirred, at $37$°C. The oxygen consumption measure, expressed in $\text{nmol~O}_2/(\text{min}\cdot\text{mg})$, is repeated in two versions, adding two different substrates, \ie:
 	\begin{enumerate*}[label=(\roman*)]
 		\item a combination of $5~\text{mM}$ pyruvate with $2.5~\text{mM}$ malate or
 		\item only $20~\text{mM}$ succinate.
@@ -63,14 +64,15 @@ Data collection and further analysis were managed by a team of specialized biolo
 	
 	\item[] \textbf{ATP synthesis} We already covered the importance of ATP to evaluate the metabolic state of cells. So, we also measured ATP synthesis, expressed in $\text{nmol~ATP}/(\text{min}\cdot\text{mg})$,  by the highly sensitive luciferin/luciferase method. The same two substrates used for the oximetric evaluation were adopted. In the remainder of the chapter we refer to such measures as \atppyrmal and \atpsucc, accordingly.
 	
-	\item[] \textbf{P/O ratio} In order to assess the efficiency of oxidative phosphorylation, we also evaluated the ratio between ATP synthesis and oxygen consumption under both the substrates. We call the two obtained features as \popyrmal and \posucc, respectively.
+	\item[] \textbf{P/O ratio} In order to assess the efficiency of oxidative phosphorylation, we also evaluated the ratio between \ATP synthesis and oxygen consumption under both the substrates. We call the two obtained features as \popyrmal and \posucc, respectively.
 	
 	\item[] \textbf{Glycolytic flux} In order to assay the glycolytic flux, we measured the activity of the Lactate Dehydrogenase (\ac{LDH}), expressed in $\text{U}/\text{mg}$. This enzyme is important to evaluate the other metabolic pathway not mentioned so far, \ie the anaerobic respiration.
 	
 	\item[] \textbf{Lipid peroxidation} The uncoupled oxidative phosphorylation metabolism is often associated with an increment in the oxidative stress production~\cite{dai2014mitochondrial}, which induces damages on proteins, nucleic acid and membrane. Therefore, we evaluated the level of malondialdehyde (\ac{MDA}) as a marker of lipid peroxidation. The measure of \mda follows the protocol in~\cite{ravera2015oxidative}.
 \end{itemize}
 
-Each sample of this dataset is then described by the $12$-dimensional feature set summarized in Table~\ref{tab:aging_features}.
+The categorical feature \gender is encoded as $[0,1]$ for \textit{male} ad \textit{female}, respectively.
+Each example of this dataset is then described by the $12$-dimensional feature set summarized in Table~\ref{tab:aging_features}.
 
 \begin{table}[]
 	\centering
@@ -79,7 +81,7 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 	\begin{tabular}{@{}ll@{}}
 		\toprule
 		\textbf{Measure}                                    & \textbf{Feature name}\\ \midrule
-		Gender of the individual                      & gender          \\
+		Gender of the individual                      & \gender          \\
 		ATP intracellular concentration            & \atp         \\
 		AMP intracellular concentration            & \amp         \\
 		ATP/AMP ratio                              & \atpamp      \\
@@ -98,10 +100,10 @@ Each sample of this dataset is then described by the $12$-dimensional feature se
 \section{Exploratory data analysis} \label{sec:frassoni_EDA}
 % BOXPLOT - PCA - HEATMAP etc
 In this section we investigate on the relationship between the collected molecular biomarkers and the age of $118$ healthy individuals which volunteered to participate to this study.
-Unfortunately, $7$ subjects presented missing values (in the features \ldh and sex). These subjects were excluded from EDA.
+Unfortunately, $7$ subjects presented missing values (in the features \ldh and \gender). These subjects were excluded from EDA.
 
 
-The data collection process entirely ran on voluntary basis. So, it is interesting to investigate on the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, the decades of age are not equally represented. Ideally, we would have collected samples uniformly distributed with respect to their age, but this was unfortunately not possible.
+The data collection process entirely ran on voluntary basis. So, it is interesting to observe the resulting age distribution. As we can see from the histogram in Figure~\ref{fig:frassoni_agehist}, the decades of age are not equally represented. Ideally, we would have collected samples uniformly distributed with respect to their age, but this was unfortunately not possible. Therefore, in this data science challenge we shall adopt robust resampling schemes in order to ameliorate possible biases induced by this phenomenon.
 %Therefore, we shall provide appropriate countermeasures to avoid bias in the following supervised regression step \todo{false so far}.
 
 \begin{figure}[]
@@ -110,13 +112,15 @@ The data collection process entirely ran on voluntary basis. So, it is interesti
 	\caption{Age distribution of the $118$ individuals involved in the study.} \label{fig:frassoni_agehist}
 \end{figure}
 
-Next, we aim at investigating on how the distribution of the molecular biomarkers is influenced by the age of individuals. To this aim we group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
+Next, we aim at investigating on how the distribution of the molecular biomarkers is influenced by the age of individuals. To this aim we perform a preliminary univariate analysis. We group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
 As we can see, most of the biomarkers are clearly influenced by the age.
 Let's start the visual inspection focusing on the variables related to the mitochondrial aerobic metabolism (from Figure~\ref{fig:frassoni_boxplot_copyrmal} to \ref{fig:frassoni_boxplot_atpamp}).
+
 In particular, focusing our attention on the \atpamp ratio (Figure~\ref{fig:frassoni_boxplot_atpamp}), which is known to be an energy status monitor of the cells, we can see that the values decrease progressively with the decades, with a drastic drop between $40$ and $50$ years. Moreover, from an observation of \atp and \amp intracellular concentration (Figure~\ref{fig:frassoni_boxplot_atp} and Figure~\ref{fig:frassoni_boxplot_amp}, respectively) we can sense how the decrease of the \atpamp ratio is mainly due to the growth of \amp in the aging process.
 Similar considerations can be made for the efficiency of oxidative phosphorylation, evaluated by \popyrmal and \posucc. In particular, \popyrmal oscillates around its reference level of $2.5~\text{nmol~O}_2/(\text{min}\cdot\text{mg})$~\cite{hinkle2005p} in subjects having from $0$ to $30$ years starting to decrease afterwards. Moreover, \popyrmal, similarly to \atpamp, is fairly stable at its lowest level for elderly (age $\geq 70$).
-Let's now focus on the activity of LDH (Figure~\ref{fig:frassoni_boxplot_ldh}). As we can see, this metabolic biomarker almost monotonically increases with the aging process.
-This is mainly due to the fact that LDH is involved in the glycolysis metabolism, which is a metabolic pathway chosen by the cell to compensate its altered aerobic metabolism.
+
+Let's now focus on the activity of \LDH (Figure~\ref{fig:frassoni_boxplot_ldh}). As we can see, this metabolic biomarker almost monotonically increases with the aging process.
+This is mainly due to the fact that \LDH is involved in the glycolysis metabolism, which is a metabolic pathway chosen by the cell to compensate its altered aerobic metabolism.
 Finally, let's focus on the distributions of the \mda (Figure~\ref{fig:frassoni_boxplot_mda}). As expected, \mda has an opposite trend with respect to \atpamp and \popyrmal. In fact, it increases from $21$ to $80$ years. This can be due to the increased oxidative stress production induced by uncoupled oxidative phosphorylation~\cite{dai2014mitochondrial}.
 \mda is more stable for elderly, mainly because of their physiological metabolic slowdown.
 
@@ -177,10 +181,10 @@ Finally, let's focus on the distributions of the \mda (Figure~\ref{fig:frassoni_
 \end{figure}
 
 So far, we have investigated on the relationship between the collected measures and the age of the individuals. Let's now focus on the relationship between the variables themselves. In order to investigate on possible collinearities in the data, we evaluated the Pearson correlation coefficient
-\begin{equation}
+$$
 	\rho(a, b) = \frac{\sum_{i=1}^n (a_i - \bar a)(b_i - \bar b)}{\sqrt{\sum_{i=1}^n(a_i-\bar a)^2 \sum_{i=1}^n(b_i-\bar b)^2}}
-\end{equation}
-(where $\bar c = \frac{1}{n}\sum_{i=1} c_i$ is the empirical mean of the variable $c$) for each pair of variables. This results in a symmetric $11 \times 11$ correlation matrix.
+$$
+(where $\bar c = \frac{1}{n}\sum_{i=1} c_i$ is the empirical mean of the variable $c$) for each pair of variables. This results in a symmetric $11 \times 11$ correlation matrix (we excluded from this analysis the categorical feature gender).
 %In order to evaluate a specific age fingerprint,
 We split the data in $5$ groups, one for each two-decades, and we represent the collinearity in each group with a symmetric heatmap in which dark red cells are associated with strong positive correlation, white cells represent no correlation and dark blue cells correspond to strong negative correlation, see Figure~\ref{fig:heatmaps}.
 Thanks to this visualization, we can see that \atpamp and \popyrmal have positive correlation until the $6^{\text{th}}$ decade, while showing a negative correlation for elderly.
@@ -217,16 +221,16 @@ This is in line with the cellular need to increase the anaerobic metabolism that
 
 
 Let's now try to visualize the collected data in a scatter plot. In order to do that, we shall first reduce the dimensionality of the problem, as described in Section~\ref{sec:dimred}.
-Most of the variables showed strong linear correlation between themselves and some of them also with respect to the age. We then reduce the dimensionality of the problem following a two step pipeline:
+In this EDA, most of the variables showed strong linear correlation between themselves and with the age. We then reduce the dimensionality of the problem following a two step pipeline:
 \begin{enumerate*}[label=(\roman*)]
 	\item data standardization followed by
-	\item via linear PCA.
+	\item linear PCA.
 \end{enumerate*}
-Our hope is to be able to recognize some, approximately linear, temporal structure. The resulting scatter plot is presented in Figure~\ref{fig:frassoni_PCA}.
+Our hope is to recognize some quasi-linear temporal structure. The resulting scatter plot is presented in Figure~\ref{fig:frassoni_PCA}.
 Each point in the scatter plot represents a subject color coded according to the age.
 Let's read the image from left to right.
 As we can see, it looks like the subjects are partially grouped according to their age. In the top left corner of Figure~\ref{fig:frassoni_PCA} subjects with approximately $20$ years (or less) are clustered together. At the center bottom of the plot we can recognize individuals around their thirties. Then, following an approximately linear law from center bottom to top right we can see that the age increases until reaching the elderly, color coded in dark red.
-The insightful data visualization in Figure~\ref{fig:frassoni_PCA}, gives us hopes to be able to devise a supervised strategy to predict the age of a given individual starting from these molecular biomarkers.
+The insightful data visualization in Figure~\ref{fig:frassoni_PCA}, lets us sense that it is possible to devise a supervised strategy to predict the age of a given individual from the collected molecular biomarkers.
 
 \begin{figure}[]
 	\centering
@@ -243,19 +247,19 @@ To this aim, we imputed the small fraction of missing values following the $k$-n
 
 The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate in this direction by evaluating the so-called \textit{learning curves}~\cite{murphy2012machine}. Such graphical representation is obtained by iteratively fitting a given regression model on increasingly large chunks of the entire dataset.
 Horizontal axis corresponds to the number of training samples, while vertical axis represents mean values of some cross-validated regression metric (such as MAE).
-The shape of the obtained learning curve tells a lot about the prediction problem at hand. For instance, if the cross-validation error keeps decreasing we may sense that there may be (much) \textit{more} to learn about the input/output relationship. In this case, the regression performance would benefit from a larger dataset. Conversely, if the cross-validation error initially decreases eventually reaching a plateau it may be that the number of samples is large enough and collecting more data would only marginally improve the prediction performance. This may happen mainly because:
+The shape of the obtained learning curve tells a lot about the prediction problem at hand. For instance, if the cross-validation error keeps decreasing we may sense that there may be \textit{more} to learn about the input/output relationship and that the regression performance would benefit from a larger dataset. Conversely, if the cross-validation error initially decreases eventually reaching a plateau it may be that the number of samples is large enough and collecting more data would only marginally improve the prediction performance. This may happen mainly because:
 \begin{enumerate*}[label=(\roman*)]
 	\item the available feature set only partially explains the input/output relationship and more/better variables should be observed to improve the regression performance,
 	\item the selected model is incapable of capturing some of the input/output relationship already hidden in the data or
-	\item variability (and the noise) of the data.
+	\item noise affecting the data.
 \end{enumerate*}
 Learning curves plot gives also information on the amount of bias and variance affecting a given predictive model.
 Four our purpose, we rely on the use of standard Ridge regression model (see Section~\ref{sec:ridge_regression}) and 100-splits Monte Carlo cross-validated MAE to evaluate each point of our learning curves (see Section~\ref{sec:frassoni_results}).
 
-In EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that many molecular biomarkers present a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
+In EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that many molecular biomarkers present a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion of degree $D$ could be beneficial for the age prediction.
 To this aim, we devised the following experimental design.
 
-A cross-validated estimate of the empirical distribution four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated on $500$ Monte Carlo random splits.
+A cross-validated estimate of the empirical distribution of four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated on $500$ Monte Carlo random splits.
 %\todo{should have been stratified -> correggere}.
 This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{the fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}}. On each obtained training set a supervised learning model is fitted.
 %In our experiments, we ran a total of $500$ Monte Carlo resampling.
@@ -279,13 +283,13 @@ Moreover, for the second step of the pipeline we adopted the following regressio
 	\item Gradient Boosting and
 	\item Multilayer Perceptron.
 \end{enumerate*}
-The free parameters of each model, see Section~\ref{subsec:supervised_learning}, are optimized via grid-search $5$-fold cross-validation.
+The free parameters of each model, including the degree of the polynomial expansion $D$, are optimized via grid-search $5$-fold cross-validation.
 
-This Monte Carlo cross-validated procedure is evaluated two times: with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
+This Monte Carlo cross-validated procedure is evaluated two times: with and without a preliminary polynomial feature expansion. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
 Then, for each model and for each metric, we evaluated the p-value obtained from the one-tailed two-sample Kolmogorov–Smirnov test~\cite{everitt2002cambridge}. This let us understand in which cases the scores obtained after a polynomial expansion are significantly better than their counterpart, obtained only with  linear features.
 
 The final goal of this section is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
-So, as a side result of the previous analysis, we ranked the features according to their selection frequency. The most important features are more likely to be selected more often. This strategy is known in literature as  \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio} and, for our purposes, it let us get a preview of which features will appear in the final model.
+So, as a side result of the previous analysis, we ranked the features according to their selection frequency. The most important features are more likely to be selected more often. This strategy is known in literature as  \textit{selection stability framework}~\cite{meinshausen2010stability, barbieri16palladio} and, for our purposes, it let us get a preview of which features will likely appear in the final model.
 
 Finally, the proposed age predicting model is achieved by fitting the best regression strategy on a training set obtained by randomly extracting $75\%$ of the whole dataset. This model is eventually tested, by the usual metrics, on the remaining $25\%$. We expect to achieve regression metrics in line with the previous experiments.
 
@@ -293,14 +297,14 @@ Finally, the proposed age predicting model is achieved by fitting the best regre
 % tabella dei risultati
 Figure~\ref{fig:frassoni_learning_curves} shows the obtained learning curves. Interestingly, the average cross-validation error (blue line), reaches a plateau around $\text{MAE} \approx 9$ years a little bit after $80$ samples. This suggests that adding more training examples would not significantly improve the predictions. This justifies the choice of dimensioning the Monte Carlo training sets as $75\%$ of the input data (see previous section).
 Moreover, we can see that the gap between training and cross-validation error becomes smaller as the number of sample increases. This suggests that the linear regression model is generalizing well. We can also notice that the training variance decreases from left to right. This suggests that, as expected, increasing the number of training examples induces a stabilization effect on the learned function.
-We repeated the learning curve experiment also after the degree $2$ polynomial feature expansion, see Figure~\ref{fig:frassoni_learning_curves_poly}. At a first glance, we can see two main differences:
+We repeated the learning curve experiment also after the degree $D=2$ polynomial feature expansion, see Figure~\ref{fig:frassoni_learning_curves_poly}. At a first glance, we can see two main differences:
 \begin{enumerate*}[label=(\roman*)]
 	\item at the right hand side of the plot, the cross-validation curve (blue line) is still, slowly, decreasing and it is not reaching a plateau,
 	\item the gap between training and cross-validation curves is wider.
 \end{enumerate*}
 Therefore, we suspect that increasing the number of collected sample would significantly improve the regression performance in this case.
 For consistency with the previous case, we opted to anyway randomly extract training sets of $75\%$ of the dataset after the polynomial expansion as well.
-What we describe here is a real-world case study and, at the time of writing, expanding the data collection is unfortunately not possible. Nevertheless, we strongly believe that it would be beneficial for the study, therefore we mark it as future work.
+What we describe here is a real-world case study and, at the time of writing, expanding the data collection is unfortunately not possible. Nevertheless, we strongly believe that it would be beneficial for the study, therefore we mark this as future work.
 
 
 \begin{figure}[]
@@ -313,13 +317,13 @@ What we describe here is a real-world case study and, at the time of writing, ex
 		\includegraphics[width=0.5\textwidth]{part2/aging_learning_curve_polyfeat.png}
 		\label{fig:frassoni_learning_curves_poly}%
 	} %
-	\caption{Learning curves obtained on the aging problem by fitting a Ridge regression model on $100$ Monte Carlo random splits and evaluating the MAE on each training (orange line) and test (blue line) sets. Panel (a) shows the learning curves obtained using only the original features, whereas panel (b) shows the results achieved after a degree $2$ polynomial feature expansion. \todo{update plots}}
+	\caption{Learning curves obtained on the aging problem by fitting a Ridge regression model on $100$ Monte Carlo random splits and evaluating the MAE on each training (orange line) and test (blue line) sets. Panel (a) shows the learning curves obtained using only the original features, whereas panel (b) shows the results achieved after a degree $2$ polynomial feature expansion.}
 \end{figure}
 
 \input{part2/summary}
 \input{part2/stats}
 
-Table~\ref{tab:frassoni_model_challenge} shows the results of the model assessment performed as described earlier. Focusing on linear features (top half of the table), we can see that Random Forests is the top performing method (in bold). We can also notice that RF is immediately followed by SVM with RBF kernel. This suggests that some nonlinear input/output relationship is hidden in the data. So, let's see whether a simple $2\text{nd}\}$-degree polynomial expansion exposes such hidden data structure.
+Table~\ref{tab:frassoni_model_challenge} shows the results of the model assessment performed as described earlier. Focusing on linear features (top half of the table), we can see that Random Forests is the top performing method (in bold). We can also notice that RF is immediately followed by SVM with RBF kernel. This suggests that some nonlinear input/output relationship is hidden in the data. So, let's see whether a simple $2^\text{nd}$-degree polynomial expansion exposes such hidden data structure.
 Looking at the bottom half of the Table~\ref{tab:frassoni_model_challenge}, we can see that all the linear model benefit from the polynomial expansion. Quite surprisingly, two linear methods, namely linear SVM and the Lasso, even outperform Random Forests, according to almost every metric.
 
 Table~\ref{tab:frassoni_pvalues} highlights the cases in which the metrics evaluated after the polynomial expansion are statistically significantly better than their counterpart evaluated with linear features only (with p-value $< 0.01$).
@@ -336,7 +340,7 @@ This result looks quite surprising at a first glance, but actually one can specu
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.8\textwidth]{part2/aging_lassopolyfeat.png}
+	\includegraphics[width=0.8\textwidth]{part2/aging_lassopolyfeat2.png}
 	\caption{The coefficients of the proposed age prediction model.} \label{fig:frassoni_topmodel}
 \end{figure}
 
@@ -354,33 +358,69 @@ Nevertheless, as the Lasso regression model is trained on preprocessed data, the
 
 \begin{equation}\label{eq:frassoni_lasso}
 \begin{aligned}
-\hat{\text{age}} = {} & 5.416\times 10^{-2} \cdot (\text{gender} \cdot \text{ATP-Succinate}) +
-2.862 \cdot (\text{gender} \cdot \text{PO-Succinate}) -\\
-& 1.465 \cdot (\text{gender} \cdot \text{ATP}) 
--2.664\times 10^{-3} \cdot (\text{gender} \cdot \text{LDH}) - \\
-& -6.469\times 10^{-3} \cdot (\text{CO-Pyr/Mal} \cdot \text{CO-Succinate})
--5.655\times 10^{-2} \cdot (\text{CO-Pyr/Mal} \cdot \text{AMP}) + \\
-& 1.199\times 10^{-1} \cdot (\text{CO-Succinate} \cdot \text{ATP/AMP}) +
-5.492\times 10^{-4} \cdot \text{ATP-Pyr/Mal}^2 + \\
-& 3.965\times 10^{-2} \cdot (\text{ATP-Succinate} \cdot \text{MDA}) -
-1.649\times 10^{-2} \cdot (\text{PO-Pyr/Mal} \cdot \text{LDH}) \\
-& -3.248 \cdot (\text{PO-Succinate} \cdot \text{ATP})
--5.899 \cdot (\text{ATP} \cdot \text{AMP}) + \\
-& 1.359 \cdot (\text{ATP} \cdot \text{MDA}) +
-1.097\times 10^{-1} \cdot (\text{AMP} \cdot \text{LDH}) + \\
-&1.924\times 10^{-1} \cdot (\text{ATP/AMP} \cdot \text{MDA})
--2.243\times 10^{-2} \cdot (\text{ATP/AMP} \cdot \text{LDH}) + \\
-& 6.592\times 10^{-3} \cdot \text{MDA}^2 +
-2.508\times 10^{-3} \cdot (\text{MDA} \cdot \text{LDH}) + \\
-& 1.618\times 10^{-4} \cdot \text{LDH}^2 + 24.894
+\hat{\text{age}} = {} & 5.416\times 10^{-2} \cdot (\text{\gender} \cdot \text{\atpsucc}) +
+2.862 \cdot (\text{\gender} \cdot \text{\posucc}) -\\
+& 1.465 \cdot (\text{\gender} \cdot \text{\ATP}) 
+-2.664\times 10^{-3} \cdot (\text{\gender} \cdot \text{\LDH}) - \\
+& -6.469\times 10^{-3} \cdot (\text{\copyrmal} \cdot \text{\cosucc})
+-5.655\times 10^{-2} \cdot (\text{\copyrmal} \cdot \text{\AMP}) + \\
+& 1.199\times 10^{-1} \cdot (\text{\cosucc} \cdot \text{\atpamp}) +
+5.492\times 10^{-4} \cdot \text{\atppyrmal}^2 + \\
+& 3.965\times 10^{-2} \cdot (\text{\atpsucc} \cdot \text{\MDA}) -
+1.649\times 10^{-2} \cdot (\text{\popyrmal} \cdot \text{\LDH}) \\
+& -3.248 \cdot (\text{\posucc} \cdot \text{\ATP})
+-5.899 \cdot (\text{\ATP} \cdot \text{\AMP}) + \\
+& 1.359 \cdot (\text{\ATP} \cdot \text{\MDA}) +
+1.097\times 10^{-1} \cdot (\text{\AMP} \cdot \text{\LDH}) + \\
+&1.924\times 10^{-1} \cdot (\text{\atpamp} \cdot \text{\MDA})
+-2.243\times 10^{-2} \cdot (\text{\atpamp} \cdot \text{\LDH}) + \\
+& 6.592\times 10^{-3} \cdot \text{\MDA}^2 +
+2.508\times 10^{-3} \cdot (\text{\MDA} \cdot \text{\LDH}) + \\
+& 1.618\times 10^{-4} \cdot \text{\LDH}^2 + 24.894
 \end{aligned}
 \end{equation}
 
 
-
 \section{Conclusions and future works} \label{sec:frassoni_conclusions}
 % CCS
+%future: collect more data (see learning curves with polyfeat) in order to have a uniformly distributed dataset
+This chapter presented the first biomedical data challenge of the thesis. The goal of such task is to investigate on the changes of energy metabolism during the physiological aging by means of a set of metabolic biomarkers obtained from mononuclear cells isolated from peripheral blood.
 
-future: collect more data (see learning curves with polyfeat) in order to have a uniformly distributed dataset
+After a preliminary, and insightful EDA, we realized that the measured variables are highly correlated and that they also show a non negligible trend with the age. Therefore, we investigated on the use of several linear and nonlinear regression models used in combination with a degree $2$ polynomial feature expansion.
+
+We devised a Lasso-based regression model that, once trained on the $75\%$ of the dataset, predicted the age of the remaining $25\%$ with MAE of $6.591$ years ($\text{MSE}=82.182$, $\text{R}^2=0.901$ and $\text{EV}=0.902$). This result is in line with what observed in the experiments summarized in Table~\ref{tab:frassoni_model_challenge}.
+
+\todo{...da qui in poi mi serve Silvia...}
+To the best of our knowledge this is the first attempt to build an age predicting model that takes into account such metabolic biomarkers.
+Our goal here is not to devise an accurate and ready-to-use age prediction model, whereas we aimed at verifying that the energetic state of blood cells by itself is already a good predictor of the age of a subject.
+
+In the next future we plan to extend this study by enrolling more volunteers in order to expand the number of samples in the dataset.
+We also plan to apply such method to a different cohort of adult patients that suffered from blood tumor in their childhood and that are currently in remission.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%
