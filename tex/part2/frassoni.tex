@@ -241,12 +241,13 @@ This section presents the development of the regression model for the age predic
 
 To this aim, we imputed the small fraction of missing values following the $k$-nearest neighbors (with $k=3$) proposed in~\cite{troyanskaya2001missing}. So, the development of the predictive model can take advantage of the total number of individuals ($n=118$).
 
-The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate in this direction by evaluating the so-called \textit{learning curves}. Such graphical representation is obtained by iteratively fitting a given regression model on increasingly large chunks of the entire dataset.
+The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate in this direction by evaluating the so-called \textit{learning curves}~\cite{murphy2012machine}. Such graphical representation is obtained by iteratively fitting a given regression model on increasingly large chunks of the entire dataset.
 Horizontal axis corresponds to the number of training samples, while vertical axis represents mean values of some cross-validated regression metric (such as MAE).
 The shape of the obtained learning curve tells a lot about the prediction problem at hand. For instance, if the cross-validation error keeps decreasing we may sense that there may be (much) \textit{more} to learn about the input/output relationship. In this case, the regression performance would benefit from a larger dataset. Conversely, if the cross-validation error initially decreases eventually reaching a plateau it may be that the number of samples is large enough and collecting more data would only marginally improve the prediction performance. This may happen mainly because:
 \begin{enumerate*}[label=(\roman*)]
-	\item the available feature set only partially explains the input/output relationship and more/better variables should be observed to improve the regression performance, or
-	\item the selected model is incapable of capturing some of the input/output relationship already hidden in the data.
+	\item the available feature set only partially explains the input/output relationship and more/better variables should be observed to improve the regression performance,
+	\item the selected model is incapable of capturing some of the input/output relationship already hidden in the data or
+	\item variability (and the noise) of the data.
 \end{enumerate*}
 Learning curves plot gives also information on the amount of bias and variance affecting a given predictive model.
 Four our purpose, we rely on the use of standard Ridge regression model (see Section~\ref{sec:ridge_regression}) and 100-splits Monte Carlo cross-validated MAE to evaluate each point of our learning curves (see Section~\ref{sec:frassoni_results}).
@@ -254,18 +255,18 @@ Four our purpose, we rely on the use of standard Ridge regression model (see Sec
 In EDA we realized that most of the input variables show a quasi-linear relationship with the age. Moreover, we also realized that many molecular biomarkers present a strong pairwise linear correlation. Therefore it seems sensible to investigate whether a polynomial feature expansion could be beneficial for the age prediction.
 To this aim, we devised the following experimental design.
 
-A cross-validated estimate of four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated.
-In order to achieve a reliable estimate of their empirical distribution, we opted for a Monte Carlo cross-validation strategy.
+A cross-validated estimate of the empirical distribution four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated on $500$ Monte Carlo random splits.
 %\todo{should have been stratified -> correggere}.
-This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{the fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}}. On each obtained training set a supervised learning model is fitted. In our experiments, we ran a total of $500$ Monte Carlo resampling.
+This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{the fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}}. On each obtained training set a supervised learning model is fitted.
+%In our experiments, we ran a total of $500$ Monte Carlo resampling.
 %\todo{As not each age decade is equally represented, see Figure~\ref{fig:frassoni_agehist}, we opted for a cross-validation strategy that is stratified with respect to the decades. So, in each random extraction, the same proportion of samples}
-Once the model is fitted, the five regression scores are then evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
+Once the model is fitted, the five regression scores are evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
 The adopted supervised model consists in a pipeline having two steps:
 \begin{enumerate*}[label=(\roman*)]
 	\item data standardization and
 	\item regression model fitting.
 \end{enumerate*}
-The first step simply consists in subtracting the mean from each feature and dividing them by their standard deviation. Nesting this preprocessing step inside the Monte Carlo cross-validation scheme improves the empirical estimate of the regression scores. In fact, for each cross-validation iteration, the mean and the standard deviation are estimated from the training set only. This allows to have, each time, a genuine score, estimated only on data points that were never seen before by the current supervised pipeline.
+The first step simply consists in subtracting the mean from each feature and dividing them by their standard deviation. Nesting this preprocessing step inside the Monte Carlo cross-validation scheme improves the empirical estimate of the regression scores. In fact, for each cross-validation iteration, the mean and the standard deviation are estimated from the training set only. This allows to have, each time, a genuine score, estimated only on data points that were never seen before by the current supervised regression model.
 Moreover, for the second step of the pipeline we adopted the following regression models:
 \begin{enumerate*}[label=(\alph*)]
 	\item Ridge,
@@ -278,9 +279,9 @@ Moreover, for the second step of the pipeline we adopted the following regressio
 	\item Gradient Boosting and
 	\item Multilayer Perceptron.
 \end{enumerate*}
-The free parameter of each model, see Section~\ref{subsec:supervised_learning}, are optimized via grid search $5$-fold cross-validation scheme.
+The free parameters of each model, see Section~\ref{subsec:supervised_learning}, are optimized via grid-search $5$-fold cross-validation.
 
-This procedure is evaluated two times: with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
+This Monte Carlo cross-validated procedure is evaluated two times: with and without a preliminary polynomial feature expansion of degree $2$. We expect linear models to benefit more from the polynomial expansion than the nonlinear ones.
 Then, for each model and for each metric, we evaluated the p-value obtained from the one-tailed two-sample Kolmogorov–Smirnov test~\cite{everitt2002cambridge}. This let us understand in which cases the scores obtained after a polynomial expansion are significantly better than their counterpart, obtained only with  linear features.
 
 The final goal of this section is to find the best age prediction model. Therefore, it is important to understand which are the most predictive variables.
@@ -290,39 +291,97 @@ Finally, the proposed age predicting model is achieved by fitting the best regre
 
 \section{Results} \label{sec:frassoni_results}
 % tabella dei risultati
+Figure~\ref{fig:frassoni_learning_curves} shows the obtained learning curves. Interestingly, the average cross-validation error (blue line), reaches a plateau around $\text{MAE} \approx 9$ years a little bit after $80$ samples. This suggests that adding more training examples would not significantly improve the predictions. This justifies the choice of dimensioning the Monte Carlo training sets as $75\%$ of the input data (see previous section).
+Moreover, we can see that the gap between training and cross-validation error becomes smaller as the number of sample increases. This suggests that the linear regression model is generalizing well. We can also notice that the training variance decreases from left to right. This suggests that, as expected, increasing the number of training examples induces a stabilization effect on the learned function.
+We repeated the learning curve experiment also after the degree $2$ polynomial feature expansion, see Figure~\ref{fig:frassoni_learning_curves_poly}. At a first glance, we can see two main differences:
+\begin{enumerate*}[label=(\roman*)]
+	\item at the right hand side of the plot, the cross-validation curve (blue line) is still, slowly, decreasing and it is not reaching a plateau,
+	\item the gap between training and cross-validation curves is wider.
+\end{enumerate*}
+Therefore, we suspect that increasing the number of collected sample would significantly improve the regression performance in this case.
+For consistency with the previous case, we opted to anyway randomly extract training sets of $75\%$ of the dataset after the polynomial expansion as well.
+What we describe here is a real-world case study and, at the time of writing, expanding the data collection is unfortunately not possible. Nevertheless, we strongly believe that it would be beneficial for the study, therefore we mark it as future work.
+
+
+\begin{figure}[]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_learning_curve_linfeat.png}
+		\label{fig:frassoni_learning_curves}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/aging_learning_curve_polyfeat.png}
+		\label{fig:frassoni_learning_curves_poly}%
+	} %
+	\caption{Learning curves obtained on the aging problem by fitting a Ridge regression model on $100$ Monte Carlo random splits and evaluating the MAE on each training (orange line) and test (blue line) sets. Panel (a) shows the learning curves obtained using only the original features, whereas panel (b) shows the results achieved after a degree $2$ polynomial feature expansion. \todo{update plots}}
+\end{figure}
+
+
+Table~\ref{tab:frassoni_model_challenge} shows the results of the model assessment performed as described earlier. Focusing on linear features (top half of the table), we can see that Random Forests is the top performing method (in bold). We can also notice that RF is immediately followed by SVM with RBF kernel. This suggests that some nonlinear input/output relationship is hidden in the data. So, let's see whether a simple $2\text{nd}\}$-degree polynomial expansion exposes such hidden data structure.
+Looking at the bottom half of the Table~\ref{tab:frassoni_model_challenge}, we can see that all the linear model benefit from the polynomial expansion. Quite surprisingly, two linear methods, namely linear SVM and the Lasso, even outperform Random Forests, according to almost every metric.
+
+Table~\ref{tab:frassoni_pvalues} highlights the cases in which the metrics evaluated after the polynomial expansion are statistically significantly better than their counterpart evaluated with linear features only (with p-value $< 0.01$).
+As expected, the polynomial expansion is beneficial for all the linear method, while it is not for almost every nonlinear method.
+A separate comment can be made for MLP. In this context, given the reduced number of training samples, we opted for a shallow network with only one hidden layer. The number of hidden units in the hidden layer is considered as a free parameter of the model and it is therefore chosen via grid-search cross validation.
+As we can see from Table~\ref{tab:frassoni_model_challenge}, MLP is consistently the worst performing regression method. This can partially be explained with the fact that neural networks are known to be more powerful when trained with large datasets, which is not the case. Interestingly, MLP is the only nonlinear method that statistically significantly benefits from the polynomial feature expansion.
+This result looks quite surprising at a first glance, but actually one can speculate that the effect of the polynomial expansion could be compared to the effect of the addition of another hidden layer. In fact, it is known that deeper architectures, even if harder to train, usually lead to better results.
 
 \input{part2/summary}
 \input{part2/stats}
 
-\begin{figure}[]
-	\centering
-	\includegraphics[width=0.8\textwidth]{part2/aging_learning_curve_linfeat}
-	\caption{Learning curves} \label{fig:frassoni_learning_curves}
-\end{figure}
+From the insights above it is clear that the proposed model uses a degree $2$ polynomial feature expansion. However, Table~\ref{tab:frassoni_model_challenge} indicates two possible linear regression models: linear SVM and the Lasso. In this context we choose to use the Lasso to accomplish the age prediction task for two main reasons:
+\begin{enumerate*}[label=(\roman*)]
+	\item it outperforms linear SVM for $3$ metrics out of $4$ and
+	\item its sparsity enforcing penalty leads to a more compact and interpretable model.
+\end{enumerate*}
 
+Analyzing the feature selection frequency of the Lasso, Figure~\ref{fig:frassoni_topfeat}, we can see that all the top-ranked variables are features that arise from the polynomial expansion. This is a further evidence of the importance of such step.
 
 \begin{figure}[]
 	\centering
 	\includegraphics[width=0.8\textwidth]{part2/aging_topfeatures.png}
-	\caption{The top features ... lasso ... stability selection.} \label{fig:frassoni_topfeat}
+	\caption{The feature ranking obtained via stability selection on the aging problem adopting the Lasso regression model.} \label{fig:frassoni_topfeat}
 \end{figure}
 
-%test MAE 5.904
-%test MSE 78.075
-%test R2 0.873
-%test EV 0.879
+The final Lasso model, fitted on a $75\%$ of the dataset after the $2^{\text{nd}}$ degree polynomial expansion and a feature-wise standardization leads to the coefficients of Figure~\ref{fig:frassoni_topmodel}. Such model, evaluated on the test set, achieves $\text{MAE}=6.591$ years, $\text{MSE} = 82.182$ years$^2$, $\text{R}^2 = 0.901$ explaining the $90.2\%$ of the variance. Which is consistent with what we expected from Table~\ref{tab:frassoni_model_challenge}.
 
 \begin{figure}[]
 	\centering
 	\includegraphics[width=0.8\textwidth]{part2/aging_lassopolyfeat.png}
-	\caption{The top model ... lasso ....} \label{fig:frassoni_topmodel}
+	\caption{The coefficients of the proposed age prediction model.} \label{fig:frassoni_topmodel}
 \end{figure}
+
+Taking into account the preliminary data preprocessing step, it is possible to write the final prediction model as in Equation~\eqref{eq:frassoni_lasso}.
+
+\begin{equation}\label{eq:frassoni_lasso}
+\begin{aligned}
+\hat{\text{age}} = {} & 5.416\times 10^{-2} \cdot (\text{gender} \cdot \text{ATP-Succinate}) +
+2.862 \cdot (\text{gender} \cdot \text{PO-Succinate}) -\\
+& 1.465 \cdot (\text{gender} \cdot \text{ATP}) 
+-2.664\times 10^{-3} \cdot (\text{gender} \cdot \text{LDH}) - \\
+& -6.469\times 10^{-3} \cdot (\text{CO-Pyr/Mal} \cdot \text{CO-Succinate})
+-5.655\times 10^{-2} \cdot (\text{CO-Pyr/Mal} \cdot \text{AMP}) + \\
+& 1.199\times 10^{-1} \cdot (\text{CO-Succinate} \cdot \text{ATP/AMP}) +
+5.492\times 10^{-4} \cdot \text{ATP-Pyr/Mal}^2 + \\
+& 3.965\times 10^{-2} \cdot (\text{ATP-Succinate} \cdot \text{MDA}) -
+-1.649\times 10^{-2} \cdot (\text{PO-Pyr/Mal} \cdot \text{LDH}) \\
+& -3.248 \cdot (\text{PO-Succinate} \cdot \text{ATP})
+-5.899 \cdot (\text{ATP} \cdot \text{AMP}) + \\
+& 1.359 \cdot (\text{ATP} \cdot \text{MDA}) +
+1.097\times 10^{-1} \cdot (\text{AMP} \cdot \text{LDH}) + \\
+&1.924\times 10^{-1} \cdot (\text{ATP/AMP} \cdot \text{MDA})
+-2.243\times 10^{-2} \cdot (\text{ATP/AMP} \cdot \text{LDH}) + \\
+& 6.592\times 10^{-3} \cdot \text{MDA}^2 +
+2.508\times 10^{-3} \cdot (\text{MDA} \cdot \text{LDH}) + \\
+& 1.618\times 10^{-4} \cdot \text{LDH}^2 + 24.894
+\end{aligned}
+\end{equation}
 
 
 
 \section{Conclusions and future works} \label{sec:frassoni_conclusions}
 % CCS
 
-future: collect more data in order to have a uniformly distributed dataset
+future: collect more data (see learning curves with polyfeat) in order to have a uniformly distributed dataset
 
 %%
