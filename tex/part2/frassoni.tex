@@ -352,33 +352,29 @@ From the insights above it is clear that the proposed model uses a degree $2$ po
 
 Analyzing the feature selection frequency of the Lasso, Figure~\ref{fig:frassoni_topfeat}, we can see that all the top-ranked variables are features that arise from the polynomial expansion. This is a further evidence of the importance of such step.
 
-The final Lasso model, fitted on a $75\%$ of the dataset after the $2^{\text{nd}}$ degree polynomial expansion and a feature-wise standardization leads to the coefficients of Figure~\ref{fig:frassoni_topmodel}. Such model, evaluated on the test set, achieves $\text{MAE}=6.591$ years, $\text{MSE} = 82.182$ years$^2$, $\text{R}^2 = 0.901$ explaining the $90.2\%$ of the variance. Which is consistent with what we expected from Table~\ref{tab:frassoni_model_challenge}.
+The final Lasso model, fitted on a $75\%$ of the dataset after the $2^{\text{nd}}$ degree polynomial expansion and a feature-wise standardization leads to the coefficients of Figure~\ref{fig:frassoni_topmodel}. Such model, evaluated on the test set, achieves $\text{MAE}=6.40$ years, $\text{MSE} = 97.24$ years$^2$, $\text{R}^2 = 0.81$ explaining the $82\%$ of the variance. Which is consistent with what we expected from Table~\ref{tab:frassoni_model_challenge}.
 
 Nevertheless, as the Lasso regression model is trained on preprocessed data, the coefficients in Figure~\ref{fig:frassoni_topmodel} cannot be used to predict the age from raw measures. To this purpose, we also report the prediction model, with its raw data-ready coefficients, as in Equation~\eqref{eq:frassoni_lasso}.
 
 \begin{equation}\label{eq:frassoni_lasso}
 \begin{aligned}
-\hat{\text{age}} = {} & 5.416\times 10^{-2} \cdot (\text{\gender} \cdot \text{\atpsucc}) +
-2.862 \cdot (\text{\gender} \cdot \text{\posucc}) -\\
-& 1.465 \cdot (\text{\gender} \cdot \text{\ATP}) 
--2.664\times 10^{-3} \cdot (\text{\gender} \cdot \text{\LDH}) - \\
-& -6.469\times 10^{-3} \cdot (\text{\copyrmal} \cdot \text{\cosucc})
--5.655\times 10^{-2} \cdot (\text{\copyrmal} \cdot \text{\AMP}) + \\
-& 1.199\times 10^{-1} \cdot (\text{\cosucc} \cdot \text{\atpamp}) +
-5.492\times 10^{-4} \cdot \text{\atppyrmal}^2 + \\
-& 3.965\times 10^{-2} \cdot (\text{\atpsucc} \cdot \text{\MDA}) -
-1.649\times 10^{-2} \cdot (\text{\popyrmal} \cdot \text{\LDH}) \\
-& -3.248 \cdot (\text{\posucc} \cdot \text{\ATP})
--5.899 \cdot (\text{\ATP} \cdot \text{\AMP}) + \\
-& 1.359 \cdot (\text{\ATP} \cdot \text{\MDA}) +
-1.097\times 10^{-1} \cdot (\text{\AMP} \cdot \text{\LDH}) + \\
-&1.924\times 10^{-1} \cdot (\text{\atpamp} \cdot \text{\MDA})
--2.243\times 10^{-2} \cdot (\text{\atpamp} \cdot \text{\LDH}) + \\
-& 6.592\times 10^{-3} \cdot \text{\MDA}^2 +
-2.508\times 10^{-3} \cdot (\text{\MDA} \cdot \text{\LDH}) + \\
-& 1.618\times 10^{-4} \cdot \text{\LDH}^2 + 24.894
+\hat{\text{age}} = {} & 1.13 \times 10^{-1} \cdot (\text{\gender} \cdot \text{\copyrmal}) +
+9.63 \times 10^{-3} \cdot (\text{\cosucc} \cdot \text{\mda}) - \\
+& 1.91 \times 10^{-1} \cdot (\text{\atppyrmal} \cdot \text{\amp}) +
+3.31 \times 10^{-2} \cdot (\text{\atpsucc} \cdot \text{\mda}) \\
+& 1.17 \cdot (\text{\popyrmal} \cdot \text{\atp}) -
+1.45 \times 10^{-2} \cdot (\text{\popyrmal} \cdot \text{\ldh}) -\\
+& 6.73 \times 10^{-1} \cdot (\text{\atp} \cdot \text{\amp}) +
+5.03 \times 10^{-1} \cdot (\text{\atp} \cdot \text{\mda}) +\\
+& 9.52 \times 10^{-2} \cdot (\text{\amp} \cdot \text{\ldh}) +
+5.30 \times 10^{-1} \cdot (\text{\atpamp} \cdot \text{\mda}) -\\
+& 2.28 \times 10^{-2} \cdot (\text{\atpamp} \cdot \text{\ldh}) +
+8.08 \times 10^{-4} \cdot (\text{\mda} \cdot \text{\ldh}) +\\
+& 1.84 \times 10^{-4} \cdot \text{\ldh}^2 +
+29.1
 \end{aligned}
 \end{equation}
+
 
 
 \section{Conclusions and future works} \label{sec:frassoni_conclusions}
