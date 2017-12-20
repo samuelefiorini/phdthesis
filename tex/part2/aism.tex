@@ -1,12 +1,24 @@
 % !TEX root = ../main.tex
 
-\chapter{Temporal model for multiple sclerosis evolution} \label{chap:aism}
+\chapter{Temporal prediction of multiple sclerosis evolution from patient-centered outcomes} \label{chap:aism}
 % AISM
 
 \begin{displayquote}
-	\textit{abstract here.}
+%	This chapter describes a patient-centered outcomes-based ML model that predicts the disease evolution of multiple sclerosis patients.
+	In this chapter, we investigate on
+	use of patient-centered outcomes to predict the evolution of multiple sclerosis and to assess its impact on patients' lives.
+	Multiple Sclerosis is a degenerative condition of the central nervous system that affects nearly $2.5$ million of individuals in terms of their physical, cognitive, psychological and social capabilities. Despite the high variability of its clinical presentation, \textit{relapsing} and \textit{progressive} multiple sclerosis are considered the two main disease types, with the former possibly evolving into the latter.
+	%Nowadays no acknowledged clinical tests to diagnose multiple sclerosis or to distinguish between its types have been proposed.
+	Recently, the attention of the medical community toward the use of patient-centered outcomes in multiple sclerosis has significantly increased. Such patient-friendly measures are devoted to the assessment of the impact of the disease on several domains of the patient life.
+	% One of the open questions in the field is the use of patient-centered outcomes to assess multiple sclerosis impact on patients' lives and to predict the evolution of the disease.
+	%To date, a clear understanding on whether it is possible to define a predictive model based on them is still an open question.
+	%the use of such measures to assess neurodegenerative diseases evolution is still lacking. Moreover,
+	To this aim, we build a novel temporal model based on gradient boosting classification and multiple-output elastic-net regression. The model
+	%  is entirely based on patient-centered outcomes and it
+	provides clinically interpretable results along with accurate predictions of the disease course evolution.
 \end{displayquote}
 
+\section{Introduction: the evolution of multiple sclerosis} \label{sec:aism_intro}
 
 Multiple Sclerosis (MS) is a neurodegenerative and chronic disease of the central nervous system characterized by damages to the myelin sheaths, resulting in a wide range of symptoms, such as fatigue, numbness, visual disturbances, bladder problems, mobility issues and cognitive deficits.
 
@@ -14,9 +26,33 @@ Multiple Sclerosis (MS) is a neurodegenerative and chronic disease of the centra
 
 People with MS (PwMS) are mainly classified according to their disease course:
 relapsing-remitting (\ac{RR}), secondary-progressive (\ac{SP}), primary-progressive (\ac{PP}) and progressive-relapsing (\ac{PR})~\cite{giovannoni2016brain}.
-Neurological disability in \RR patients is mainly due to the development of multifocal inflammatory lesions and it results in relapses, that are attacks of neurological worsening, followed by partial or complete recovery. Disability accrues predominantly in progressive courses (\SP, \PP, \PR) that are more characterized from diffuse immune mechanisms and neurodegeneration.
+Neurological disability in \RR patients is mainly due to the development of multifocal inflammatory lesions and it results in relapses, that are attacks of neurological worsening (\ie \textit{relapses}), followed by partial or complete recovery. Disability accrues predominantly in progressive courses (\SP, \PP, \PR) that are more characterized from diffuse immune mechanisms and neurodegeneration.
+Figure~\ref{fig:ms_mock} shows a representative disability progression of MS patients according to their disease course.
+
 An estimated $15\%$ of PwMS have a \PP or \PR course at the onset, the remaining $85\%$ is diagnosed with a \RR course.
 About $80\%$ of \RR patients develop \SP course within $15\text{--}20$ years if untreated, or if the adopted pharmacological and rehabilitative protocols are not continuously adjusted according to the evolution of the disease~\cite{scalfari2014onset}.
+
+\begin{figure}[]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_mock_rr.png}
+		\label{fig:ms_mock_rr}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_mock_sp.png}
+		\label{fig:ms_mock_sp}%
+	}
+	\hfill
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_mock_pr.png}
+		\label{fig:ms_mock_pr}%
+	}%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_mock_pp.png}
+		\label{fig:ms_mock_pp}%
+	}
+	\caption{Disability evolution of the four main MS courses: panel (a) shows a prototypical \RR patient, characterized by time-limited attacks which may or may not leave permanent deficits; panel (b) shows \SP typical disability progression, that is steady with no more relapses; panel (c) represents a typical \PR disability evolution, which is characterized by steady disability progression from the onset; panel (d) shows a \PR patient; which has a steady disability progression from the onset with relapses.} \label{fig:ms_mock}
+\end{figure}
 
 
 % This form is characterized by clearly defined {\em relapses}, \ie  attacks of neurological worsening, followed by partial or complete recovery.
@@ -31,8 +67,9 @@ However, as showed by~\cite{vukusic2003prognostic}, studies investigating on pro
 report a high proportion of \RR patients not monitored enough to reach progressive course and they lead, to some extent, to contradictory results.
 Currently, MS research mainly focuses on developing and assessing drugs and rehabilitative protocols for \RR patients disregarding progressive courses.
 
+\section{\PCOs data collection}\label{sec:proms_data_collection}
 
-In the recent past, researchers explored the potential role of Patient-Centered Outcomes (\ac{PCO}) to follow the progression of neurodegenerative diseases and  to take timely healthcare decisions~\cite{black2013patient}. %~\todo{REF \cite{??}}.
+In the recent past, researchers explored the potential role of Patient-Centered Outcomes (\ac{PCO}) to follow the progression of neurodegenerative diseases and to take timely decisions~\cite{black2013patient}. %~\todo{REF \cite{??}}.
 %\PCOs usually consist in ordinal or categorical scaled questionnaires and self-reported measures.
 \PCOs comprise self- and physician-administered tests, questionnaires and clinical scales consisting of either ordinal or categorical scaled answers.
 As opposed to stressful, not frequently repeatable and expensive clinical exams, like magnetic resonance imaging or blood tests, \PCOs are patient-friendly and low-cost measures that could allow to investigate the individual changes and disease impact on several aspects such as physical, cognitive, psychological, social and well-being domains~\cite{fiorini2015machine}.
@@ -42,71 +79,73 @@ Nevertheless, it is still unclear which are the most informative \PCOs and, cont
 
 %\todo{In our study, we propose a machine learning approach that, leveraging on \PCOs data, aims at
 %forecasting the transition of PwMS from \RR to \SP and at providing insights on the most appropriate use of \PCOs.}
-In our study, we propose a machine learning approach that, leveraging on \PCO data, aims at predicting the temporal evolution of MS disease course providing insights on the most appropriate use of \PCOs.
-We resort to a vast category of predictive models, ranging from sparse regularization to ensemble and deep learning methods.
-These models are widely adopted in the biomedical context as they benefit from good generalization properties as well as they allow to address regression and classification problems within the same statistical and computational framework~\cite{lecun2015deep, qi2012random, nowak2011fused,  teramoto2009balanced, zou2005regularization}.
+%In our study, we propose a machine learning approach that, leveraging on \PCO data, aims at predicting the temporal evolution of MS disease course providing insights on the most appropriate use of \PCOs.
+%We resort to a vast category of predictive models, ranging from sparse regularization to ensemble and deep learning methods.
+%These models are widely adopted in the biomedical context as they benefit from good generalization properties as well as they allow to address regression and classification problems within the same statistical and computational framework~\cite{lecun2015deep, qi2012random, nowak2011fused,  teramoto2009balanced, zou2005regularization}.
 %azencott2013efficient
-
-\section{\PCOs data set description}\label{sec:proms_data_collection}
 
 % \PCOs are low-cost and patient-friendly source of information that can be acquired over time in order to quantitatively assess patients' disease impact on several aspects of their life.
 
-The predictive model presented in this work is based on a \PCO data set acquired from a cohort of PwMS progressively enrolled within an ongoing funded project. Ethical review committee approval \textit{023REG2014} was obtained for this work.  %% codice approvazione comitato etico: \anonym
+The biomedical data science challenge presented in this chapter is based on a \PCO dataset acquired from a cohort of PwMS progressively enrolled within an ongoing funded project \footnote{ethical review committee approval \textit{023REG2014} was obtained for this work}.
 
 Each patient is evaluated every four months through the items of the \PCOs reported in Table~\ref{tab:proms} which cover physical, cognitive and psychosocial domains.
+
+\todo{add here details on PCOs}
+
 \PCO data are intrinsically noisy due to the subjectivity of self-reported measures provided by the patients that can be influenced by personal feelings and opinions. In order to ameliorate this issue, $4$ questionnaires out of $10$ are administered by medical staff which is trained to keep a homogeneous level of evaluation.
 
-In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except EDSS. Such scale is based on a neurological examination and, although usually adopted as an index of the disability level, it focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
+In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except \EDSS. Such scale is based on a neurological examination and, although usually adopted as an index of the disability level, it focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
 %\todo{other comments here?}
 
-% The model considered all the \PCOs except EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.
+% The model considered all the \PCOs except \EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.
 
 \begin{table}[htb]
 	\center
 	\footnotesize
 	\begin{tabular}{l|l|l}%{@{} l*{4}{l} @{}}
 		\toprule
-		\textbf{Acronym} & \textbf{Full name} & \textbf{Reference} \\
+		Acronym & Full name & Reference \\
 		\midrule
-		$MFIS$ & Modified fatigue impact scale & \cite{flachenecker2002fatigue}\\
-		$HADS$ & Hospital anxiety and depression scale &  \cite{honarmand2009validation}\\
-		$LIFE$ &  Life satisfaction index &  \cite{franchignoni1999life}\\
-		$OAB$ & Overactive bladder questionnaire & \cite{cardozo2014validation}\\
-		$EDINB$ &  Edinburgh handedness inventory & \cite{oldfield1971assessment} \\
-		$ABILH$ &  Hand ability index & \cite{arnould2012can} \\
+		\MFIS & Modified fatigue impact scale & \cite{flachenecker2002fatigue}\\
+		\HADS & Hospital anxiety and depression scale &  \cite{honarmand2009validation}\\
+		\LIFE &  Life satisfaction index &  \cite{franchignoni1999life}\\
+		\OAB & Overactive bladder questionnaire & \cite{cardozo2014validation}\\
+		\EDINB &  Edinburgh handedness inventory & \cite{oldfield1971assessment} \\
+		\ABILH &  Hand ability index & \cite{arnould2012can} \\
 		\midrule
-		$FIM$ &  Functional independence measure  &\cite{granger1990functional}\\
-		$MOCA$ &  Montreal cognitive assessment & \cite{dagenais2013value}\\
-		$PASAT$ &  Paced auditory serial addition task & \cite{aupperle2002three} \\
-		$SDMT$ &  Symbol digit modality test  & \cite{parmenter2007screening}\\
-		$EDSS$ & Expanded disability status scale & \cite{kurtzke1983rating}\\
-		\bottomrule
+		\FIM &  Functional independence measure  &\cite{granger1990functional}\\
+		\MOCA &  Montreal cognitive assessment & \cite{dagenais2013value}\\
+		\PASAT &  Paced auditory serial addition task & \cite{aupperle2002three} \\
+		\SDMT &  Symbol digit modality test  & \cite{parmenter2007screening}\\
+		\EDSS & Expanded disability status scale & \cite{kurtzke1983rating}\\		\bottomrule
 	\end{tabular}
 	\caption{The set of available \PCOs.
 		The first $6$ are self-reported, while the last $5$ are administered by trained medical staff.
-		In our analysis all \PCOs were used, with the exception of $EDSS$.
-		% The set of clinically validated questionnaires available for this work. All questionnaires were used to predict the disease course evolution with exception of $EDSS$. The answers to the first $6$ questionnaires are completely self-reported, while the last $5$ are administered by trained medical staff.
+		In our analysis all \PCOs were used, with the exception of \EDSS.
+		% The set of clinically validated questionnaires available for this work. All questionnaires were used to predict the disease course evolution with exception of \EDSS. The answers to the first $6$ questionnaires are completely self-reported, while the last $5$ are administered by trained medical staff.
 	}\label{tab:proms}
 \end{table}
 
 
 % we focus on the use of $10$ of the clinically validated questionnaires reported in Table~\ref{tab:proms}. Each questionnaire consists of a different number of items testing the capabilities of the patients in different domains, such as physical, cognitive or psychosocial.
 % Moreover, the set of variables considered by our
-The collected \PCO data set comprises additional information such as:
+The collected \PCO dataset comprises additional information such as:
 \begin{enumerate*}[label=\roman*)]
 	\item number of relapses in the last four months (NR),
 	\item educational level expressed in terms of total years of education (EDU),
 	\item height (H) and
 	\item weight (W).
 \end{enumerate*}
-Each sample of the data set is represented by a vector of $d=165$ predictors.
+Each sample of the dataset is represented by a vector of $d=165$ predictors.
 Moreover, a neurologist assigns to each patient the corresponding disease course. The global distribution of MS types across time points is depicted in Figure~\ref{fig:PPRRSP}.
 
-% \todo{@AISM: add here the motivations that lead us to exclude EDSS from the analysis.}
+% \todo{@AISM: add here the motivations that lead us to exclude \EDSS from the analysis.}
+
+\section{\PCOs exploratory data analysis} \label{sec:aism_eda}
 
 
 %In this work we focus on detecting the \RR to \SP prediction, hence the patients in \PR and \PP form will not be taken into account.
-In this work we focus on predicting MS course evolution of  \RR and  \SP patients, hence the subjects with \PR and \PP forms will not be taken into account.
+Our final goal is predicting MS course evolution of  \RR and  \SP patients, hence the subjects with \PR and \PP forms will not be taken into account.
 We considered all the patients with a minimum of $1$ time point (the most recently enrolled) up to $T=8$ time points for a total of $2699$ samples, of which $1220$ \RR and $1579$ \SP (see Figure~\ref{fig:patients}). As this is an ongoing project, the number of PwMS decreases with time. We expect to fill the gap of samples between \textit{Exam~$1$} and \textit{Exam~$8$} by the end of the funded study.
 
  In this work we analyze \PCOs data acquired every four months from a cohort of MS patients enrolled in a funded study.
@@ -124,14 +163,12 @@ We considered all the patients with a minimum of $1$ time point (the most recent
 	\subfloat[]{%
 		\includegraphics[width=0.5\textwidth]{part2/PP-RR-SP_copy.png} \label{fig:PPRRSP}
 	}%
-	\caption{An overview of the \PCO data set used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3137$), divided according to the disease form. \todo{break figure in two}}\label{fig:data}
+	\caption{An overview of the \PCO dataset used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3137$), divided according to the disease form. \todo{break figure in two}}\label{fig:data}
 \end{figure}
 
-
+\section{Problem description}\label{sec:problem_description}
 
 % We adopted suitable categorical data encoding and missing values imputing strategies to cope with these issues (see Section~\ref{sec:problem_description}).
-
-\section{Problem description}\label{sec:problem_description}
 
 %a machine-learning based temporal model that, extracting information from \PCOs data, is able to answer to
 Predicting the MS course evolution can be split in three different related tasks: \f (\F), \g (\G) and \fog (\FOG).
@@ -151,9 +188,9 @@ Analyzing \PCO data is challenging from several respects.
 First, items belonging to different questionnaires are encoded with numerical values in different ranges.
 % each item can have categorical or ordinal values in a
 % different numerical ranges.
-% For instance, the items of the MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the SDMT outcome is the global number of correctly answered items of the test (max $110$) and the EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
+% For instance, the items of the \MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the \SDMT outcome is the global number of correctly answered items of the test (max $110$) and the \EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
 To tackle this issue, we opted for a $[0-1]$ scaling of the ordinal answers and a binary one-hot-encoding of the categorical ones.
-Secondly, as the missing data amount to $1.52\%$ of the entire data set, we resort to the K-nearest neighbor data imputing strategy proposed in~\cite{troyanskaya2001missing}.
+Secondly, as the missing data amount to $1.52\%$ of the entire dataset, we resort to the K-nearest neighbor data imputing strategy proposed in~\cite{troyanskaya2001missing}.
 To ensure unbiasedness of the results, this preprocessing phase is not performed on the entire data collection, but it is separately evaluated prior to each model fitting process on its cross-validation portion of the training set, as described in the next section.
 
 
@@ -166,7 +203,7 @@ We shall discuss separately the experimental designs used to learn $f(\bm{x})$ a
 % In particular, the training set comprises all samples collected at time points $t = 1, \dots ,T_{tr}$, the validation set at $t=T_{tr}+1,\dots,T_{vld}$ and the test set at $t=T_{vld}+1,\dots,T$.
 
 The \F model $f(\bm{x})$ solves a binary classification problem: to each input $\bm{x}_i^t$ is associated  an output $y_i^t$ that encodes the corresponding MS disease course (\RR or \SP) with a binary label.
-We split the data set in three temporal chunks, namely {\em training}, {\em validation} and {\em test} sets, consisting of all samples collected at time points $t=1,2,3$, $t=4$ and $t=5,6,7,8$, respectively.
+We split the dataset in three temporal chunks, namely {\em training}, {\em validation} and {\em test} sets, consisting of all samples collected at time points $t=1,2,3$, $t=4$ and $t=5,6,7,8$, respectively.
 Accordingly, we used $1853$ samples for training $f(\bm{x})$, $398$ for validation leaving the remaining $448$ for test.
 Five candidate models for $f(\bm{x})$ are fitted on $20$ Monte Carlo (MC) random sampling of the training set each time keeping $\frac{1}{4}$ of the samples aside~\cite{molinaro2005prediction}. For each MC sampling the fitting procedure is performed on the remaining $\frac{3}{4}$ of the samples and it includes an inner parameter optimization via grid-search cross-validation~\cite{hastie2009elements}. In particular, we require the MS course prediction to be based on a reduced number of variables (see Section~\ref{sec:learning_f}), therefore we enforce sparsity in each candidate model.
 % Each candidate model is required to be sparse, therefore the MS course prediction is based on a reduced number of variables (see Section~\ref{sec:learning_f}).
@@ -177,7 +214,7 @@ Once a variable ranking is achieved for each candidate model, the list of select
 On the other hand, learning the \G model $g(\bm{x})$ implies solving a multiple-output regression problem and each input $\bm{x}_i^t$ is associated with the output vector $\bm{x}_i^{t+1}$.
 % and the class labels are not taken into account.
 Therefore, we can only consider samples at time point $t$ with an available follow-up at the next time point $t+1$, which reduces the overall number of available samples.
-The data set splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8$ for test, resulting in $1737$ and $254$ samples, respectively.
+The dataset splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8$ for test, resulting in $1737$ and $254$ samples, respectively.
 The fitting procedure includes an inner parameter optimization via grid-search cross-validation. Each candidate model is a function
 $g: \mathbb{R}^{165} \rightarrow \mathbb{R}^k$ where $k$ is the number of variables selected by the best \F model.
 % that predicts the evolution of the variables selected by the best \F model starting from the full set of \PCOs.
@@ -219,7 +256,7 @@ We shall discuss separately the results achieved in terms of \F, \G and \FOG mod
 Regarding \F, the GB method outperforms the other candidate models reaching accuracy $0.900$, precision $0.936$, recall $0.899$ and $\text{F}_1$ score $0.917$, as shown in Figure~\ref{fig:diagnosis_competition}. Therefore we chose it as \F model $\hat{f}(\bm{x})$.
 Insights on the use of \PCOs for MS assessment are provided by the sparsity of the \F model induced by the RFE schema.
 The $31$ selected variables are reported in Table~\ref{tab:selected}.
-Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Table~\ref{tab:selected}, we observe that each \PCO used in this study is represented at least once, except EDINB, and the most represented is FIM.
+Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Table~\ref{tab:selected}, we observe that each \PCO used in this study is represented at least once, except \EDINB, and the most represented is \FIM.
 We also see that, whenever possible, the model tends to select aggregate scores (total and subtotal) rather that single items. This is consistent with the clinical practice, where neurologists are more likely to assess patient's health status by using the aggregate scores, rather than the single questions.
 Quite surprisingly, the recent number of relapses is the only additional information not selected by the model.
 Finally, we note that all the domains that are known to be affected by the disease are well covered: mobility (upper and lower limbs), cognition, emotional, fatigue, bladder and psychosocial.
