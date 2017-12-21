@@ -144,6 +144,20 @@ Moreover, a neurologist assigns to each patient the corresponding disease course
 \section{\PCOs exploratory data analysis} \label{sec:aism_eda}
 
 
+ \begin{figure}[]
+	\centering
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_bars.png}
+		\label{fig:patients}%
+	}%
+	%	\hfill%
+	\subfloat[]{%
+		\includegraphics[width=0.5\textwidth]{part2/ms_pie.png} \label{fig:PPRRSP}
+	}%
+	\caption{An overview of the \PCO dataset used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3137$), divided according to the disease form. \todo{break figure in two}}\label{fig:data}
+\end{figure}
+
+
 %In this work we focus on detecting the \RR to \SP prediction, hence the patients in \PR and \PP form will not be taken into account.
 Our final goal is predicting MS course evolution of  \RR and  \SP patients, hence the subjects with \PR and \PP forms will not be taken into account.
 We considered all the patients with a minimum of $1$ time point (the most recently enrolled) up to $T=8$ time points for a total of $2699$ samples, of which $1220$ \RR and $1579$ \SP (see Figure~\ref{fig:patients}). As this is an ongoing project, the number of PwMS decreases with time. We expect to fill the gap of samples between \textit{Exam~$1$} and \textit{Exam~$8$} by the end of the funded study.
@@ -153,18 +167,6 @@ We considered all the patients with a minimum of $1$ time point (the most recent
 
  The number of considered samples across examinations is hence $2699$, of which $1220$ \RR and $1579$ \SP.
 
- \begin{figure}[h!]
-	\centering
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/patients_copy.png}
-		\label{fig:patients}%
-	}%
-	\hfill%
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/PP-RR-SP_copy.png} \label{fig:PPRRSP}
-	}%
-	\caption{An overview of the \PCO dataset used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3137$), divided according to the disease form. \todo{break figure in two}}\label{fig:data}
-\end{figure}
 
 \section{Problem description}\label{sec:problem_description}
 
