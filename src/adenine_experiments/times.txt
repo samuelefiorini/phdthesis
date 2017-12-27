@@ -1,6 +1,0 @@
-# ade_run on rafiki for AISM data
-Adenine master - Elapsed time : 02:18:03 s
-Adenine analyze - Elapsed time : 00:27:06 s
-
-# ade_run with dask on 4 nodes (rafiki, orio, serendipity, megazord)
-Adenine master - Elapsed time : 02:44:00 s -.-'

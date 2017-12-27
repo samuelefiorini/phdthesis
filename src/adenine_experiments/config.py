@@ -13,14 +13,14 @@ use_compression = False  # use gzip to compress the results
 
 # ----------------------------  INPUT DATA ---------------------------- #
 # Load an example dataset or specify your input data in tabular format
-data_file = 'anonimyzed_data_03-2017.csv'
-labels_file = 'anonimyzed_labels_03-2017.csv'  # OPTIONAL
+data_file = '../data../AISM/anonimyzed_data_12-2017.csv'
+labels_file = '../data../AISM/anonimyzed_labels_12-2017.csv'  # OPTIONAL
 samples_on = 'rows'  # if samples lie on columns use 'cols' or 'col'
 data_sep = ','  # the data separator. e.g., ',', '\t', ' ', ...
 X, y, feat_names, index = data_source.load('custom',
                                            data_file, labels_file,
                                            samples_on=samples_on,
-#                                           n_samples=150,
+                                           n_samples=150,
                                            sep=data_sep)
 
 # -----------------------  PIPELINES DEFINITION ------------------------ #
