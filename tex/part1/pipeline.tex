@@ -2,10 +2,10 @@
 % \usepackage{amsmath}
 % \begin{document}
 
-\begin{figure}[b]
+\begin{figure}[]
   \centering
-  \begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.3cm]
-    \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum height=1.2cm]
+  \begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=4cm]
+    \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum height=2.5cm]
     \node[state]    (xit)                     {$\bm{x}_i^t$};
     \node[state]    (yit)[below of=xit]       {$y_i^t$};
     \node[state]    (xit1)[right of=xit]      {$\bm{x}_i^{t+1}$};
