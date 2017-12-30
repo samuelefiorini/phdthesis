@@ -2,6 +2,8 @@
 """Perform selection stability on a bunch of models on the AISM dataset."""
 from __future__ import print_function
 import warnings
+import time
+import datetime
 
 import numpy as np
 import pandas as pd
@@ -37,13 +39,13 @@ def evaluate(estimator, X, y):
 
 def stability_selection(estimator, X, y):
     """Naive stability selection process with MC samples."""
-    rs = StratifiedShuffleSplit(n_splits=100, test_size=.25)
+    rs = StratifiedShuffleSplit(n_splits=2, test_size=.25)
     feats = []
     test_metrics = []
     print('      + Running {} splits:'.format(rs.n_splits))
     for i, (train_index, test_index) in enumerate(rs.split(X, y)):
+        tic = time.time()
         estimator.fit(X.iloc[train_index], y.iloc[train_index])
-
         # Save the features
         _mdl = estimator.best_estimator_.steps[1][1]
         if hasattr(_mdl, 'coef_'):
@@ -52,7 +54,7 @@ def stability_selection(estimator, X, y):
             feats.append(X.columns[_mdl.support_])
 
         test_metrics.append(evaluate(estimator, X.iloc[test_index], y.iloc[test_index]))
-        print('      + Split {}/{} done.'.format(i+1, rs.n_splits))
+        print('      + Split {}/{} done [{}].'.format(i+1, rs.n_splits, str(datetime.timedelta(seconds=time.time()-tic))))
     return feats, test_metrics
 
 
@@ -68,12 +70,12 @@ def create_pipelines():
         ]
 
     estimators = [
-        GradientBoostingClassifier(learning_rate=0.05),
-        RFECV(RandomForestClassifier(), step=.25, cv=3),
+        RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
+        RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
         L1L2Classifier(),
         LogisticRegression(penalty='l2'),
         LogisticRegression(penalty='l1'),
-        RFECV(SVC(kernel='linear'), step=.25, cv=3)
+        RFECV(SVC(kernel='linear'), step=.25, cv=3, n_jobs=-1)
         ]
 
     params = [
