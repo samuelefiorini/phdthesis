@@ -6,12 +6,12 @@ import numpy as np
 from palladio import datasets
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from adenine.utils.extensions import Imputer
-from sklearn.preprocessing import MinMaxScaler
+#from adenine.utils.extensions import Imputer
+from sklearn.preprocessing import StandardScaler
 
 
 from sklearn.feature_selection import RFECV
-from sklearn.ensemble import GradientBoostingClassifier as GB
+from sklearn.ensemble import RandomForestClassifier as RF
 
 #####################
 #   DATASET PATHS ###
@@ -21,8 +21,8 @@ from sklearn.ensemble import GradientBoostingClassifier as GB
 
 # The list of all files required for the experiments
 
-data_path = 'dataset_03-2017/data_training.csv'
-target_path = 'dataset_03-2017/labels_training.csv'
+data_path = 'dataset_12-2017/data_training.csv'
+target_path = 'dataset_12-2017/labels_training.csv'
 
 # pandas.read_csv options
 data_loading_options = {
@@ -53,17 +53,17 @@ feature_names = dataset.feature_names
 #   SESSION OPTIONS ###
 #######################
 
-session_folder = 'mucmd_rfecv-gb3-NOTOT'
+session_folder = 'thesis_rfecv-rf'
 
 # The learning task, if None palladio tries to guess it
 # [see sklearn.utils.multiclass.type_of_target]
 learning_task = None
 
 # The number of repetitions of 'regular' experiments
-n_splits_regular = 20
+n_splits_regular = 100
 
 # The number of repetitions of 'permutation' experiments
-n_splits_permutation = 20
+n_splits_permutation = None
 
 #######################
 #  LEARNER OPTIONS  ###
@@ -71,23 +71,22 @@ n_splits_permutation = 20
 
 # PIPELINE ###
 # STEP 1: Imputing
-imp = Imputer(strategy='nn')
+#imp = Imputer(strategy='nn')
 
 # STEP 2: Preprocessing
-pp = MinMaxScaler(feature_range=(0, 1))
+pp = StandardScaler()
 
 # SETP 3: Classification
-clf = RFECV(GB(), step=.25, cv=3)
+clf = RFECV(RF(), step=.25, cv=3)
 
-param_grid = {'classification__estimator__max_depth': map(int, np.linspace(50, 100, 10)),
-              'classification__estimator__max_features': [None, 'log2', 'sqrt', 0.5],
-              'classification__estimator__n_estimators': map(int, np.linspace(10, 200, 10)),
-              'classification__estimator__learning_rate': [0.05]
+param_grid = {'classification__estimator__max_features': [None, 'log2', 'sqrt', 0.5],
+              'classification__estimator__min_samples_leaf': map(int, np.linspace(5, 100, 30)),
+              'classification__estimator__oob_score': [True],
+              'classification__estimator__n_estimators': [1000]
               }
 
 # COMPOSE THE PIPELINE
-pipe = Pipeline([('imputing', imp),
-                 ('preproc', pp),
+pipe = Pipeline([('preproc', pp),
                  ('classification', clf)])
 
 # palladio estimator

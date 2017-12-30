@@ -6,12 +6,11 @@ import numpy as np
 from palladio import datasets
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from adenine.utils.extensions import Imputer
-from sklearn.preprocessing import MinMaxScaler
+#from adenine.utils.extensions import Imputer
+from sklearn.preprocessing import StandardScaler
 
-
-from sklearn.feature_selection import RFECV
-from sklearn.svm import SVC
+# from palladio.wrappers import ElasticNetClassifier as ENET
+from sklearn.linear_model import LogisticRegression as LR
 
 #####################
 #   DATASET PATHS ###
@@ -21,8 +20,8 @@ from sklearn.svm import SVC
 
 # The list of all files required for the experiments
 
-data_path = 'dataset_03-2017/data_training.csv'
-target_path = 'dataset_03-2017/labels_training.csv'
+data_path = 'dataset_12-2017/data_training.csv'
+target_path = 'dataset_12-2017/labels_training.csv'
 
 # pandas.read_csv options
 data_loading_options = {
@@ -53,17 +52,17 @@ feature_names = dataset.feature_names
 #   SESSION OPTIONS ###
 #######################
 
-session_folder = 'mucmd_rfecv-svm-part2'
+session_folder = 'thesis_logit'
 
 # The learning task, if None palladio tries to guess it
 # [see sklearn.utils.multiclass.type_of_target]
 learning_task = None
 
 # The number of repetitions of 'regular' experiments
-n_splits_regular = 0
+n_splits_regular = 100
 
 # The number of repetitions of 'permutation' experiments
-n_splits_permutation = 8
+n_splits_permutation = None
 
 #######################
 #  LEARNER OPTIONS  ###
@@ -71,22 +70,20 @@ n_splits_permutation = 8
 
 # PIPELINE ###
 # STEP 1: Imputing
-imp = Imputer(strategy='nn')
+#imp = Imputer(strategy='nn')
 
 # STEP 2: Preprocessing
-pp = MinMaxScaler(feature_range=(0, 1))
+pp = StandardScaler()
 
 # SETP 3: Classification
-clf = RFECV(SVC(), step=.25, cv=3)
+clf = LR()
 
-param_grid = {'classification__estimator__kernel': ['linear'],
-              'classification__estimator__C': np.logspace(-3, 3, 10),
-              'classification__estimator__gamma': np.logspace(-5, 1, 10)
+param_grid = {'classification__C': np.logspace(-3, 3, 30),
+              'classification__penalty': ['l1']
               }
 
 # COMPOSE THE PIPELINE
-pipe = Pipeline([('imputing', imp),
-                 ('preproc', pp),
+pipe = Pipeline([('preproc', pp),
                  ('classification', clf)])
 
 # palladio estimator
@@ -114,7 +111,6 @@ frequency_threshold = None
 
 # ~~ Plotting Options ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 score_surfaces_options = {
-    'logspace': ['classification__estimator__C',
-                 'classification__estimator__gamma'],
+    'logspace': ['classification__alpha'],
     'plot_errors': True
 }

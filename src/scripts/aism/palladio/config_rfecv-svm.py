@@ -6,9 +6,12 @@ import numpy as np
 from palladio import datasets
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
+#from adenine.utils.extensions import Imputer
 from sklearn.preprocessing import StandardScaler
 
-from palladio.wrappers import ElasticNetClassifier as ENET
+
+from sklearn.feature_selection import RFECV
+from sklearn.svm import SVC
 
 #####################
 #   DATASET PATHS ###
@@ -18,8 +21,8 @@ from palladio.wrappers import ElasticNetClassifier as ENET
 
 # The list of all files required for the experiments
 
-data_path = 'dataset_03-2017/data_training.csv'
-target_path = 'dataset_03-2017/labels_training.csv'
+data_path = 'dataset_12-2017/data_training.csv'
+target_path = 'dataset_12-2017/labels_training.csv'
 
 # pandas.read_csv options
 data_loading_options = {
@@ -50,17 +53,17 @@ feature_names = dataset.feature_names
 #   SESSION OPTIONS ###
 #######################
 
-session_folder = 'mucmd_rfecv-enet'
+session_folder = 'thesis_rfecv-svm'
 
 # The learning task, if None palladio tries to guess it
 # [see sklearn.utils.multiclass.type_of_target]
 learning_task = None
 
 # The number of repetitions of 'regular' experiments
-n_splits_regular = 50
+n_splits_regular = 100
 
 # The number of repetitions of 'permutation' experiments
-n_splits_permutation = 50
+n_splits_permutation = None
 
 #######################
 #  LEARNER OPTIONS  ###
@@ -74,10 +77,10 @@ n_splits_permutation = 50
 pp = StandardScaler()
 
 # SETP 3: Classification
-clf = ENET()
+clf = RFECV(SVC(), step=.25, cv=3)
 
-param_grid = {'classification__l1_ratio': np.linspace(0, 1, 30),
-              'classification__alpha': np.logspace(-5, 1, 30)
+param_grid = {'classification__estimator__kernel': ['linear'],
+              'classification__estimator__C': np.logspace(-3, 3, 30),
               }
 
 # COMPOSE THE PIPELINE
@@ -109,6 +112,6 @@ frequency_threshold = None
 
 # ~~ Plotting Options ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 score_surfaces_options = {
-    'logspace': ['classification__alpha'],
+    'logspace': ['classification__estimator__C'],
     'plot_errors': True
 }
