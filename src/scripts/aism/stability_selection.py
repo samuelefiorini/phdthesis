@@ -37,11 +37,11 @@ def evaluate(estimator, X, y):
             'recall': rcll, 'MCC': mcc, 'AUC': auc}
 
 
-def stability_selection(estimator, X, y):
+def stability_selection(estimator, X, y, tag=None):
     """Naive stability selection process with MC samples."""
-    rs = StratifiedShuffleSplit(n_splits=2, test_size=.25)
+    rs = StratifiedShuffleSplit(n_splits=100, test_size=.25)
     feats = []
-    test_metrics = []
+    scores = []
     print('      + Running {} splits:'.format(rs.n_splits))
     for i, (train_index, test_index) in enumerate(rs.split(X, y)):
         tic = time.time()
@@ -49,13 +49,20 @@ def stability_selection(estimator, X, y):
         # Save the features
         _mdl = estimator.best_estimator_.steps[1][1]
         if hasattr(_mdl, 'coef_'):
-            feats.append(X.columns[np.nonzero(_mdl.coef_)])
+            feats.append(X.columns[np.nonzero(_mdl.coef_)[0]])
         elif hasattr(_mdl, 'support_'):
             feats.append(X.columns[_mdl.support_])
 
-        test_metrics.append(evaluate(estimator, X.iloc[test_index], y.iloc[test_index]))
-        print('      + Split {}/{} done [{}].'.format(i+1, rs.n_splits, str(datetime.timedelta(seconds=time.time()-tic))))
-    return feats, test_metrics
+        scores.append(evaluate(estimator, X.iloc[test_index], y.iloc[test_index]))
+        print('      + [{}] Split {}/{} done [{}].'.format(tag, i+1, rs.n_splits, str(datetime.timedelta(seconds=time.time()-tic))))
+
+    # Save results
+    if tag is not None:
+        print('    * [{}] Dumping results on disk...'.format(tag))
+        dump(feats, tag+'_coefs.pkl')
+        dump(scores, tag+'_scores.pkl')
+        print('    * [{}] done.'.format(tag))
+    #return feats, scores
 
 
 def create_pipelines():
@@ -64,8 +71,8 @@ def create_pipelines():
         'gradient_boosting',
         'random_forests',
         'l1l2',
-        'l2_logistic_regression',
-        'l1_logistic_regression',
+        #'l2_logistic_regression',
+        #'l1_logistic_regression',
         'linear_svc'
         ]
 
@@ -73,21 +80,21 @@ def create_pipelines():
         RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
         RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
         L1L2Classifier(),
-        LogisticRegression(penalty='l2'),
-        LogisticRegression(penalty='l1'),
+        #LogisticRegression(penalty='l2'),
+        #LogisticRegression(penalty='l1'),
         RFECV(SVC(kernel='linear'), step=.25, cv=3, n_jobs=-1)
         ]
 
     params = [
         {'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
          'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
-        {'predict__estimator__max_features': map(int, np.linspace(0.1, 0.8, 10)),  # random_forests
-         'predict__estimator__min_samples_leaf': map(int, np.linspace(5, 100, 10)),
+        {'predict__estimator__max_features': map(int, np.linspace(10, 150, 10)),  # random_forests
+         'predict__estimator__min_samples_leaf': np.arange(1, 10),
          'predict__estimator__n_estimators': [1000]},
         {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
          'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
-        {'predict__alpha': np.logspace(-3, 2, 30)},  # l2 logistic regression
-        {'predict__alpha': np.logspace(-3, 2, 30)},  # l1 logistic regression
+        #{'predict__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
+        #{'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
         {'predict__estimator__C': np.logspace(-3, 3, 30)}  # linear svr
         ]
 
@@ -102,6 +109,34 @@ def create_pipelines():
     return pipes
 
 
+def master_parallel(pipes, X, y):
+    """Parallel pipelines evaluation."""
+    import multiprocessing as mp
+    jobs = []
+
+    # Submit jobs
+    for i, key in enumerate(pipes.keys()):
+        proc = mp.Process(target=stability_selection,
+                          args=(pipes[key], X, y, key))
+        jobs.append(proc)
+        proc.start()
+        print("- Job: %s submitted", i)
+
+    # Collect results
+    count = 0
+    for proc in jobs:
+        proc.join()
+        count += 1
+    print("- %d jobs collected", count)
+
+    # import joblib as jl
+    # jl.Parallel(n_jobs=-1) \
+    #     (jl.delayed(pipe_worker)(
+    #         'pipe' + str(i), pipe, pipes_dump, X) for i, pipe in enumerate(
+    #             pipes))
+
+
+
 def main():
     """Stability selection main routine."""
     print('-----------------------------------------')
@@ -111,6 +146,8 @@ def main():
     # 0. Load data
     data = pd.read_csv('dataset_12-2017/data_training.csv', header=0, index_col=0)
     labels = pd.read_csv('dataset_12-2017/labels_training.csv', header=0, index_col=0)
+    yy = np.where(labels.values == 'SP', 1, 0) # map RR - SP / 0 - 1
+    labels = pd.DataFrame(data=yy, index=labels.index, columns=labels.columns)
     print('- Data loaded: {} x {}'.format(*data.shape))
 
     # 1. Define the cross-validated pipelines
@@ -119,14 +156,15 @@ def main():
 
     # 2. Iterate over the pipelines
     print('- Starting main routine:')
-    for key in pipes.keys():
-        print('    * Running {}...'.format(key))
-        feats, scores = stability_selection(pipes[key], data, labels)
-        print('    * done.')
-        print('    * Dumping results on disk...')
-        dump(feats, key+'_coefs.pkl')
-        dump(scores, key+'_scores.pkl')
-        print('    * done.')
+    master_parallel(pipes, data, labels)
+    # for key in pipes.keys():
+    #     print('    * Running {}...'.format(key))
+    #     feats, scores = stability_selection(pipes[key], data, labels)
+    #     print('    * done.')
+    #     print('    * Dumping results on disk...')
+    #     dump(feats, key+'_coefs.pkl')
+    #     dump(scores, key+'_scores.pkl')
+    #     print('    * done.')
     print('done.')
 
 ################################################################################
