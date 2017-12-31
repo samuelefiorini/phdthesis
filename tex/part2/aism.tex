@@ -92,10 +92,35 @@ The biomedical data science challenge presented in this chapter is based on a \P
 Each patient is evaluated every four months through the items of the \PCOs reported in Table~\ref{tab:proms} which cover physical, cognitive and psychosocial domains.
 
 \todo{add here details on PCOs}
+\begin{itemize}
+	\item[] {\sc \textbf{MFIS}} This is a $21$-items self-reported questionnaire typically administered in $5$ to $10$ minutes. \MFIS provides an assessment of the effects of fatigue in terms of physical, cognitive, psychosocial functioning and it is considered a valuable tool by clinicians.
+	
+	\item[] {\sc \textbf{HADS}} This is a $14$-items self-reported questionnaire typically administered in $2$ to $6$ minutes which aims at detecting clinically significant symptoms of depression and anxiety in patients. \HADS consists in $7$ questions for depression and the remaining $7$ for anxiety.
+	
+	\item[] {\sc \textbf{LIFE}} 
+	
+	\item[] {\sc \textbf{OAB}}
+	
+	\item[] {\sc \textbf{EDINB}}
+	
+	\item[] {\sc \textbf{ABILH}}
+	
+	\item[] {\sc \textbf{FIM}}
+	
+	\item[] {\sc \textbf{MOCA}}
+	
+	\item[] {\sc \textbf{PASAT}} This clinical scale is a measure of cognitive function that assesses patients' auditory processing speed and flexibility,  as well as their calculation ability. It can be administered in $10$ to $15$ minutes and it consists in audio stimuli in which single digits are presented every $3$ seconds. The patient is asked to add each new digit to the one immediately prior to it. \PASAT must be administered by trained examiner.
+	
+	\item[] {\sc \textbf{SDMT}}
+	
+	\item[] {\sc \textbf{EDSS}} This is probably the oldest assessment instrument for MS. \EDSS is based on a neurological examination consisting of $7$-items. Each item rates a different function, all the items are then combined in the final \EDSS score which is an ordinal scale ranging from $0$ (normal neurological examination) to $10$ (death due to MS), in half-point increment. The use of \EDSS in modern MS assessment is somewhat controversial. Although usually adopted as an index of the disability level, \EDSS focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
+	
+	
+\end{itemize}
 
 \PCO data are intrinsically noisy due to the subjectivity of self-reported measures provided by the patients that can be influenced by personal feelings and opinions. In order to ameliorate this issue, $4$ questionnaires out of $10$ are administered by medical staff which is trained to keep a homogeneous level of evaluation.
 
-In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except \EDSS. Such scale is based on a neurological examination and, although usually adopted as an index of the disability level, it focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
+In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except \EDSS.
 %\todo{other comments here?}
 
 % The model considered all the \PCOs except \EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.

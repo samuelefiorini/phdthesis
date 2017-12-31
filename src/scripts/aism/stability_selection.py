@@ -88,7 +88,7 @@ def create_pipelines():
     params = [
         {'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
          'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
-        {'predict__estimator__max_features': map(int, np.linspace(10, 150, 10)),  # random_forests
+        {'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
          'predict__estimator__min_samples_leaf': np.arange(1, 10),
          'predict__estimator__n_estimators': [1000]},
         {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
