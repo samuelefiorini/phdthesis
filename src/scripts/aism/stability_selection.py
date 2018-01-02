@@ -18,7 +18,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 
 # Re-use the utilities of the dataprep script
 from aism_dataprep import dump
@@ -68,34 +68,37 @@ def stability_selection(estimator, X, y, tag=None):
 def create_pipelines():
     """Create all the models organized in a dictionary."""
     names = [
-        'gradient_boosting',
+        #'gradient_boosting',
         'random_forests',
-        'l1l2',
+        #'l1l2',
         #'l2_logistic_regression',
         #'l1_logistic_regression',
-        'linear_svc'
+        'linear_svc_l2',
+        'linear_svc_l1',
         ]
 
     estimators = [
-        RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
+        #RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
         RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
-        L1L2Classifier(),
+        #L1L2Classifier(),
         #LogisticRegression(penalty='l2'),
         #LogisticRegression(penalty='l1'),
-        RFECV(SVC(kernel='linear'), step=.25, cv=3, n_jobs=-1)
+        RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
+        RFECV(LinearSVC(penalty='l1', dual=False), step=.25, cv=3, n_jobs=-1)
         ]
 
     params = [
-        {'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
-         'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
+        #{'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
+        # 'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
         {'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
          'predict__estimator__min_samples_leaf': np.arange(1, 10),
          'predict__estimator__n_estimators': [1000]},
-        {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
-         'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
+        #{'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
+        # 'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
         #{'predict__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
         #{'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
-        {'predict__estimator__C': np.logspace(-3, 3, 30)}  # linear svr
+        {'predict__estimator__C': np.logspace(-3, 3, 10)},  # linear svc l2
+        {'predict__estimator__C': np.logspace(-3, 3, 10)}  # linear svc l1
         ]
 
     # Create all the cross-validated pipeline objects
