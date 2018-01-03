@@ -1144,6 +1144,11 @@ As of today ML is the workhorse of data science.
 	   			\text{MSE}(\bm{\hat y}, \bm{y}) = \frac{1}{n}\sum_{i=1}^n(\hat y_i - y_i)^2
     		\end{equation}
     		
+    		\item \textit{Root Mean Squared Error} (\ac{RMSE}): this is simply defined as the square root of MSE.
+    		\begin{equation} \label{eq:metrics_rmse}
+    			\text{RMSE}(\bm{\hat y}, \bm{y}) = \sqrt{\frac{1}{n}\sum_{i=1}^n(\hat y_i - y_i)^2}
+    		\end{equation}
+
     		\item \textit{Residual Sum of Squares} (\ac{RSS}): this data discrepancy measure is mainly used to measure the performance of least squares methods, as it corresponds to the square loss function.
     		\begin{equation} \label{eq:metrics_rss}
     			\text{RSS}(\bm{\hat y}, \bm{y}) = \sum_{i=1}^n(\hat y_i - y_i)^2
