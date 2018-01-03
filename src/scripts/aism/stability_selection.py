@@ -49,14 +49,17 @@ def stability_selection(estimator, X, y, tag=None):
         # Save the features
         _mdl = estimator.best_estimator_.steps[1][1]
         if hasattr(_mdl, 'coef_'):
-            feats.append(X.columns[np.nonzero(_mdl.coef_)[0]])
+            assert(len(_mdl.coef_.ravel()) == 165)  # sanity check
+            feats.append(X.columns[np.nonzero(_mdl.coef_.ravel())[0]])
         elif hasattr(_mdl, 'support_'):
+            assert(len(_mdl.support_.ravel()) == 165)  # sanity check
             feats.append(X.columns[_mdl.support_])
 
         scores.append(evaluate(estimator, X.iloc[test_index], y.iloc[test_index]))
         print('      + [{}] Split {}/{} done [{}].'.format(tag, i+1, rs.n_splits, str(datetime.timedelta(seconds=time.time()-tic))))
 
     # Save results
+    tag = None
     if tag is not None:
         print('    * [{}] Dumping results on disk...'.format(tag))
         dump(feats, tag+'_coefs.pkl')
@@ -69,20 +72,20 @@ def create_pipelines():
     """Create all the models organized in a dictionary."""
     names = [
         #'gradient_boosting',
-        'random_forests',
-        #'l1l2',
-        #'l2_logistic_regression',
-        #'l1_logistic_regression',
+        #'random_forests',
+        'l1l2',
+        'l2_logistic_regression',
+        'l1_logistic_regression',
         'linear_svc_l2',
         'linear_svc_l1',
         ]
 
     estimators = [
         #RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
-        RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
-        #L1L2Classifier(),
-        #LogisticRegression(penalty='l2'),
-        #LogisticRegression(penalty='l1'),
+        #RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
+        L1L2Classifier(),
+        LogisticRegression(penalty='l2'),
+        LogisticRegression(penalty='l1'),
         RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
         RFECV(LinearSVC(penalty='l1', dual=False), step=.25, cv=3, n_jobs=-1)
         ]
@@ -90,15 +93,15 @@ def create_pipelines():
     params = [
         #{'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
         # 'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
-        {'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
-         'predict__estimator__min_samples_leaf': np.arange(1, 10),
-         'predict__estimator__n_estimators': [1000]},
-        #{'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
-        # 'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
-        #{'predict__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
-        #{'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
-        {'predict__estimator__C': np.logspace(-3, 3, 10)},  # linear svc l2
-        {'predict__estimator__C': np.logspace(-3, 3, 10)}  # linear svc l1
+        #{'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
+        # 'predict__estimator__min_samples_leaf': np.arange(1, 10),
+        # 'predict__estimator__n_estimators': [1000]},
+        {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
+         'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
+        {'predict__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
+        {'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
+        {'predict__estimator__C': np.logspace(-3, 3, 15)},  # linear svc l2
+        {'predict__estimator__C': np.logspace(-3, 3, 15)}  # linear svc l1
         ]
 
     # Create all the cross-validated pipeline objects
@@ -149,7 +152,7 @@ def main():
     # 0. Load data
     data = pd.read_csv('dataset_12-2017/data_training.csv', header=0, index_col=0)
     labels = pd.read_csv('dataset_12-2017/labels_training.csv', header=0, index_col=0)
-    yy = np.where(labels.values == 'SP', 1, 0) # map RR - SP / 0 - 1
+    yy = np.where(labels.values == 'SP', 1, 0)  # map RR - SP / 0 - 1
     labels = pd.DataFrame(data=yy, index=labels.index, columns=labels.columns)
     print('- Data loaded: {} x {}'.format(*data.shape))
 
