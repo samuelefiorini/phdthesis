@@ -1,0 +1,123 @@
+(lp1
+cpandas.core.indexes.base
+_new_Index
+p2
+(cpandas.core.indexes.base
+Index
+p3
+(dp4
+S'data'
+p5
+cnumpy.core.multiarray
+_reconstruct
+p6
+(cnumpy
+ndarray
+p7
+(I0
+tS'b'
+tRp8
+(I1
+(I42
+tcnumpy
+dtype
+p9
+(S'O8'
+I0
+I1
+tRp10
+(I3
+S'|'
+NNNI-1
+I-1
+I63
+tbI00
+(lp11
+S'ABILH009'
+p12
+aS'ABILH012'
+p13
+aS'ABILH018'
+p14
+aS'ABILHSUB1'
+p15
+aS'ABILHTOT'
+p16
+aS'FIM (003'
+p17
+aS'FIM (004'
+p18
+aS'FIM (005'
+p19
+aS'FIM (009'
+p20
+aS'FIM (010'
+p21
+aS'FIM (011'
+p22
+aS'FIM (012'
+p23
+aS'FIM (014'
+p24
+aS'FIM (SUB1'
+p25
+aS'FIM (SUB3'
+p26
+aS'FIM (SUB4'
+p27
+aS'FIM (SUB5'
+p28
+aS'FIM (SUB6'
+p29
+aS'FIM (TOT'
+p30
+aS'HADS 007'
+p31
+aS'HADS 014'
+p32
+aS'HADS SUB1'
+p33
+aS'HADS SUB2'
+p34
+aS'HADS TOT'
+p35
+aS'HEIG'
+p36
+aS'ISTRU'
+p37
+aS'LIFE TOT'
+p38
+aS'MFIS 001'
+p39
+aS'MFIS 002'
+p40
+aS'MFIS 004'
+p41
+aS'MFIS SUB1'
+p42
+aS'MFIS SUB2'
+p43
+aS'MFIS SUB3'
+p44
+aS'MFIS TOT'
+p45
+aS'MOCA 001'
+p46
+aS'MOCA 009'
+p47
+aS'MOCA SUB1'
+p48
+aS'MOCA TOT'
+p49
+aS'OAB-QTOT'
+p50
+aS'PASATTOT'
+p51
+aS'SDMT TOT'
+p52
+aS'WEIG'
+p53
+atbsS'name'
+p54
+NstRp55
+a.

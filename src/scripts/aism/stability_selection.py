@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn import metrics
-from l1l2py.classification import L1L2Classifier
+# from l1l2py.classification import L1L2Classifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFECV
@@ -32,7 +32,7 @@ def evaluate(estimator, X, y):
     prec = metrics.precision_score(y, y_pred)
     rcll = metrics.recall_score(y, y_pred)
     mcc = metrics.matthews_corrcoef(y, y_pred)
-    auc = metrics.roc_auc_score(y, y_pred)
+    auc = metrics.roc_auc_score(y, y_pred) # FIXME this index is nonsensical
     return {'accuracy': acc, 'precision': prec,
             'recall': rcll, 'MCC': mcc, 'AUC': auc}
 
@@ -58,12 +58,11 @@ def stability_selection(estimator, X, y, tag=None):
         scores.append(evaluate(estimator, X.iloc[test_index], y.iloc[test_index]))
         print('      + [{}] Split {}/{} done [{}].'.format(tag, i+1, rs.n_splits, str(datetime.timedelta(seconds=time.time()-tic))))
 
-    # Save results
-    tag = None
+    # Save result
     if tag is not None:
         print('    * [{}] Dumping results on disk...'.format(tag))
-        dump(feats, tag+'_coefs.pkl')
-        dump(scores, tag+'_scores.pkl')
+        dump(feats, tag+'_coefs3.pkl')
+        dump(scores, tag+'_scores3.pkl')
         print('    * [{}] done.'.format(tag))
     #return feats, scores
 
@@ -71,37 +70,40 @@ def stability_selection(estimator, X, y, tag=None):
 def create_pipelines():
     """Create all the models organized in a dictionary."""
     names = [
-        #'gradient_boosting',
+        'gradient_boosting',
         #'random_forests',
-        'l1l2',
-        'l2_logistic_regression',
-        'l1_logistic_regression',
-        'linear_svc_l2',
-        'linear_svc_l1',
+        #'l1l2',
+        #'l2_logistic_regression',
+        #'l1_logistic_regression',
+        #'linear_svc_l2',
+        #'linear_svc_l1',
         ]
 
     estimators = [
-        #RFECV(GradientBoostingClassifier(learning_rate=0.05), step=.25, cv=3, n_jobs=-1),
+        RFECV(GradientBoostingClassifier(learning_rate=0.05,  # enable early stopping for gradient boosting
+                                         n_iter_no_change=10,  # this needs sklearn > 0.20dev
+                                         validation_fraction=0.2), step=.25, cv=3, n_jobs=-1),
         #RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
-        L1L2Classifier(),
-        LogisticRegression(penalty='l2'),
-        LogisticRegression(penalty='l1'),
-        RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
-        RFECV(LinearSVC(penalty='l1', dual=False), step=.25, cv=3, n_jobs=-1)
+        #L1L2Classifier(),
+        #RFECV(LogisticRegression(penalty='l2'), step=.25, cv=3, n_jobs=-1),
+        #LogisticRegression(penalty='l1'),
+        #RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
+        #LinearSVC(penalty='l1', dual=False)
         ]
 
     params = [
-        #{'predict__estimator__max_depth': map(int, np.linspace(50, 100, 10)),  # gradient_boosting
-        # 'predict__estimator__n_estimators': map(int, np.linspace(10, 200, 10))},
+        {'predict__estimator__max_depth': map(int, np.linspace(10, 100, 15)),  # gradient_boosting
+         # 'predict__estimator__n_estimators': map(int, np.linspace(10, 500, 15)),
+         'predict__estimator__max_features': ['sqrt', 0.5, None]},
         #{'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
         # 'predict__estimator__min_samples_leaf': np.arange(1, 10),
         # 'predict__estimator__n_estimators': [1000]},
-        {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
-         'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
-        {'predict__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
-        {'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
-        {'predict__estimator__C': np.logspace(-3, 3, 15)},  # linear svc l2
-        {'predict__estimator__C': np.logspace(-3, 3, 15)}  # linear svc l1
+        #{'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
+        # 'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
+        #{'predict__estimator__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
+        #{'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
+        #{'predict__estimator__C': np.logspace(-3, 3, 15)},  # linear svc l2
+        #{'predict__C': np.logspace(-3, 3, 15)}  # linear svc l1
         ]
 
     # Create all the cross-validated pipeline objects
