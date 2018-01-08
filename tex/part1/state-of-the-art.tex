@@ -1113,7 +1113,7 @@ As of today ML is the workhorse of data science.
 	
 	\subsubsection{Principal component analysis} \label{sec:pca}
 	
-	Principal Component Analysis (\ac{PCA})~\cite{bishop2006pattern} is probably the most popular dimensionality reduction technique. PCA is typically defined as linear projection of the data onto a lower dimensional space where the variance is maximized.
+	Principal Component Analysis (\ac{PCA})~\cite{jolliffe2002principal} is probably the most popular dimensionality reduction technique. PCA is typically defined as linear projection of the data onto a lower dimensional space where the variance is maximized.
 	
 	In order to understand PCA in general, we first focus on how to find the first principal component, \ie the main direction in which the data shall be projected in order to preserve as much variance as possible. Let $\bm{u}_1$ the $d$ dimensional vector which identifies the direction of the first principal component. As we are not interested in the magnitude of this vector, but rather in its direction, without loss of generality we can assume $\bm{u}_1^T\bm{u}_1 = 1$.
 	
@@ -1131,21 +1131,27 @@ As of today ML is the workhorse of data science.
 	$$
 	which means that the variance is maximum when $\bm{u}_1$ is the eigenvector of $S$ with maximum eigenvalue $\lambda_1$. The eigenvector $\bm{u}_1$ is hence known as the principal components.
 	
-	Additional components can be iteratively found by choosing new directions, orthogonal to the ones already identified, that maximize the projected variance.
+	Additional components can be iteratively found by choosing new directions, orthogonal to the ones already identified, that maximize the projected variance. \todo{use cases?}
 	
 	\subsubsection{Multi-dimensional scaling} \label{sec:mds}
 
-	Multi-dimensional scaling (\ac{MDS})~\cite{bishop2006pattern} is a dimensionality reduction technique which aims at finding a low-dimensional projection that maximally preserves the pairwise distance between data points.
+	Multi-dimensional scaling (\ac{MDS})~\cite{borg2005modern} is a dimensionality reduction technique which aims at finding a low-dimensional projection that maximally preserves the pairwise distance between data points.
 		
-	Adopting the Euclidean distance metric, MDS is similar to PCA. However, the MDS algorithm can be extended to a wide range of similarity measures.
+	Adopting the Euclidean distance metric, MDS is similar to PCA. However, the MDS algorithm can be extended to a wide range of similarity measures. \todo{use cases?}
 	
 	\subsubsection{Isomap} \label{sec:isomap}
 	
+	Isomap~\cite{tenenbaum2000global} is a non-linear dimensionality reduction technique that can be seen as an extension of MDS.
+	
+	In this algorithm, the similarity between the data points are evaluated as geodesic distances along some manifold. At first the algorithm finds the $k$ nearest neighbors of each sample. Then it builds a graph where each sample is a node and the edges of neighboring nodes are weighted with the Euclidean distance of the corresponding samples. Finally, the geodesic distance is approximated by summing the weights of the edges corresponding to the shortest path between each pair of points. The final low-dimensional projection is obtained performing MDS on such distance matrix. \todo{use cases?}
+	
+	
 	\subsubsection{t-Distributed Stochastic Neighbor Embedding} \label{sec:tsne}
-	\todo{maybe}
+	
+	t-Distributed Stochastic Neighbor Embedding	(\ac{t-SNE})~\cite{van2008visualizing} is a relatively recently proposed nonlinear dimensionality reduction technique specifically developed for high-dimensional data visualization. t-SNE aims at learning a low-dimensional data projection that reflects the original data similarities as much as possible.
+	
+	The algorithm has two main steps. At first t-SNE devises pairwise probability distributions over high-dimensional samples such that the similar ones are picked together with high probability. Then, the algorithm defines another probability distribution on a low-dimensional map identified by minimizing the Kullback–Leibler divergence between the two distributions. The minimization problem is solved by gradient descent. \todo{use cases?}
     
-    
-
 
   \section{Model selection and evaluation} \label{subsec:model_selection}
     \subsection{Model selection strategies}
