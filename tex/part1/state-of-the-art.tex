@@ -1113,7 +1113,7 @@ As of today ML is the workhorse of data science.
 	
 	\subsubsection{Principal component analysis} \label{sec:pca}
 	
-	Principal Component Analysis (\ac{PCA}) is probably the most popular dimensionality reduction technique. PCA is typically defined as linear projection of the data onto a lower dimensional space where the variance is maximized.
+	Principal Component Analysis (\ac{PCA})~\cite{bishop2006pattern} is probably the most popular dimensionality reduction technique. PCA is typically defined as linear projection of the data onto a lower dimensional space where the variance is maximized.
 	
 	In order to understand PCA in general, we first focus on how to find the first principal component, \ie the main direction in which the data shall be projected in order to preserve as much variance as possible. Let $\bm{u}_1$ the $d$ dimensional vector which identifies the direction of the first principal component. As we are not interested in the magnitude of this vector, but rather in its direction, without loss of generality we can assume $\bm{u}_1^T\bm{u}_1 = 1$.
 	
@@ -1134,6 +1134,10 @@ As of today ML is the workhorse of data science.
 	Additional components can be iteratively found by choosing new directions, orthogonal to the ones already identified, that maximize the projected variance.
 	
 	\subsubsection{Multi-dimensional scaling} \label{sec:mds}
+
+	Multi-dimensional scaling (\ac{MDS})~\cite{bishop2006pattern} is a dimensionality reduction technique which aims at finding a low-dimensional projection that maximally preserves the pairwise distance between data points.
+		
+	Adopting the Euclidean distance metric, MDS is similar to PCA. However, the MDS algorithm can be extended to a wide range of similarity measures.
 	
 	\subsubsection{Isomap} \label{sec:isomap}
 	
