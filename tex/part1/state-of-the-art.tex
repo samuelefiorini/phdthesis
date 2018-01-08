@@ -1107,14 +1107,31 @@ As of today ML is the workhorse of data science.
 	
 	It is often the case that the feature space $\mathcal{X}$ is not the most suitable to our purposes. Sometimes projecting the data in a different space $\mathcal{X}' \in \mathbb{R}^p$, maybe with $p<d$ or even $p \ll d$, can greatly ease the successive learning step. We have already explored this concept talking about the kernel trick in Section~\ref{sec:kernel_trick}.
 	
-	Heavily decreasing the dimensionality of the data is also helpful as it reduces computational times and eases data visualization. These two aspects are really important when dealing with large scale biomedical data.
+	In particular, heavily decreasing the dimensionality of the data is helpful as it achieves (lossy) data compression reducing the computational time of further analyses. Moreover, dimensionality reduction eases data visualization and understanding. These aspects are really important when dealing with large scale biomedical data.
 	
 	This section presents a compact overview of the dimensionality reduction and unsupervised feature learning algorithms that are most relevant with the biomedical data science projects presented in the second part of this thesis.
 	
 	\subsubsection{Principal component analysis} \label{sec:pca}
 	
-	Principal Component Analysis (\ac{PCA}) is probably the most popular dimensionality reduction technique.
+	Principal Component Analysis (\ac{PCA}) is probably the most popular dimensionality reduction technique. PCA is typically defined as linear projection of the data onto a lower dimensional space where the variance is maximized.
 	
+	In order to understand PCA in general, we first focus on how to find the first principal component, \ie the main direction in which the data shall be projected in order to preserve as much variance as possible. Let $\bm{u}_1$ the $d$ dimensional vector which identifies the direction of the first principal component. As we are not interested in the magnitude of this vector, but rather in its direction, without loss of generality we can assume $\bm{u}_1^T\bm{u}_1 = 1$.
+	
+	The projection of each data point $\bm{x}_i$ on the direction identified by $\bm{u}_1$ can easily be found as $\bm{x}_i' = \bm{u}_1^T\bm{x}_i$. We shall notice that the variance of the projected data can be expressed as
+	$$
+	\sigma^2_{\bm{x}_i'} = \frac{1}{n} \sum_{i=1}^n \big[\bm{u}_1^T\bm{x}_i - \bm{u}_1^T\bar{x}\big]^2 = \bm{u}_1^T S \bm{u}_1
+	$$
+	where $\bar{x} = \frac{1}{n} \sum_{i=1}^n \bm{x}_i$ is the empirical mean of the samples and $S$ is the data covariance matrix, defined as $S = \frac{1}{n} \sum_{i=1}^n (\bm{x}_i - \bar{x})(\bm{x}_i - \bar{x})^T$. Therefore, finding $\bm{u}_1$ can be casted in the following optimization problem
+	$$
+	\max_{\bm{u} \in \mathbb{R}^d} \big[ \bm{u}_1^T S \bm{u}_1 + \lambda_1 (1 - \bm{u}_1^T  \bm{u}_1) \big]
+	$$
+	where $\lambda_1$ is a Lagrangian multiplier. By setting the derivative with respect to $\bm{u}_1$ equal to zero we can easily write
+	$$
+	S \bm{u}_1 = \lambda_1 \bm{u}_1 \Rightarrow \bm{u}_1^T S \bm{u}_1 = \lambda_1
+	$$
+	which means that the variance is maximum when $\bm{u}_1$ is the eigenvector of $S$ with maximum eigenvalue $\lambda_1$. The eigenvector $\bm{u}_1$ is hence known as the principal components.
+	
+	Additional components can be iteratively found by choosing new directions, orthogonal to the ones already identified, that maximize the projected variance.
 	
 	\subsubsection{Multi-dimensional scaling} \label{sec:mds}
 	
