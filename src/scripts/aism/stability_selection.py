@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 from sklearn import metrics
-# from l1l2py.classification import L1L2Classifier
+from l1l2py.classification import L1L2Classifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFECV
@@ -61,8 +61,8 @@ def stability_selection(estimator, X, y, tag=None):
     # Save result
     if tag is not None:
         print('    * [{}] Dumping results on disk...'.format(tag))
-        dump(feats, tag+'_coefs3.pkl')
-        dump(scores, tag+'_scores3.pkl')
+        dump(feats, tag+'_coefs_MM.pkl')
+        dump(scores, tag+'_scores_MM.pkl')
         print('    * [{}] done.'.format(tag))
     #return feats, scores
 
@@ -71,39 +71,40 @@ def create_pipelines():
     """Create all the models organized in a dictionary."""
     names = [
         'gradient_boosting',
-        #'random_forests',
-        #'l1l2',
-        #'l2_logistic_regression',
-        #'l1_logistic_regression',
-        #'linear_svc_l2',
-        #'linear_svc_l1',
+        'random_forests',
+        'l1l2',
+        'l2_logistic_regression',
+        'l1_logistic_regression',
+        'linear_svc_l2',
+        'linear_svc_l1',
         ]
 
     estimators = [
         RFECV(GradientBoostingClassifier(learning_rate=0.05,  # enable early stopping for gradient boosting
                                          n_iter_no_change=10,  # this needs sklearn > 0.20dev
-                                         validation_fraction=0.2), step=.25, cv=3, n_jobs=-1),
-        #RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
-        #L1L2Classifier(),
-        #RFECV(LogisticRegression(penalty='l2'), step=.25, cv=3, n_jobs=-1),
-        #LogisticRegression(penalty='l1'),
-        #RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
-        #LinearSVC(penalty='l1', dual=False)
+                                         validation_fraction=0.2,
+                                         n_estimators=500), step=.25, cv=3, n_jobs=-1),
+        RFECV(RandomForestClassifier(), step=.25, cv=3, n_jobs=-1),
+        L1L2Classifier(),
+        RFECV(LogisticRegression(penalty='l2'), step=.25, cv=3, n_jobs=-1),
+        LogisticRegression(penalty='l1'),
+        RFECV(LinearSVC(penalty='l2'), step=.25, cv=3, n_jobs=-1),
+        LinearSVC(penalty='l1', dual=False)
         ]
 
     params = [
         {'predict__estimator__max_depth': map(int, np.linspace(10, 100, 15)),  # gradient_boosting
          # 'predict__estimator__n_estimators': map(int, np.linspace(10, 500, 15)),
          'predict__estimator__max_features': ['sqrt', 0.5, None]},
-        #{'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
-        # 'predict__estimator__min_samples_leaf': np.arange(1, 10),
-        # 'predict__estimator__n_estimators': [1000]},
-        #{'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
-        # 'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
-        #{'predict__estimator__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
-        #{'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
-        #{'predict__estimator__C': np.logspace(-3, 3, 15)},  # linear svc l2
-        #{'predict__C': np.logspace(-3, 3, 15)}  # linear svc l1
+        {'predict__estimator__max_features': np.linspace(0.1, 0.9, 10),  # random_forests
+         'predict__estimator__min_samples_leaf': np.arange(1, 10),
+         'predict__estimator__n_estimators': [500]},
+        {'predict__alpha': np.logspace(-3, 2, 30),  # l1l2
+         'predict__l1_ratio': np.linspace(1e-3, 1, 30)},
+        {'predict__estimator__C': np.logspace(-3, 2, 30)},  # l2 logistic regression
+        {'predict__C': np.logspace(-3, 2, 30)},  # l1 logistic regression
+        {'predict__estimator__C': np.logspace(-3, 3, 15)},  # linear svc l2
+        {'predict__C': np.logspace(-3, 3, 15)}  # linear svc l1
         ]
 
     # Create all the cross-validated pipeline objects
