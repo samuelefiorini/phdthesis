@@ -960,7 +960,35 @@ As of today ML is the workhorse of data science.
    \end{itemize}
 
 	Variable selection techniques are traditionally organized in three groups: filter, wrapper and embedded methods~\cite{guyon2003introduction}.
-	
+
+	\begin{itemize}
+		
+		\item[] \textbf{Filters}
+		These techniques, \textit{irrelevant} features are filtered out from the feature set before any learning step.
+%		Indeed, filter methods may suffer from selection bias, if the filtering is performed before splitting the data, and it does not guarantee that the identified feature subset is optimal with respect to the learning problem.
+		A fair majority of filter approaches is based on some variable ranking criteria that are usually based on the definition of a scoring function $F(\bm{x}^{j}, \bm{y})$, where $\bm{x}^{j}$ is the $j-th$ variable and $\bm{y}$ is the output vector. Usually high values of the scoring function correspond to highly relevant features. Once the scoring function is evaluated for each feature, the entire feature set is sorted by means of their score. Varying the selection threshold one may generate different set of nested features. The selection of one of such subsets can be done after an actual learning step, \ie when a reliable estimate of the prediction error is available.
+		Variable selection techniques that belong to this class may be based on some statistical scores, \eg t-test, ANOVA, Pearson correlation, or some entropy measures, \eg the mutual information~\cite{everitt2006cambridge}. Statistical score-based algorithms may fail when the assumptions on the probability distribution function does not hold for the available data. On the same line, information theoretic techniques should need the probability distribution of the data, which is usually unknown.
+%		In practical cases, an estimate of the probability distribution is estimated by means of frequency counts.
+%		Such empirical estimates are, of course, weak in case of small $n$ and their computation is harder with several classes and variable values ($X$).
+%		This last observation underlines also how entropy-based criteria are more suitable for classification problem than for regression ones and, above all, how ineffective they could be on high-dimensional data.\\
+		
+		Single variable classifiers is another class of methods that, to some extent, may fall into this family. They still define a scoring function $F$, but such function is a measure of the predictive power of each features. For instance, in a classification scenario one may select the list of variables that, individually, have best accuracy, or false positive or false negative classification rate. Moreover, in case of regression problems best residual sum of squares or $\text{R}^2$ score may be used  (see Section~\ref{sec:performance_metrics}). A major drawback of this class of methods is that features that are not relevant by themselves will be discarded even if they would have been relevant used in combination with some other ones.
+		
+		\item[] \textbf{Wrappers}
+		The key idea behind the algorithms of this second family is that the variable selection process should not only depend on input and outputs, but also on a specified learning algorithm. These algorithms select a feature subset according to the prediction performance achieved by some learning algorithms evaluated on subsamples of the original feature set. ML methods are here used as black boxes that, given some input, simply return a prediction performance score.
+		Exhaustive search over the whole space of all possible features subset, that has cardinality $2^d$, is clearly unfeasible even in low dimension. In order to cope with this problem several \textit{greedy} techniques have been proposed. Among them, the most popular algorithms are the \textit{matching pursuit} (also known as forward stage-wise selection)~\cite{cai2011orthogonal} and the Recursive Feature Elimination scheme (RFE)~\cite{guyon2002gene}.
+		While the first starts from an empty vector and greedily incorporate the most relevant features, RFE starts with the whole feature set and then iteratively exclude the least promising variables.
+		
+		\item[] \textbf{Embedded}
+		The main characteristic of these methods is that they can learn and perform variable selection simultaneously.
+%		In other words, the variable selection is here embedded in the learning machine.
+		Embedded variable selection can be achieved by two families of learning machines: tree-based and regularization methods.
+		Decision trees can be used for variable selection as only some of the input variables are used to partition the feature space and variables not involved in any split are can be discarded, see Section~\ref{sec:decision_trees}. Moreover, ensemble of decision trees natively offer a feature importance measure~\ref{sec:ensemble_methods}.
+		On the other hand, regularization methods as extensively discussed in Section~\ref{subsec:regularization_methods}), can easily be used for variable selection by exploiting sparsity enforcing penalties.
+		
+	\end{itemize}
+
+	\todo{discuss a bit the variable selection stability}
 
 	
 

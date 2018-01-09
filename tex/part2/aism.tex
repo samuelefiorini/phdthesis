@@ -330,7 +330,7 @@ We imposed $f(\bm{x})$ to be sparse. This requirement is helpful from two distin
 	% \item the effect the course of dimensionality~\cite{hastie2015statistical} may be attenuated, hence increasing the performance of the predictive model, and
 	\item the identification of a reduced subset of meaningful \PCOs provides interpretability of the results for the clinicians.
 \end{enumerate*}
-In order to achieve such sparse model, we take advantage of two main variable selection strategies: embedded and wrapper methods~\cite{guyon2003introduction}.
+In order to achieve such sparse model, we take advantage of two main variable selection strategies: embedded and wrapper methods (see Section~\ref{subsec:feature_selection}).
 When using embedded methods, we exploited the sparsity inducing penalties of EN to take into account possible correlation between \PCO variables and of SLR to benefit from the renowned classification capability of the logistic loss function.
 We applied the RFE wrapper method to
 % Concerning the use of wrapper methods, which exploit a RFE schema, we chose
@@ -344,7 +344,7 @@ As no prior information on the relationship between \PCOs evaluated at different
 
 Concerning the linear models, we explored two different solutions: NNM and MTEN. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to the state-of-the-art MLP approach.
 
-\section{Results}\label{sec:results}
+\section{Results}\label{sec:aism_results}
 
 % \todo{add table of selected features}
 We shall discuss separately the results achieved in terms of \F, \G and \FOG models.
