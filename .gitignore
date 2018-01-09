@@ -2,6 +2,7 @@
 **/__local
 **/results
 **/__partial
+**/__trash
 
 ## Notebooks checkpoints
 **/*.ipynb_checkpoints

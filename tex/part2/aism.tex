@@ -197,7 +197,10 @@ Analyzing \PCO data is challenging from several respects.
 For instance, items belonging to different questionnaires are encoded with numerical values in different ranges.
 As an example, the items of the \MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the \SDMT outcome is the global number of correctly answered items of the test (max $110$) and the \EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
 To tackle such issues, in this EDA we opted for a preliminary data preprocessing of the ordinal answers and a binary one-hot-encoding of the categorical ones, the latter increases the dimensionality of the samples, leading to $d=165$ variables in the dataset.
-The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature in a $[0, 1]$ range.
+The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature in a $[0, 1]$ range. The min-max scaling is obtained by the transformation in Equation~\eqref{eq:minmax}.
+\begin{equation} \label{eq:minmax}
+	asd
+\end{equation}
 The effect of the data preprocessing on the ordinal input variables is visually represented in Figure~\ref{fig:ms_boxplots}. As we can see, this preprocessing step allows to compare more easily the input features.
 
 \begin{figure}[]
