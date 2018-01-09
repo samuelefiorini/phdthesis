@@ -944,22 +944,25 @@ As of today ML is the workhorse of data science.
 %  
 %  In the era of personalized medicine, biospecimen collection and biological data management is still a challenging and expensive task~\cite{toga2015sharing}. Only few large-scale research enterprises, such as ENCODE~\cite{encode2004encode},  ADNI~\cite{jack2008alzheimer},  MOPED~\cite{kolker2012moped} or TCGA~\footnote{\url{https://cancergenome.nih.gov}}
 %  , have sufficient financial and human resources to manage, share and distribute access of heterogeneous types of biological data. To date, many biomedical studies still rely on a small number of collected samples~\cite{mcneish2016effect, button2013power, yu2013shrinkage}. This effect is even worse in case of rare diseases~\cite{Garg2016ABM} or in high-throughput molecular data (\eg genomics and proteomics) where the dimensionality of the problem can be in the order of hundreds of thousands.
-	Dealing with biomedical problems it is very often the case that the number of acquired variables $d$ is high. It may even happen that $d$ heavily outnumbers the number of collected samples $n$. This setting is usually referred to as \textit{large d small n} scenario, or simply $n \ll d$. Practical examples of this case are countless, \eg gene expression measures, DNA sequencing data, proteomics, biomedical images and so on.
+	Dealing with real-world data science challenges it is very often the case that the number of acquired variables $d$ is high. It may even happen that $d$ heavily outnumbers the number of collected samples $n$. This setting is usually referred to as \textit{large d small n} scenario, or simply $n \ll d$. Practical examples of this case can be easily found in the context of applied life sciences, \eg gene expression, DNA sequencing, proteomics, spectroscopy, medical imaging and so on.
 	
 	In such cases, the main goal of the analysis is often to identify a meaningful subset of relevant variables that are the most representative of the observed phenomenon. In machine learning, this is known as variable/feature selection and several techniques addressing this task were presented so far~\cite{guyon2002gene}. Variable selection not only increases the prediction power of the learning machine, but it also promotes model interpretability, that is crucial in biology~\cite{altmann2010permutation}.
 
-    Regardless~\citep{okser2014regularized} of the learning machine, regularization can be introduced in several ways and it is of fundamental use in order to achieve the following desired properties:
+    Regardless of the learning machine, regularization can be introduced in several ways and it is of fundamental use in order to achieve the following desired properties~\citep{okser2014regularized}:
   %
-  \begin{itemize}
-  	\item identify models with good generalization properties, even with a limited amount of collected samples;
-  	\item achieve solutions that are robust to noise;
-  	\item learn the data structure when unknown;
-  	\item exploit prior knowledge on the data structure;
-  	\item promote interpretability performing variable selection;
-  	\item reduce the feasible set in order to help solving inverse problems.
-  \end{itemize}
+    \begin{itemize}
+    	\item identify models with good generalization properties, even with a limited amount of collected samples;
+    	\item achieve solutions that are robust to noise;
+    	\item learn the data structure when unknown;
+    	\item exploit prior knowledge on the data structure;
+        \item promote interpretability performing variable selection;
+    	\item reduce the feasible set in order to help solving inverse problems.
+   \end{itemize}
 
-\todo{more here...}
+	Variable selection techniques are traditionally organized in three groups: filter, wrapper and embedded methods~\cite{guyon2003introduction}.
+	
+
+	
 
   \section{Unsupervised learning} \label{subsec:unsupervised_learning}
   In Section~\ref{subsec:supervised_learning} we started the discussion of supervised learning methods with a metaphorical comparison with the human ability of learning from examples.
