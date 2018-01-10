@@ -988,8 +988,15 @@ As of today ML is the workhorse of data science.
 		
 	\end{itemize}
 
-	\todo{discuss a bit the variable selection stability}
-
+%	\todo{discuss a bit the variable selection stability}
+	Assessing the stability of the selected variables is a major issue that is typically faced when performing variable selection on high-dimensional problems. This observation is even more evident in $n \ll d$ cases. Classical variable selection strategies, \eg the Lasso (see Section~\ref{sec:the_lasso}), are sensitive to random sample extraction.
+	This reflects in having a, possibly, very different list of selected variables each time the algorithm is evaluated on a cross-validated training split of the data.
+	Variable selection stability is widely studied in literature and different strategies to ameliorate this issue are available~\cite{kuncheva2007stability, de2009elastic, hofner2015controlling, nogueira2016measuring}.
+	
+	In particular, in~\cite{meinshausen2010stability} the authors propose the so-called \textit{stability selection} framework.
+	For a given variable selection strategy (let's think about the Lasso, for simplicity) this can be seen as an extension of standard regularization paths (see Section~\ref{subsec:regularization_methods}). For increasing values of the free parameter of the chosen variable selection strategy (\eg the regularization parameter $\lambda$), a \textit{selection probability} is estimated for each variable. Such probability is estimated by evaluating the variable selection algorithm on several random extractions of a portion of the training set. This produces the so-called \textit{stability path}.
+	A stable list of selected variables can therefore be obtained by including the variables that, for a given value of the free parameter, are selected with high probability.
+	As shown in the original paper, this framework is not heavily influenced by the values of free parameter and probability threshold. However, they can be chosen by validation on an external validation set, which is fundamental in order to avoid selection bias~\cite{ambroise2002selection}. Similar strategies are also explored in~\cite{de2009regularized, barbieri16palladio}
 	
 
   \section{Unsupervised learning} \label{subsec:unsupervised_learning}
@@ -1188,7 +1195,8 @@ As of today ML is the workhorse of data science.
   \section{Model selection and evaluation} \label{subsec:model_selection}
     \subsection{Model selection strategies}
     % cross validation flavours
-    \subsection{Feature selection stability}
+    \todo{writeme}
+%    \subsection{Feature selection stability}
     % stability selection
     \subsection{Performance metrics} \label{sec:performance_metrics}
     % sup and unsup
