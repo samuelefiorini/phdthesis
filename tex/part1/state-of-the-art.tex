@@ -7,7 +7,7 @@
 \end{displayquote}
 
 The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
-With a simple search on Google Trends\footnote{\url{https://trends.google.com}} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward both the terms \textit{machine learning} and \textit{data science} is growing, with the first consistently superior to the second.
+With a simple search on Google Trends\footnote{Source \url{https://trends.google.com}.} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward both the terms \textit{machine learning} and \textit{data science} is growing, with the first consistently superior to the second.
 
 \begin{figure}[h!]
   \centering
@@ -31,7 +31,7 @@ A unique answer to this question is not easy to provide. In fact, ML can be defi
   "$[\dots]$ \emph{a set of methods that can automatically detect patterns in data, and then use the uncovered patterns to predict future data, or to perform other kinds of decision making under uncertainty} $[\dots]$"
   \end{displayquote}
 
-  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU})}, held in October 2015 at the Stanford University, gave the following three definitions.
+  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{ Part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU}).}, held in October 2015 at the Stanford University, gave the following three definitions.
 
   \begin{displayquote}
     \begin{itemize}
@@ -124,7 +124,7 @@ As of today ML is the workhorse of data science.
 		Precautions in the model formulation process must be taken in order to achieve solutions that are insensitive to small changes in the input data and that are, in general, \textit{robust} to the noise effect.
 
 		Considering a ML model ($\hat f$) fitted on a collection of data ($\mathcal{D}$), the most desirable property of $\hat f$ is that it should be able to achieve good prediction performance not only on $\mathcal{D}$, but also on all the future, therefore unseen, data points $\mathcal{D}'$.
-		In other words, assuming that the samples in $\mathcal{D}$ are affected by some kind of random\footnote{here with \textit{random} means "\textit{uncorrelated with the input-output relationship}"} component, $\hat f$ should be a predictive function that does not \textit{follow the noise}, but rather models the true input-output relationship.
+		In other words, assuming that the samples in $\mathcal{D}$ are affected by some kind of random\footnote{ Here with \textit{random} means "\textit{uncorrelated with the input-output relationship}".} component, $\hat f$ should be a predictive function that does not \textit{follow the noise}, but rather models the true input-output relationship.
 		In ML, a model that fits well $\mathcal{D}$ but performs poorly on $\mathcal{D}'$ is said to be \textit{overfitting}.
 
 	  \begin{figure}[!h]
@@ -186,9 +186,9 @@ As of today ML is the workhorse of data science.
 			With the regularization parameter $\lambda$ it is possible to control the trade-off between adherence to the training data and strength of the effect induced by $\mathcal{R}(f)$.
 			As an example, we can think of using a penalty that induces smoothness, such as the $\ell_2$-norm, or sparsity, such as the $\ell_1$-norm, in the solution.
 			A pictorial representation of a learning machine working in overfitting, underfitting and optimal fitting regime in a regression and a classification case can be seen in
-			Figure~\ref{fig:regression_fit}~\footnote{source \url{https://losc.ligo.org/events/GW150914/}}
+			Figure~\ref{fig:regression_fit}~\footnote{ Source \url{https://losc.ligo.org/events/GW150914/}.}
 			and
-		  Figure~\ref{fig:classification_fit}~\footnote{source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}}, respectively.
+		  Figure~\ref{fig:classification_fit}~\footnote{ Source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}.}, respectively.
 
 
 	%    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
@@ -235,7 +235,7 @@ As of today ML is the workhorse of data science.
 			OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let's see what happens when we use the OLS model on a real regression problem.
 
 			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where each input sample $\bm{x}_i \in \mathbb{R}^{12}$ presents a set of measures describing the metabolic state of a healthy subject and $y_i \in \mathbb{N}_+$ is its age expressed in years.
-			For the sake of this discussion a  thorough description of $\mathcal{D}_{\text{aging}}$ at this point is irrelevant\footnote{this regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we can simply think as the $d=12$ variables as predictors of the outcome $y$ and we look for some linear input-output relationship.
+			For the sake of this discussion a  thorough description of $\mathcal{D}_{\text{aging}}$ at this point is irrelevant\footnote{ This regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we can simply think as the $d=12$ variables as predictors of the outcome $y$ and we look for some linear input-output relationship.
 			In order to do that, we randomly split $\mathcal{D}_{\text{aging}}$ in two chunks obtaining a training and a test set of $n_{\text{tr}}=74$ and $n_{\text{ts}}=37$ samples respectively. Then, we fit the OLS model on the training set obtaining the weights vector $\bm{\hat w}_{\text{OLS}}$ represented in Figure~\ref{fig:coefs_ols}.
 			\begin{figure}[!h]
 				\centering
@@ -391,7 +391,7 @@ As of today ML is the workhorse of data science.
 			\end{equation}
 			where $\tau = \lambda\alpha$ and $\mu = \lambda(1-\alpha)$. The first formulation of the problem, Equation~\eqref{eq:enet}, is more convenient when we want to control the overall amount of regularization with $\lambda$, given a certain amount of sparsity $\alpha$. In fact, it is easy to see that fitting the Elastic-Net model for $\alpha=0$ or $\alpha=1$ is equivalent to solve ridge or Lasso regression, respectively. On the other hand, writing the Elastic-Net problem as in Equation~\eqref{eq:enet_l1l2} is more convenient when we want to separately control the $\ell_1$- and $\ell_2$-norm penalties, as in~\cite{de2009regularized}.
 
-			The Elastic-Net\footnote{actually, in the original paper the authors refer to Equations~\eqref{eq:enet} and~\eqref{eq:enet_l1l2} as \textit{na\"ive} Elastic-Net~\cite{zou2005regularization} because empirical evidence show that the weights $\bm{\hat w}_{\ell_1\ell_2}$ may suffer from over-shrinking when appropriate rescaling strategies, also described in~\cite{de2009regularized},  are not applied.} model is widely adopted to perform linear model fitting and variable selection. Indeed, the combined presence of the two norms promotes sparse solutions were groups of correlated variables can be simultaneously selected, hence overcoming the variable selection drawbacks of the Lasso and making the Elastic-Net suitable for variable selection in $n \ll d$ scenarios.
+			The Elastic-Net\footnote{ Actually, in the original paper the authors refer to Equations~\eqref{eq:enet} and~\eqref{eq:enet_l1l2} as \textit{na\"ive} Elastic-Net~\cite{zou2005regularization} because empirical evidence show that the weights $\bm{\hat w}_{\ell_1\ell_2}$ may suffer from over-shrinking when appropriate rescaling strategies, also described in~\cite{de2009regularized},  are not applied.} model is widely adopted to perform linear model fitting and variable selection. Indeed, the combined presence of the two norms promotes sparse solutions were groups of correlated variables can be simultaneously selected, hence overcoming the variable selection drawbacks of the Lasso and making the Elastic-Net suitable for variable selection in $n \ll d$ scenarios.
 			As already seen for the Lasso, the minimization problem in Equation~\eqref{eq:enet} is convex and non-differentiable, due to the $\ell_1$-norm, and it can be efficiently solved either by proximal forward-backward splitting strategies (\eg FISTA~\cite{beck2009fast}), or by coordinate descent~\cite{wu2008coordinate}. A pictorial representation of the Elastic-Net solution can be seen in Figure~\ref{fig:w_enet}.
 
 			The Elastic-Net method is successfully applied in several biomedical fields, including gene expression~\cite{jacob2015robust, de2009regularized}, genome-wide association studies~\cite{waldmann2013evaluation} and other molecular data~\cite{aben2016tandem, jacob2015robust}.
@@ -486,7 +486,7 @@ As of today ML is the workhorse of data science.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			\subsubsection{Logistic Regression} \label{sec:logistic_regression}
-			Logistic regression is one of the most popular linear methods for classification problems\footnote{as counter-intuitive as it sounds}. In its unpenalized form, it can be simply seen as the problem of minimizing the logistic loss (see Table~\ref{tab:losses}) on a given training dataset. Therefore, logistic regression can be written as in Equation~\eqref{eq:logistic_regression},
+			Logistic regression is one of the most popular linear methods for classification problems\footnote{ As counter-intuitive as it sounds.}. In its unpenalized form, it can be simply seen as the problem of minimizing the logistic loss (see Table~\ref{tab:losses}) on a given training dataset. Therefore, logistic regression can be written as in Equation~\eqref{eq:logistic_regression},
 			\begin{equation} \label{eq:logistic_regression}
 				\bm{\hat w}_{\text{LR}} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n}\sum_{i=1}^n\log(1 + e^{-y_i\,\bm{x}_i^T\bm{w}})
 			\end{equation}
@@ -727,7 +727,7 @@ As of today ML is the workhorse of data science.
 			H_{\text{MSE}}(Q_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} \big(y_i - \bar y_m \big)^2
 		\end{equation}
 		where $\bar y_m = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} y_i$, is the average output of $Q_m$, \ie the training samples in region $R_m$;
-		or the Mean Absolute Error (\ac{MAE})\footnote{we previously came across this measure when evaluating the performance of learning methods on the aging problem, see Sections~\ref{sec:ols},~\ref{sec:ridge_regression},~\ref{sec:the_lasso}, \etc.}, which is simply defined as below.
+		or the Mean Absolute Error (\ac{MAE})\footnote{ We previously came across this measure when evaluating the performance of learning methods on the aging problem, see Sections~\ref{sec:ols},~\ref{sec:ridge_regression},~\ref{sec:the_lasso}, \etc.}, which is simply defined as below.
 		\begin{equation} \label{eq:MAE}
 				H_{\text{MAE}}(Q_m) = \frac{1}{n_m} \sum_{\bm{x}_i \in R_m} | y_i - \bar y_m |
 		\end{equation}
@@ -759,7 +759,7 @@ As of today ML is the workhorse of data science.
 	    The key idea of ensemble methods is to build a prediction model by aggregating a collection of multiple \textit{base learners} that are trained to solve the same problem~\citep{zhou2012ensemble}.
 
 	    % FIXME
-	    \textit{Bagging} is a common ensemble strategy that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{random sampling with replacement} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$.
+	    \textit{Bagging} is a common ensemble strategy that consists in fitting multiple models $f_b(\bm{x})$ for $b=1,\dots,B$ each one on a \textit{bootstrap} sampling\footnote{ Random sampling with replacement.} $\mathcal{D}_b$ of the training dataset  $\mathcal{D}=\{\bm{x}_i, y_i\}_{i=1}^n$.
 %	    \citep{hastie2009elements}
 	    For each sample $\bm{x}_i$, the bagging estimate $\hat{f}(\bm{x}_i)$ is obtained by combining the predictions of the base learners $\hat{f}_b(\bm{x}_i)$. For instance, in case of classification tasks, the bagged model may select the most predicted class casting a vote among the $B$ base learners. On the other hand, for regression problems, the bagging estimate can be a (weighted) mean, or the median, of the predictions of the $B$ base learners. Decision trees (see Section~\ref{sec:decision_trees}) are typical base learner for bagged estimators.
 
@@ -866,7 +866,7 @@ As of today ML is the workhorse of data science.
 	    
 		Deep Learning (DL) is a branch of ML that, in the recent past, is becoming extremely appealing thanks to the high predictive power that it has empirically shown on real-world problems.
 		This section is definitely not an attempt to summarize the heterogeneous plethora of the DL methods presented in literature so far. Indeed, even a dedicated PhD thesis may not be enough to accomplish this task.
-		In this section we will only get a grasp on the mechanisms behind the supervised DL methods applied in Part II\footnote{unsupervised DL methods are available as well, but as they are not used in Part II, their discussion is not presented here. We recall to~\cite{lecun2015deep, goodfellow2016deep, chollet2018deep} for a more comprehensive overview.}.
+		In this section we will only get a grasp on the mechanisms behind the supervised DL methods applied in Part II\footnote{ Unsupervised DL methods are available as well, but as they are not used in Part II, their discussion is not presented here. We recall to~\cite{lecun2015deep, goodfellow2016deep, chollet2018deep} for a more comprehensive overview.}.
 	    
 	    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
 	    One of the main characteristics of DL methods is that, starting from raw data, they aim at learning a suitable feature representation (see Section~\ref{subsec:unsupervised_learning}) and a prediction function, at the same time.
@@ -942,7 +942,7 @@ As of today ML is the workhorse of data science.
   
 %  The process of modeling complex systems often implies collecting large amount of data in the field of life science, where large, multivariate and noisy measurements are typically acquired with the aim of describing multifactorial diseases.
 %  
-%  In the era of personalized medicine, biospecimen collection and biological data management is still a challenging and expensive task~\cite{toga2015sharing}. Only few large-scale research enterprises, such as ENCODE~\cite{encode2004encode},  ADNI~\cite{jack2008alzheimer},  MOPED~\cite{kolker2012moped} or TCGA~\footnote{\url{https://cancergenome.nih.gov}}
+%  In the era of personalized medicine, biospecimen collection and biological data management is still a challenging and expensive task~\cite{toga2015sharing}. Only few large-scale research enterprises, such as ENCODE~\cite{encode2004encode},  ADNI~\cite{jack2008alzheimer},  MOPED~\cite{kolker2012moped} or TCGA~\footnote{ Source \url{https://cancergenome.nih.gov}.}
 %  , have sufficient financial and human resources to manage, share and distribute access of heterogeneous types of biological data. To date, many biomedical studies still rely on a small number of collected samples~\cite{mcneish2016effect, button2013power, yu2013shrinkage}. This effect is even worse in case of rare diseases~\cite{Garg2016ABM} or in high-throughput molecular data (\eg genomics and proteomics) where the dimensionality of the problem can be in the order of hundreds of thousands.
 	Dealing with real-world data science challenges it is very often the case that the number of acquired variables $d$ is high. It may even happen that $d$ heavily outnumbers the number of collected samples $n$. This setting is usually referred to as \textit{large d small n} scenario, or simply $n \ll d$. Practical examples of this case can be easily found in the context of applied life sciences, \eg gene expression, DNA sequencing, proteomics, spectroscopy, medical imaging and so on.
 	
@@ -1022,7 +1022,7 @@ As of today ML is the workhorse of data science.
     \subsection{Cluster analysis} \label{sec:clustering}
     \textit{Cluster analysis}, \aka \textit{data segmentation} or \textit{clustering}, is the class of unsupervised learning algorithm which aim at grouping together similar objects, by some definition of \textit{similarity}.
         
-    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures, such as gene expression, blood exams, and so on. This section presents an overview on the most popular clustering algorithms.\footnote{a good reference for the clustering algorithms proposed in literature is \textit{Section 2.3. - Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering.html}.}
+    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures, such as gene expression, blood exams, and so on. This section presents an overview on the most popular clustering algorithms\footnote{ A good reference for the clustering algorithms proposed in literature is \textit{Section 2.3. - Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering.html}.}.
 
     \subsubsection{The $k$-means algorithm} \label{sec:k-means}
     $k$-means is the most intuitive strategy for cluster analysis.
@@ -1052,7 +1052,7 @@ As of today ML is the workhorse of data science.
     Intuitively, $\bm{\mu}_k$ corresponds to the mean of the points assigned to the cluster $k$.
     The $k$-means algorithm starts with random centroids. Then, the points are assigned to the cluster having the nearest centroid. Successively, the centroids position is updated. At each step the value of $J(\bm{\mu})$ is reduced, hence the convergence of $k$-means is assured. Nevertheless, the algorithm may converge to a local minimum, achieving a suboptimal solution.
     
-    For a given dataset, defining an optimal value for $K$ is still an open problem. The $k$-means algorithm works with a number of cluster fixed a priori\footnote{some relevant work on automatic cluster discovery is presented in~\cite{ball1967clustering, pelleg2000x, muhr2009automatic}}.
+    For a given dataset, defining an optimal value for $K$ is still an open problem. The $k$-means algorithm works with a number of cluster fixed a priori\footnote{ Some relevant work on automatic cluster discovery is presented in~\cite{ball1967clustering, pelleg2000x, muhr2009automatic}.}.
     This is be given from some prior knowledge on the problem, or it can be estimated following some heuristics. Otherwise, an estimate of $K$ can be defined by optimizing data-driven coefficients like the silhouette score~\cite{rousseeuw1987silhouettes}, or some information criteria, such as \ac{AIC} or \ac{BIC}~\cite{bishop2006pattern}.
     These estimates can be done with or without cross-validation~\cite{fiorini2017adenine}.
     
@@ -1327,7 +1327,7 @@ As of today ML is the workhorse of data science.
         	\begin{equation} \label{eq:metrics_silhouette}
         	s(\bm{x}_i) = \frac{b(\bm{x}_i) - a(\bm{x}_i)}{\max[a(\bm{x_i}), b(\bm{x}_i)]}
         	\end{equation}
-        	The quality of the achieved clustering can be graphically assessed visualizing the silhouette coefficient for each sample, as in Figure~\ref{fig:silhouette}\footnote{image created with \ade, see Chapter~\ref{chap:adenine}.}, or it can be globally measured by its average score $\bar s = \frac{1}{n}\sum_{i=1}^n s(\bm{x}_i)$.
+        	The quality of the achieved clustering can be graphically assessed visualizing the silhouette coefficient for each sample, as in Figure~\ref{fig:silhouette}\footnote{ Image created with \ade, see Chapter~\ref{chap:adenine}.}, or it can be globally measured by its average score $\bar s = \frac{1}{n}\sum_{i=1}^n s(\bm{x}_i)$.
         	
         	\item \textit{Homogeneity}: a clustering satisfies the homogeneity property if each cluster contains only members of a single class.
         	In order to evaluate the homogeneity, the clustering ground truth must be provided. In this sense, this can be seen as a supervised measure.

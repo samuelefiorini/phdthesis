@@ -42,7 +42,7 @@ Using \textit{Nextflow}, everything must be hard-coded, therefore plugging in cu
 Similar considerations can be made for Snakemake (source \url{https://snakemake.bitbucket.io}), which is a pythonic workflow management system which is mainly tailored for the parallelization of the analysis of DNA data.
 
 
-The most notable project that spans between the two families is \emph{Orange}\footnote{if I have to pick one, this is definitely my favorite -- Ed.} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
+The most notable project that spans between the two families is \emph{Orange}\footnote{ If I have to pick one, this is definitely my favorite -- Ed.} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
 Moreover, large data sets are difficult to analyze as it can run only on a single workstation, lacking of distributed computing support.
 
 \section{\ade overview} \label{sec:adenine_overview}
@@ -110,7 +110,7 @@ Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeli
 
 \ade is developed with the aim of speeding-up EDA on large biomedical data collections.
 It has a scalable architecture, that allows its pipelines to seamlessly run in parallel as separate Python processes on a single workstation or as 
-%MPI\footnote{\url{http://mpi-forum.org/}}
+%MPI\footnote{ Source \url{http://mpi-forum.org/}.}
 separate tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
 % \ade pipelines are designed to be independent from each other, therefore they all run in parallel as separate Python processes on different cores/machines.
 Moreover, as \ade makes large use of {\sc numpy} and {\sc scipy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
@@ -166,7 +166,7 @@ The selection of the optimal number of clusters in centroid-based algorithms fol
 For affinity propagation \cite{frey2007clustering} and $k$-means \cite{bishop2006pattern} clustering parameters can be automatically defined ({\color{string} {\tt "preference"}}  and {\color{string} {\tt "n\_clusters}}, respectively).
 % Clustering parameters for affinity propagation \cite{frey2007clustering} and k-means \cite{bishop2006pattern}, that are \emph{preference} and \emph{number of clusters}, can be automatically defined.
 Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an implicit cluster discovery.
-For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{see the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
+For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{ See the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
 % \todo{@fede DBSCAN}
 
 In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc numpy} and {\sc scipy} and it comes \textit{for free}. So, let's focus on multiprocessing.
@@ -255,7 +255,7 @@ To run such experiment, one simply needs to select and activate the hierarchical
 % procedures that are similar to the one described above can be followed.
 
 
-%For \ade installation instructions and for a comprehensive description of all the options available in the configuration file we refer to the online documentation and tutorials\footnote{\url{http://slipguru.github.io/adenine}}.
+%For \ade installation instructions and for a comprehensive description of all the options available in the configuration file we refer to the online documentation and tutorials\footnote{ Source \url{http://slipguru.github.io/adenine}.}.
 
 \section{Results} \label{sec:results}
 

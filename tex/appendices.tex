@@ -89,13 +89,13 @@ In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f
 	\end{aligned}
 \end{equation}
 
-Applying the \textit{Lagrange multipliers technique}\footnote{for a thorough description of this technique, see Appendix E of Bishop's book~\cite{bishop2006pattern}} Equation~\eqref{eq:constrained_erm} can be finally written as Equation~\eqref{eq:losspen2}.
+Applying the \textit{Lagrange multipliers technique}\footnote{ For a thorough description of this technique, see Appendix E of Bishop's book~\cite{bishop2006pattern}.} Equation~\eqref{eq:constrained_erm} can be finally written as Equation~\eqref{eq:losspen2}.
 
 \begin{equation} \label{eq:losspen2}
 	\argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)} + \lambda \mathcal{R}(f)
 \end{equation}
 
-The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{$\mathcal{R}(f)$, in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization}}
+The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{ $\mathcal{R}(f)$, in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization}}
 and, according to its definition, it can ensure well-posedness of the problem and it can enforce different interesting properties on the achieved solution, see Section~\ref{subsec:regularization_methods}. It can also be shown that the use of appropriate regularizes promotes generalization, hence increases our chance to find a $\hat f(\bm{x})$ \textit{close} to $f^*(\bm{x})$.
 
  According to the choice made for $L(\cdot)$ and $\mathcal{R}(\cdot)$, the minimization problem posed in Equation~\eqref{eq:losspen2} can have very different properties; it can be convex or non-convex, it can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization methods for ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
@@ -117,7 +117,7 @@ This statistical setup suggests a strategy to obtain an estimate for $\bm{\theta
 	\bm{\hat \theta}_{MLE} =\argmax_{\theta~\in~\Theta}\mathcal{L}(y_i|\bm{x}_i, \bm{\theta}) = \argmax_{\theta~\in~\Theta} \prod_{i=1}^{n} p(y_i | \bm{x}_i, \bm{\theta})
 \end{equation}
 
-Instead of maximizing the likelihood it is often convenient to minimize the \textit{negative log-likelihood}\footnote{approaching information theory or deep learning literature, the negative log-likelihood is often referred to as \textit{cross-entropy}}. Equation~\eqref{eq:mle} can then be rewritten as Equation~\eqref{eq:nll}.
+Instead of maximizing the likelihood it is often convenient to minimize the \textit{negative log-likelihood}\footnote{ Approaching information theory or deep learning literature, the negative log-likelihood is often referred to as \textit{cross-entropy}.}. Equation~\eqref{eq:mle} can then be rewritten as Equation~\eqref{eq:nll}.
 
 \begin{equation} \label{eq:nll}
 	\bm{\hat \theta}_{MLE} = \argmin_{\theta~\in~\Theta} - \sum_{i=1}^n \log p(y_i | \bm{x}_i, \bm{\theta})
@@ -158,7 +158,7 @@ Assuming that we have the usual collection of \ac{iid} samples $\mathcal{D}=\{(\
 	\hat f_{MLE} = \argmax_{f~\in~\mathcal{F}} \prod_{i=1}^n p(y_i|\bm{x}_i,f)
 \end{equation}
 
-Applying the negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}\footnote{the two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$}.
+Applying the negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}\footnote{ The two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$.}.
 
 \begin{equation} \label{eq:logfmle}
 	\hat f_{MLE} = \argmin_{f~\in~\mathcal{F}} - \frac{1}{n} \sum_{i=1}^n \log p(y_i|\bm{x}_i,f)
@@ -270,5 +270,5 @@ The minimization problem expressed in Equation~\eqref{eq:logistic_logmap} is kno
 
 
 
-% asd\footnote{in the deep learning literature this is usually named \textit{activation} function}
+% asd\footnote{ In the deep learning literature this is usually named \textit{activation} function.}
 %%

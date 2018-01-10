@@ -19,7 +19,7 @@
 \section{Introduction: aging and metabolism} \label{sec:frassoni_intro}
 
 In this chapter we present the first biomedical data science challenge of the thesis.
-This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{this was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}.}.
+This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{ This was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}.}.
 This chapter describes the extensive EDA and the thorough model selection procedure which lead to the development of the final model.
 Before diving into the details of the experimental setup, let's see some preliminary biological notions of how aging influences our metabolism.
 
@@ -38,7 +38,7 @@ As shown in~\cite{mckerrell2015leukemia}, mononuclear cells isolated from periph
 
 \section{Data collection} \label{sec:frassoni_data_collection}
 
-The study presented in this chapter is performed on mononuclear cells isolated from peripheral blood obtained from a population of $118$ volunteers\footnote{all participants provided their written informed consent to participate in this study, which was approved by the Ethics Committee of the IRCCS Istituto G. Gaslini, Genoa, IT, \todo{(N°)}} with age between $8$ and $106$ years.
+The study presented in this chapter is performed on mononuclear cells isolated from peripheral blood obtained from a population of $118$ volunteers\footnote{ All participants provided their written informed consent to participate in this study, which was approved by the Ethics Committee of the IRCCS Istituto G. Gaslini, Genoa, IT, \todo{(N°)}.} with age between $8$ and $106$ years.
 In order to preserve the collected blood samples, the vacutainer tubes were transferred into the laboratory and analyzed within $24$ hours from collection.
 All chemicals were purchased from Sigma Aldrich (St. Louis, MO, USA) and Ultrapure water (Milli-Q; Millipore, Billerica, MA, USA) was used throughout. All other reagents were of analytical grade.
 Data collection and further analysis were managed by a team of specialized biologists at the IRCCS Istituto G. Gaslini, Genoa, IT. The following quantities were measured, on each blood sample.
@@ -261,7 +261,7 @@ To this aim, we devised the following experimental design.
 
 A cross-validated estimate of the empirical distribution of four regression scores: $\text{R}^2$, MAE, MSE and EV (defined in Section~\ref{sec:performance_metrics}) is evaluated on $500$ Monte Carlo random splits.
 %\todo{should have been stratified -> correggere}.
-This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{the fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}}. On each obtained training set a supervised learning model is fitted.
+This strategy consists in iteratively extracting $n_{\text{train}} = 0.75 \cdot n$ random samples multiple times\footnote{ The fraction of data to use for training is chosen accordingly to the learning curve in Figure~\ref{fig:frassoni_learning_curves}.}. On each obtained training set a supervised learning model is fitted.
 %In our experiments, we ran a total of $500$ Monte Carlo resampling.
 %\todo{As not each age decade is equally represented, see Figure~\ref{fig:frassoni_agehist}, we opted for a cross-validation strategy that is stratified with respect to the decades. So, in each random extraction, the same proportion of samples}
 Once the model is fitted, the five regression scores are evaluated on the remaining $n_{\text{test}} = n - n_{\text{train}}$ samples.
