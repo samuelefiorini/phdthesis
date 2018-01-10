@@ -1193,9 +1193,24 @@ As of today ML is the workhorse of data science.
     
 
   \section{Model selection and evaluation} \label{subsec:model_selection}
+  
+  The previous chapters present an overview of ML techniques and algorithms that are most relevant with the data science challenges presented in the second part of this PhD thesis.
+  The described algorithms are very different for both goals and mathematical structure.
+  However, they all share a common trait: the presence of one, or more, free parameters.
+  These free parameters must be specified before the actual learning step and, in ML literature, they are usually referred to as \textit{hyperparameters}\footnote{ This term is inherited from the filed of statistics, where an hyperparameter is a parameter of a prior distribution probability. This sometimes generates confusion and possible misunderstanding in technical literature.}.
+  As opposed to the model parameters, which are learned from data, hyperparameters are user-defined.
+  
+  In order to better understand this difference, let's see a practical example: a regularized least square approach (such as Ridge or Lasso).
+  In this case, the model weights $w_j$ (for $j=1,\dots,d$) of the input variables are learned from training data, are the \textit{parameters} of the model, whereas the regularization parameter $\lambda$ is the only hyperparameter of the model.
+  
+  
+  Using a robust protocol for model selection and evaluation is often the key to successfully run some data science challenge.
+  
+  
     \subsection{Model selection strategies}
     % cross validation flavours
-    \todo{writeme}
+    \todo{writeme
+    }
 %    \subsection{Feature selection stability}
     % stability selection
     \subsection{Performance metrics} \label{sec:performance_metrics}
