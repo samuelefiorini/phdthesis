@@ -862,7 +862,7 @@ As of today ML is the workhorse of data science.
 %	    \todo{consider adding boosting method for cox models...}
 
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	    \subsection{Deep learning}
+	    \subsection{Deep learning} \label{sec:deep_learning}
 	    
 		Deep Learning (DL) is a branch of ML that, in the recent past, is becoming extremely appealing thanks to the high predictive power that it has empirically shown on real-world problems.
 		This section is definitely not an attempt to summarize the heterogeneous plethora of the DL methods presented in literature so far. Indeed, even a dedicated PhD thesis may not be enough to accomplish this task.
@@ -1198,19 +1198,48 @@ As of today ML is the workhorse of data science.
   The described algorithms are very different for both goals and mathematical structure.
   However, they all share a common trait: the presence of one, or more, free parameters.
   These free parameters must be specified before the actual learning step and, in ML literature, they are usually referred to as \textit{hyperparameters}\footnote{ This term is inherited from the filed of statistics, where an hyperparameter is a parameter of a prior distribution probability. This sometimes generates confusion and possible misunderstanding in technical literature.}.
-  As opposed to the model parameters, which are learned from data, hyperparameters are user-defined.
+  As opposed to the model parameters, which are learned from data, hyperparameters are tuning knobs that must be user-defined.
   
   In order to better understand this difference, let's see a practical example: a regularized least square approach (such as Ridge or Lasso).
-  In this case, the model weights $w_j$ (for $j=1,\dots,d$) of the input variables are learned from training data, are the \textit{parameters} of the model, whereas the regularization parameter $\lambda$ is the only hyperparameter of the model.
+  In this case, the weights of the input variables $w_j$ (for $j=1,\dots,d$) are learned from training data and they are the model \textit{parameters}; whereas the regularization parameter $\lambda$ is the only hyperparameter of the model.
+  This simple example has only one hyperparameter, but more complicated models, such as gradient boosting or deep architectures (see Section~\ref{sec:deep_learning} and~\ref{sec:gradient_boosting}), present way more hyperparameters to tune (\eg depth and size of the tree, learning rate, number of layers, \etc).
   
+  In order to successfully carry out real-world data science challenges, ML practitioners need two key ingredients:
+  \begin{enumerate*}[label=(\roman*)]
+  	\item reliable model assessment strategies and %prediction performance evaluation strategies and
+  	\item robust protocols for model selection.
+  \end{enumerate*}
+  The first point often boils down to the use of a robust cross-validation technique to estimate the generalization error~\cite{molinaro2005prediction}, whilst for the second is typically performed as (exhaustive) search over a grid of possible hyperparameters values. 
+  In ML jargon, a single choice of hyperparameter corresponds a different model. Therefore, the precess of finding the best performing set of hyperparameters is typically called model selection.
+
+  \subsection{Model assessment strategies} \label{sec:model_evaluation}
+  % cross validation flavours
+  Assessing the performance of a ML model can be done by estimating its generalization error, that is a measure of the level of prediction performance we expect the model to reach on previously unseen data.
+  Particular attention should be paid when the data analysis pipeline embeds a variable selection step. In fact, in \cite{ambroise2002selection} the authors rigorously demonstrated that an error estimated on the same set of data used for variable selection can be heavily affected by \textit{selection bias}. Hence, in order to avoid too optimistic estimations of the generalization error, the predictive power of the obtained learning machine should be evaluated on \textit{future} data that, unfortunately, are not always available.
   
-  Using a robust protocol for model selection and evaluation is often the key to successfully run some data science challenge.
+  Resampling protocols are the most popular class of techniques to simulate the acquisition of future data~\cite{molinaro2005prediction}. Such methods are useful to estimate the generalization error. This section briefly presents the cross-validation routine that are most relevant for the second part of this PhD thesis.
   
+  \begin{itemize}
+  	\item[] \textbf{Monte Carlo cross-validation}
+  	This strategy repeatedly splits the $n$ samples of the dataset in two mutually exclusive sets. For each split, $n\cdot(1/\nu)$ samples are labeled as \textit{validation} set and the remaining $n\cdot(1 - 1/\nu)$ as \textit{training} set. The data points of the two sets are randomly sampled without replacement from the entire dataset.
+  	At each repetition, the chosen learning machine
+  	is fitted on the training set and its predictive power assessed by evaluating a performance metric (see Section~\ref{sec:performance_metrics}) on the independent test set. We may also point out that, if needed, a variable selection step can be part of the training phase. Monte Carlo cross-validation gives the opportunity to assess not only the value of the generalization error, that can be obtained averaging across iterations, but also to infer its probability distribution. However, a major drawback of this method is its computational burden that increases with the number of repetitions, that could be arbitrarily large.
+  	
+  	\item[] \textbf{Bootstrap} This cross-validation strategy is similar to the Monte Carlo approach, but presenting a substantial difference. In this strategy, new versions of the dataset are generated by uniform random extraction with replacement of $n'$ samples out of $n$.
+  	The extracted data are used as training set, while the left out samples are used for validation.
+  	Typically the value of $n'$ is chosen close to $n$. For large $n$ bootstrapped datasets are expected to have $\approx 63.2\%$ of unique samples, while the remaining $36.8\%$ being duplicates.
+  	
+  	\item[] \textbf{$\bm{K}$-fold cross-validation}
+    This strategy splits the data in $K$ non-overlapping subsets that are iteratively kept aside and used to estimate the prediction error of a model trained on the remainder of the data. The final estimation of the prediction error on future data can be done by averaging on the $K$ estimates obtained during the cross-validation procedure. The number of splits $K$ is here limited by the cardinality of the dataset at hand. The major advantage of a $K$-fold with respect to a Monte Carlo cross-validation strategy is its much lighter computational workload. However, as the number of splits $K$ cannot be arbitrarily large, this method is not suitable for estimating the probability distribution of the generalization error.
+  \end{itemize}
   
-    \subsection{Model selection strategies}
-    % cross validation flavours
-    \todo{writeme
-    }
+
+  
+
+  
+  \subsection{Model selection strategies}
+  \todo{writeme}
+
 %    \subsection{Feature selection stability}
     % stability selection
     \subsection{Performance metrics} \label{sec:performance_metrics}
