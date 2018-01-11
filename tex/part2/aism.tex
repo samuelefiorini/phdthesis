@@ -302,7 +302,7 @@ We shall discuss separately the experimental designs used to learn $f(\bm{x})$ a
 	On the other hand, learning the \G model $g(\bm{x})$ implies solving a multiple-output regression problem and each input $\bm{x}_i^t$ is associated with the output vector $\bm{x}_i^{t+1}$.
 	% and the class labels are not taken into account.
 	Therefore, we can only consider samples at time point $t$ with an available follow-up at the next time point $t+1$, which reduces the overall number of available samples.
-	The dataset splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3$ for training and those at $t=4,5,6,7,8,9,10,11$ for test, resulting in $XXXX$ and $XXX$ samples, respectively.
+	The dataset splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8,9,10,11$ for test, resulting in $XXXX$ and $XXX$ samples, respectively.
 	The fitting procedure includes an inner parameter optimization via grid-search cross-validation. Each candidate model is a function
 	$g: \mathbb{R}^{165} \rightarrow \mathbb{R}^k$ where $k$ is the number of variables selected by the best \F model.
 	% that predicts the evolution of the variables selected by the best \F model starting from the full set of \PCOs.
