@@ -113,7 +113,7 @@ It has a scalable architecture, that allows its pipelines to seamlessly run in p
 %MPI\footnote{ Source \url{http://mpi-forum.org/}.}
 separate tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
 % \ade pipelines are designed to be independent from each other, therefore they all run in parallel as separate Python processes on different cores/machines.
-Moreover, as \ade makes large use of {\sc numpy} and {\sc scipy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
+Moreover, as \ade makes large use of {\sc NumPy} and {\sc SciPy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
 Thanks to this hybrid parallel architecture, with \ade it is possible to get a grasp on the main structures underlying your data in a reasonable computational time.
 
 In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on) can be given as input. Moreover, as genomic is one of the major sources of data in the biological world, \ade also natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}; which data sets can be retrieved specifying their GEO accession number.

@@ -1240,7 +1240,7 @@ As of today ML is the workhorse of data science.
   \end{itemize}
 
   
-  \subsection{Model selection strategies}
+  \subsection{Model selection strategies} \label{sec:model_selection}
   As anticipated at the beginning of this section, hyperparameters tuning is still considered more an art than a science, by the majority of the ML practitioners.
   
   Nevertheless, over the years different statistically sound techniques to perform hyperparameters optimization were presented. At the time of writing, model selection is still a hot-topic in ML research. It often happens that several ML solutions adopted to tackle data science competitions\footnote{ Such as the ones hosted on the Kaggle website: \url{www.kaggle.com}.} are based on the same model. What really makes the difference, and defines the most competitive prediction strategy, is adopting an efficient and effective model selection strategy.
@@ -1420,20 +1420,31 @@ As of today ML is the workhorse of data science.
 
 \section{Computational requirements and implementations} \label{sec:implementation}
 
-Indeed, ML is currently experiencing a renewed wave of interest. Several new technologies, both software and hardware, are developed tailored for ML applications. The number of ML practitioners and researcher is growing fast and the problems that now are tackled with ML is rapidly evolving. Therefore, a description of the current technological state of the art is completely pointless as it would become outdated in no time.
+ML is currently experiencing a renewed wave of interest. Several new technologies, both software and hardware, are specifically designed for ML applications. The number of ML practitioners and researcher is growing fast and the number of problems that now are tackled with ML is rapidly evolving. Therefore, a description of the current ML technological state of the art is completely pointless as it would become outdated in no time.
 
-Nevertheless, what may be more interesting, as it may last longer, is to describe the philosophy that the most appreciated ML software solutions are currently adopted.
-The vast majority of data science software and libraries presents present two faces: a high level interface (mainly developed for Python, R, Julia or Torch) while delegating most of the heavy computations to optimized algorithms written, for instance, in C++, Fortran.
+Nevertheless, describing the philosophy that the most appreciated ML software solutions are currently adopted may be more interesting, as it may last longer. The vast majority of ML and data science software libraries presents two stacks: a high level interface (mainly developed for Python, R, Julia or Torch) and a set of highly optimized algorithms (written, for instance, in C++ or Fortran) that take care of the heavy computational workloads.
 
-Moreover....
+In modern ML algorithms, linear algebra operations are the most computational demanding tasks to run. In order to carry them out, as efficiently as possible, ML software developers are currently following two different strategies:
+\begin{enumerate*}[label=(\roman*)]
+	\item exploiting the computational power offered by multi-core \ac{CPU}s by using optimized \ac{BLAS} libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~\ac{MKL}), or
+	\item reducing the computational time by offloading the heavy linear algebra operations on \ac{GPU} cards.
+\end{enumerate*}
 
-As brilliantly pointed out by Fran\c{c}ois Chollet in his book~\cite{chollet2018deep}:
+The first solution is inherited from standard scientific computing and it is adopted from the very beginning of ML diffusion. Instead, the second is a relatively recent solution and it is currently a hot-topic in ML software development. This is mainly due to the diffusion of deep learning applications that started to exponentially rise from $2012$, when AlexNet~\cite{krizhevsky2012imagenet}, a deep convolutional neural network implemented in CUDA, won the ImageNet large scale visual recognition challenge achieving a dramatically improved top-5 accuracy with respect to the previous editions of the challenge.
+Since then, the interest of ML researcher toward GPU computing is heavily growing.
+
+Another key aspect that characterize ML applications is the high number of independent tasks that need to be executed. For instance, we can think about hyperparameters optimization via grid-search cross-validation (see Section~\ref{sec:model_selection}), where a large number of independent models is trained on the same set of data.
+In large-scale ML research, this computationally heavy workload can be distributed on the computing nodes of HPC architectures.
+A popular library in ML that exploit this parallel programming paradigm is Dask, a dynamic task scheduling manager developed for large-scale data intensive applications (see Chapter~\ref{chap:adenine}).
+
+All the data science challenge described in the second part of this PhD thesis are tackled with Python-based software solutions. In particular, the numerical computations are carried out by {\sc NumPy}\footnote{ Source: \url{http://www.numpy.org}.} and {\sc SciPy}\footnote{ Source \url{https://www.scipy.org}.}, while the data management is left to {\sc pandas}\footnote{ Source \url{https://pandas.pydata.org}.}. Moreover, for the vast majority of standard ML models (such as generalized linear models or ensemble learning strategies) I took advantage of \sklearn~\cite{scikit-learn}\footnote{ Source \url{http://scikit-learn.org}.}, which is one of the most popular ML libraries available online.
+I also relied on custom solutions, such as {\sc L1L2Py}\footnote{ Soruce: \url{https://github.com/slipguru/l1l2py}} and {\sc minimal}\footnote{ Source \url{https://github.com/samuelefiorini/minimal}}, for ML models that are not available via \sklearn API.
+Furthermore, for the deep learning models I relied on the use of {\sc Keras}\footnote{ Source \url{https://keras.io}} with CUDA enabled {\sc TensorFlow}\footnote{ Source: \url{https://www.tensorflow.org}.} backend.
+
+Every figure and every experimental result obtained in this thesis is easily replicable by using the Python scripts and {\sc jupyter}  notebooks\footnote{ Source: \url{http://jupyter.org}.} available on a dedicated GitHub repository: \url{https://github.com/samuelefiorini/phdthesis}, which also keeps track of the~\LaTeX~source code of the thesis.
+
 \begin{displayquote}
 	"\emph{Machine learning isn't mathematics or physics, where major advances can be done with a pen and a piece of paper. It's an engineering science.}"
+	
+	Fran\c{c}ois Chollet, Deep Learning with Python~\cite{chollet2018deep}
 \end{displayquote}
-
-
-%\begin{itemize}
-%  \item MPI
-%  \item GPU and accelerators
-%\end{itemize}
