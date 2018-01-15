@@ -10,12 +10,19 @@ The goal of this appendix is to shed light on some of the statistical tools and 
 
 \section{Useful theorems and definitions}
 
-This first section lists the theorems and the definitions that are useful for the comprehension of the following sections.
+This first section lists the theorems and the definitions that are useful for the comprehension of the following sections~\cite{keener2011theoretical, everitt2002cambridge}.
 
 \begin{theorem}[Law of the unconscious statistician] \label{th:lotus}
 	Given two continuous random variables $(a,b) \in A \times B$ with joint probability distribution $p(a,b)$, the expected value of the function $g(a,b)$ can be stated as follows.
 	$$\mathbb{E}[g(a,b)]=\iint_{A \times B}g(a,b)~p(a,b)~dadb$$
 \end{theorem}
+
+\begin{definition}[Conditional probability] \label{th:pc}
+	Given two events $A$ and $B$, the conditional probability of A given B is defined as
+	$$ P(A|B) = \frac{P(A \cap B)}{P(B)} $$
+	where $B$ is not an impossible event, \ie $P(B) > 0$.
+%	if $A$ and $B$ are impossible events (\ie $P(A)=P(B)=0$), then $P(A|B) = 0$.
+\end{definition}
 
 \begin{theorem}[Bayes rule] \label{th:bayes_rule}
 	Given $A$ and $B$ two events with probability $P(A)$ and $P(B) \neq 0$, the conditional probability of observing $A$ given that $B$ is true is
@@ -52,13 +59,13 @@ This first section lists the theorems and the definitions that are useful for th
 
 
 \section{Empirical risk minimization} \label{sec:erm}
-In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f: \mathcal{X} \rightarrow \mathcal{Y}$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$, we introduced the concept of \textit{loss function} $L(\hat y, y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the ideal estimator, also known as the \textit{target} function, $f^*(\bm{x})$ is the minimizer of the (true) expected risk $\mathcal{E}(f)$ in a rather \textit{large} class of functions $\mathcal{F}$.
+In Section~\ref{subsec:supervised_learning} we introduced the concept of supervised learning as the branch of ML in which predictive models are trained on labeled data. The final goal of supervised learning is to find a function of the input variables $f: \mathcal{X} \rightarrow \mathcal{Y}$ that provides a \textit{good} approximation of the output $y$. In order to measure the adherence between predictions $\hat y = f(\bm{x})$ and actual output $y$, we introduced the concept of \textit{loss function} $L(\hat y, y)$, see Table~\ref{tab:losses}. For a fixed choice of the loss, the ideal estimator, also known as the \textit{target} function, $f^*$ is the minimizer of the (true) expected risk $\mathcal{E}(f)$ \ie
+%in a rather \textit{large} class of functions $\mathcal{F}$.
 %We assume that $f^*(\bm{x})$ minimizes $\mathbb{E}(f)$ in a rather \textit{large} class of functions $\mathcal{F}$.
-
-
 \begin{equation} \label{eq:fstar}
-	f^*(\bm{x}) = \argmin_{f \in \mathcal{F}}{\mathcal{E}(f)}
+	f^* = \argmin_{f \in \mathcal{F}_0}{\mathcal{E}(f)}
 \end{equation}
+where $\mathcal{F}_0$ is the (huge) class of functions $f: \mathcal{X} \rightarrow \mathcal{Y}$ such that $\mathcal{E}(f)$ is finite.
 
 Applying the law of the unconscious statistician, stated in Theorem~\ref{th:lotus}, the expected risk $\mathcal{E}(f)$ can be written as in Equation~\eqref{eq:expected_loss}, where $(\bm{x},y)$ are two random variables with joint probability distribution $p(\bm{x},y)$.
 
@@ -68,18 +75,19 @@ Applying the law of the unconscious statistician, stated in Theorem~\ref{th:lotu
 \end{equation}
 
 In real situations, a direct computation of $\mathcal{E}(f)$ is unfeasible as the joint probability distribution $p(\bm{x},y)$ is unknown. Although, we assume to be provided with a collection of input-output pairs $\mathcal{D}=\{(\bm{x}_i,y_i)\}_{i=1}^n$ that are supposed to be sampled \ac{iid} from $\mathcal{X} \times \mathcal{Y}$ according to $p(\bm{x}, y)$.
-In statistical learning theory, as introduced by Vapnik~\cite{vapnik2013nature}, the dataset $\mathcal{D}$ can be used to build a stochastic approximation of $\mathcal{E}(f)$ called \textit{empirical risk} $\mathcal{E}(f_{\mathcal{D}})$ and defined in Equation~\eqref{eq:empirical_risk}.
+In statistical learning theory, as introduced by Vapnik~\cite{vapnik2013nature}, the dataset $\mathcal{D}$ can be used to build a stochastic approximation of $\mathcal{E}(f)$ called \textit{empirical risk} $\mathcal{E}_{\mathcal{D}}(f)$ and defined in Equation~\eqref{eq:empirical_risk}.
 
 \begin{equation} \label{eq:empirical_risk}
-	\mathcal{E}(f_{\mathcal{D}}) = \frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)
+	\mathcal{E}_{\mathcal{D}}(f) = \frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)
 \end{equation}
 
-As $\mathcal{D}$ is drawn according to the probability distribution $p(\bm{x},y)$, our hope is that the empirical risk can be used as a proxy for the expected risk, hence $\mathcal{E}(f_{\mathcal{D}}) \approx \mathcal{E}(f)$. The solution of the supervised learning problem is then found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}.
+As $\mathcal{D}$ is drawn according to the probability distribution $p(\bm{x},y)$, our hope is that the empirical risk can be used as a proxy for the expected risk, hence $\mathcal{E}_{\mathcal{D}}(f) \approx \mathcal{E}(f)$. The solution of the supervised learning problem is then found by \textit{Empirical Risk Minimization} (ERM), defined in Equation~\eqref{eq:erm}
 
 \begin{equation} \label{eq:erm}
 	\hat f(\bm{x}) = \argmin_{f \in \mathcal{F}}{\mathcal{E}(f_{\mathcal{D}})} = \argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)}
 \end{equation}
 
+Where $\mathcal{F}$ is a suitable small subset of $\mathcal{F}_0$.
 In practice, minimizing $\mathcal{E}(f_{\mathcal{D}})$ instead of $\mathcal{E}(f)$ comes at a price. The central problem is whether the first is a good approximation of the second. For instance, when $p(\bm{x}, y)$ is too \textit{complex}, the number of examples is too small and/or the class of functions $\mathcal{F}$ is \textit{too large}, $\hat f(\bm{x})$ will be far from the target function $f^*(\bm{x})$, even when its empirical error is $0$. In real circumstances, it is impossible to control the true probability distribution and it is often extremely difficult to collect a very large number of examples. The only element we can control is the class of functions $\mathcal{F}$ and, in particular, its \textit{size}. Since Tikhonov~\cite{tikhonov1963solution} it is known that, for an arbitrary function space $\mathcal{F}$, the ERM problem is ill-posed (see Definition~\ref{def:ill_posed}). A possible way to ensure well-posedness is to impose a constrain that restricts the function space. Hence, the constrained ERM problem assumes the form in Equation~\eqref{eq:constrained_erm}, where $\lambda \neq 0$.
 
 \begin{equation} \label{eq:constrained_erm}
@@ -95,10 +103,10 @@ Applying the \textit{Lagrange multipliers technique}\footnote{ For a thorough de
 	\argmin_{f \in \mathcal{F}}{\frac{1}{n} \sum_{i=1}^{n} L(f(\bm{x}_i), y_i)} + \lambda \mathcal{R}(f)
 \end{equation}
 
-The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{ $\mathcal{R}(f)$, in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization}}
+The penalty term $\mathcal{R}(f)$ acts as regularizer \footnote{ $\mathcal{R}(f)$, in general, can be thought as $\mathcal{R}(f) = \norm{f}^2_K$ where $\norm{\cdot}^2_K$ is the norm defined by the kernel $K$ in a \textit{Reproducing Kernel Hilbert Space} $\mathcal{H}$~\cite{evgeniou2000regularization, vito2005learning}.}
 and, according to its definition, it can ensure well-posedness of the problem and it can enforce different interesting properties on the achieved solution, see Section~\ref{subsec:regularization_methods}. It can also be shown that the use of appropriate regularizes promotes generalization, hence increases our chance to find a $\hat f(\bm{x})$ \textit{close} to $f^*(\bm{x})$.
 
- According to the choice made for $L(\cdot)$ and $\mathcal{R}(\cdot)$, the minimization problem posed in Equation~\eqref{eq:losspen2} can have very different properties; it can be convex or non-convex, it can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization methods for ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, bach2012optimization, sra2012optimization, nesterov2013introductory}.
+ According to the choice made for $L(\cdot)$ and $\mathcal{R}(\cdot)$, the minimization problem posed in Equation~\eqref{eq:losspen2} can have very different properties; it can be convex or non-convex, it can include differentiable as well as non-differentiable terms. A rigorous review of the most common optimization methods for ML is beyond the scope of this thesis and can be found here~\cite{boyd2004convex, vito2005learning, bach2012optimization, sra2012optimization, nesterov2013introductory}.
 
 
 \section{Maximum likelihood  estimation} \label{sec:mle}
@@ -158,7 +166,8 @@ Assuming that we have the usual collection of \ac{iid} samples $\mathcal{D}=\{(\
 	\hat f_{MLE} = \argmax_{f~\in~\mathcal{F}} \prod_{i=1}^n p(y_i|\bm{x}_i,f)
 \end{equation}
 
-Applying the negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}\footnote{ The two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$.}.
+Applying the negative log-likelihood trick, Equation~\eqref{eq:fmle} can be rewritten as Equation~\eqref{eq:logfmle}.
+%\footnote{ The two minimization problems $\min_x f(x)$ and $\min_x \alpha f(x)$ have the same solution if $\alpha$ is a constant that does not depend from $x$.}.
 
 \begin{equation} \label{eq:logfmle}
 	\hat f_{MLE} = \argmin_{f~\in~\mathcal{F}} - \frac{1}{n} \sum_{i=1}^n \log p(y_i|\bm{x}_i,f)
