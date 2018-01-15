@@ -3,19 +3,19 @@
 \chapter{Data science background} \label{chap:background}
 
 \begin{displayquote}
-	\textit{This chapter introduces the general concept of data science and starts to move the focus of the thesis toward biomedical problems. Relevant examples on how clinical questions can be translated in data science problems are also presented.}
+	\textit{This chapter introduces the general concept of data science and moves the focus of the thesis toward biomedical problems. Relevant examples on how clinical questions can be translated in data science problems are also presented.}
 \end{displayquote}
 
 %\section{What is data science and why should we care?} \label{sec:data_science}
 % data science vasta: gestione (data engineering) -> data exploration -> machine learning -> data viz
-\textit{Data science} is an under development cross-disciplinary field comprising the techniques used to collect and analyze arbitrarily large quantities of measures and information with the final aim of devising data-driven decision making strategies.
-This new field is of extreme interest for both industry and academia. In fact, following the data science philosophy it is possible to obtain highly efficient solutions and new knowledge, at the same time and in the same framework.
+\textit{Data science} is an under development cross-disciplinary field comprising the techniques used to collect and analyze arbitrarily large quantities of measures. The final aim of a data science application is to devise data-driven and statistically sound decision making strategies.
+This new field is of extreme interest for both industry and academia. In fact, following the data science philosophy it is possible to obtain highly efficient solutions and new knowledge at the same time and in the same framework.
 
-Nowadays the term data science is becoming ubiquitous; although, deeply understanding \textit{what really is} and, most importantly, \textit{why should we care about it}, can be difficult.
-This may be due to the confusing fuss that generally surrounds trending terms in the Internet era. Several people, with different backgrounds, are simultaneously trying to present their opinions on the topic\footnote{ Probably this chapter is just another attempt.} and often their views disagree.
+Nowadays the term data science is becoming ubiquitous; although, deeply understanding what really is and, most importantly, why should we care about it, can be difficult.
+This may be due to the confusing fuss that generally surrounds trending terms in the Internet era. Several people, with different backgrounds and different goals, are simultaneously presenting their opinions on the topic\footnote{ And maybe this chapter is just another attempt.} and often their point of view disagree.
 
-Perhaps, focusing on the skills required to be a data scientist may shed some light on the topic. To this regard, in September 2010, Drew Conway published on his popular blog the so-called \textit{Data Science Venn Diagram}, see Figure~\ref{fig:data_science_venn_diagram}  (source: \url{https://goo.gl/m4gwmJ}).
-In order to comment this diagram, let's focus on the three main sets.
+Perhaps, focusing on the skills required to be a data scientist may shed some light on the topic. To this regard, in September 2010, Drew Conway published on his popular blog the so-called \textit{Data Science Venn Diagram}, see Figure~\ref{fig:data_science_venn_diagram} \footnote{ Source: \url{https://goo.gl/m4gwmJ}.}.
+Let's comment this diagram, separately focusing on each of the three main sets.
 
 \begin{figure}[h!]
 	\centering
@@ -23,12 +23,14 @@ In order to comment this diagram, let's focus on the three main sets.
 	\caption{Drew Conway's Data Science Venn Diagram.} \label{fig:data_science_venn_diagram}
 \end{figure}
 
-The red set, ironically named \textit{Hacking Skills}, represents all the computer science background that a data scientist need to do his/her job. As shown in the diagram, this is the biggest  difference between data science and traditional research. In my opinion, this does not mean that traditional research does not need any computer science skill, but rather that achieving good data science solutions can be, sometimes, a messy task.
-According to the scope, data collections can have various forms. They may be structured or unstructured, raw or preprocessed, distributed or centralized and so on. The branch of data science that revolves around developing and maintaining data collections is typically called \textit{data engineering}. Although of great interest, this aspect will not be analyzed in depth in this PhD thesis.
+The red set, ironically named \textit{Hacking Skills}, represents all the computer science background that a data scientist need to do his/her job. As shown in the diagram, this  skill is what separates data science from traditional research. In my opinion, this does not mean that traditional researchers are unaware of any computer science skill, but rather that achieving good data science solutions can be, sometimes, a messy task that requires to get hands dirty with several lines of source code.
+
+
+According to their scope, data collections can have various forms. They may be structured or unstructured, raw or preprocessed, distributed or centralized, and so on. The branch of data science that revolves around developing and maintaining data collections is typically called \textit{data engineering}. Although of great interest, this aspect will not be analyzed in depth in this PhD thesis.
 
 The green set represents the mathematical and statistical background that is needed by data scientists to develop predictive models. Interestingly, Machine Learning (\ac{ML}) lies in the intersection between this set with the red one. We will diffusely discuss about ML in Chapter~\ref{chap:state-of-the-art}, for now we will just think about it as a set of mathematical models and algorithms that, once implemented and deployed on computing facilities, are capable of automatically accomplish complex tasks.
 
-Finally, the blue set, named \textit{Substantive Expertise}, represents the key difference between a data scientist and a classic statistician/data analyst. The main characteristics of data scientists is that they can ask the \textit{right} questions to the data. In other words, their domain knowledge allows them to understand which kind of information may be hidden in the data and which data-driven conclusions can be made. Data science produces statistically sound results, in which potentiality and limits of the drawn conclusion are always highlighted. Data scientists shall never \textit{fell in love} with their data, but they should always keep a high level of objectiveness in their analysis. Otherwise, as brilliantly pointed-out by the diagram, we may fear to fall in the intersection between blue and red sets, the \textit{Danger Zone!}
+Finally, the blue set, named \textit{Substantive Expertise}, represents the key difference between a data scientist and a classic statistician/data analyst. The main characteristics of data scientists is that they know how to ask the \textit{right} questions to the data. In other words, their domain knowledge allows them to understand which kind of information may be hidden in the data and which data-driven conclusions can be made. Data science produces statistically sound results, in which potentiality and limits of the drawn conclusion are always highlighted. Data scientists shall never \textit{fell in love} with their data, but they should always keep a high level of objectiveness in their analysis. Otherwise, as brilliantly pointed-out by the diagram, we may fear to fall in the intersection between blue and red sets, the \textit{Danger Zone!}
 
 
 As of today, data are leading recent discoveries in almost every scientific field. In the next sections of this PhD thesis we will focus on the application of data science techniques to biological and biomedical domains.
