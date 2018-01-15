@@ -170,34 +170,31 @@ Moreover, a neurologist assigns to each patient the corresponding disease course
 %%%%%%%% EDA %%%%%%%%
 \section{\PCOs exploratory data analysis} \label{sec:aism_eda}
 
-
- \begin{figure}[]
-	\centering
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/ms_bars.png}
-		\label{fig:patients}%
-	}%
-	%	\hfill%
-	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/ms_pie.png} \label{fig:PPRRSP}
-	}%
-	\caption{An overview of the \PCO dataset used in this study. The left panel (a) shows a bar chart of the number of MS patients in each disease form  at different examinations. The right panel (b) presents a representation of the distribution of the total amount of acquisitions ($3991$), divided according to the disease form.}\label{fig:data}
-\end{figure}
-
-
 %In this work we focus on detecting the \RR to \SP prediction, hence the patients in \PR and \PP form will not be taken into account.
 
 In this work we analyze \PCOs data acquired every four months from a cohort of MS patients enrolled in a funded study.
-Currently, we have collected data for $11$ examinations and, as patients enrollment is still ongoing,  the number of individuals for each time point is successively decreasing
-Our dataset comprises a grand total of $3991$ patients, with $1451$ \RR, $1947$ \SP, $503$ \PP, $53$ \PR and $37$ benign cases.
+Currently, we have collected data for $11$ examinations and, as patients enrollment is still ongoing,  the number of individuals for each time point is successively decreasing, as shown in Figure~\ref{fig:patients}.
+\begin{figure}[]
+	\centering
+	\includegraphics[width=0.8\textwidth]{part2/ms_bars.png}
+	\caption{Bar chart of the number of MS patients in each disease form  at different examinations.} \label{fig:patients}
+\end{figure}
+
+The collected dataset comprises a grand total of $3991$ patients, with $1451$ \RR, $1947$ \SP, $503$ \PP, $53$ \PR and $37$ benign cases, as shown in Figure~\ref{fig:PPRRSP}.
+\begin{figure}[]
+	\centering
+	\includegraphics[width=0.8\textwidth]{part2/ms_pie.png}
+	\caption{Representation of the distribution of the total amount of acquisitions, divided according to the disease form.} \label{fig:PPRRSP}
+\end{figure}
+
 Each sample of the dataset is represented by a vector containing the $145$ predictors summarized in Table~\ref{tab:proms}.
-As the missing data ratio amounts to $1.61\%$ of the entire dataset, we resort to the $k$-nearest neighbor data imputing strategy (with $k=5$) proposed in~\cite{troyanskaya2001missing}.
+As the missing data ratio amounts to $1.61\%$ of the entire dataset, we resort to the $k$-nearest neighbor data imputing strategy (with $k=3$) proposed in~\cite{troyanskaya2001missing}.
 
 Analyzing \PCO data is challenging from several respects.
 For instance, items belonging to different questionnaires are encoded with numerical values in different ranges.
-As an example, the items of the \MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the \SDMT outcome is the global number of correctly answered items of the test (max $110$) and the \EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
+For example, the items of the \MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the \SDMT outcome is the global number of correctly answered items of the test (max $110$) and the \EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
 To tackle such issues, in this EDA we opted for a preliminary data preprocessing of the ordinal answers and a binary one-hot-encoding of the categorical ones, the latter increases the dimensionality of the samples, leading to $d=165$ variables in the dataset.
-The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature $x^j$ in the a fixed range, \ie $x^{j'} \in [0, 1]$. The min-max scaling is obtained by the transformation in Equation~\eqref{eq:minmax}.
+The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature $x^j$ in a fixed range, \ie $x^{j'} \in [0, 1]$. The min-max scaling is obtained by the transformation described in Equation~\eqref{eq:minmax}.
 \begin{equation} \label{eq:minmax}
 	x^{j'} = \frac{x^j - \min(x^j)}{\max(x^j) - \min(x^j)}
 %	X_std = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
@@ -217,10 +214,10 @@ The effect of the data preprocessing on the ordinal input variables is visually 
 	\caption{The effect of the data preprocessing on the input ordinal \PCOs. The left panel (a) shows the distribution of the raw collected variables, whereas the right panel (b) shows the distribution of the same variables after the preprocessing step.}\label{fig:ms_boxplots}
 \end{figure}
 
-Furthermore, we try to decrease the dimensionality of the collected samples in order to visually inspect the data. To this aim, we project the data in a 3D space with linear PCA and Isomap (see Section~\ref{sec:dimred}).
+Furthermore, in order to visually inspect the data we investigate on how to reduce their dimensionality. To this aim, we project the data in a 3D space with linear PCA and Isomap (see Section~\ref{sec:dimred}).
 These algorithms are sensitive to outliers, which we expect to affect our dataset. Therefore, we follow a preliminary isolation forests-based anomalies detection and removal as described in~\cite{liu2008isolation, liu2012isolation}.
 The obtained scatter plots are shown in Figure~\ref{fig:ms_3dscatterplot}.
-As we can see, both the obtained projections hint some sort of class separation between \RR and \SP subjects, while the same conclusion cannot be drawn for the other classes. Moreover, considering only the first three principal components, PCA explains only the $37.4\%$ of the variance of the dataset. This suggests that more information, which may be useful for classification purposes, is spread across several input variables.
+As we can see, both the obtained projections hint some sort of class separation between \RR and \SP subjects, while the same conclusion cannot be drawn for the other classes. Moreover, considering only the first three principal components, PCA explains only the $37.4\%$ of the variance of the dataset. This suggests that most of the information, which may be useful for classification purposes, is spread across several input variables.
 %in this dataset the low dimensionality projection and visualization is not insightful. From the scatter plots in Figure~\ref{fig:ms_3dscatterplot} a clear class separation cannot be firmly observed.
 
 \begin{figure}[h!]
@@ -242,7 +239,7 @@ As we can see, both the obtained projections hint some sort of class separation 
 %		\includegraphics[width=0.5\textwidth]{part2/ms_tsne.png}
 %		\label{fig:ms_ms_tsne}%
 %	}
-	\caption{A random extraction of the $20\%$ of the MS dataset projected on a 3D space by linear PCA, panel (a), and Isomap, panel (b).} \label{fig:ms_3dscatterplot}
+	\caption{A random extraction of the $20\%$ of the MS dataset projected on a 3D space by linear PCA, on panel (a), and Isomap, on panel (b).} \label{fig:ms_3dscatterplot}
 \end{figure}
 
 This EDA raised our hopes to successfully perform a further supervised MS course classification and evolution prediction.
@@ -255,34 +252,33 @@ This EDA raised our hopes to successfully perform a further supervised MS course
 % We adopted suitable categorical data encoding and missing values imputing strategies to cope with these issues (see Section~\ref{sec:problem_description}).
 
 %a machine-learning based temporal model that, extracting information from \PCOs data, is able to answer to
-Predicting the MS course evolution can be split in three different related tasks: \f (\F), \g (\G) and \fog (\FOG).
+In order to develop a temporal model of MS evolution, we assume that our data can be modeled according to the temporal structure outlined in Figure~\ref{fig:pipeline}.
+Therefore, predicting the MS course evolution can be split in three different related tasks, which we call: \f (\F), \g (\G) and \fog (\FOG).
+
+
+\input{part1/pipeline}
+
 
 \begin{enumerate}
-	\item[] \textbf{\F} Given the $165$-dimensional representation of a patient at a fixed time point $\bm{x}_i^t$, this task consists in assigning the corresponding disease course $y_i^t$. \F can be translated into a binary classification problem and which can be solved by learning a discriminative function $f(\bm{x}_i^{t}) = y_i^{t}$.
+	\item[] \textbf{\F} Given the $165$-dimensional representation of a patient at a fixed time point $\bm{x}_i^t$, this task consists in assigning the corresponding disease course $y_i^t$. \F can be translated into a binary classification problem which can be solved by learning a discriminative function $f(\bm{x}_i^{t}) = y_i^{t}$.
 	
 	\item[] \textbf{\G} Given the historical representation  of a patient $\bm{x}_i^t$ for $t=1,\dots,\tau$, this task consists in predicting the patient representation $\bm{x}_i^{\tau+1}$. \G can be seen as a multiple-output regression function and it can be solved by learning an appropriate function $g(\bm{x}_i^{t}) = \bm{x}_i^{t+1}$.
 	
-	\item[] \textbf{\FOG} This task can be seen as foreseeing the MS disease course $y_i^{\tau+1}$ from $\bm{x}_i^t$ for $t=1,\dots,\tau$. Once $\hat{f}(\bm{x})$ and $\hat{g}(\bm{x})$ are learned by training on historical \PCO data, the \FOG problem is finally solved by the temporal model $\hat{f} \circ \hat{g}(\bm{x}_i^{t}) = y_i^{t+1}$. In time-series data analysis, this is known as \textit{one-step-ahead forecast}. Notably, the \FOG model allows to foresee if the patient at the next time point is going to experience a transition from \RR to \SP, or not.
+	\item[] \textbf{\FOG} This task can be seen as foreseeing the MS disease course $y_i^{\tau+1}$ from $\bm{x}_i^t$ for $t=1,\dots,\tau$. Once $\hat{f}(\bm{x})$ and $\hat{g}(\bm{x})$ are learned by training on historical \PCO data, the \FOG problem is finally solved by the temporal model $\hat{f} \circ \hat{g}(\bm{x}_i^{t}) = y_i^{t+1}$. In time-series data analysis, this is known as \textit{one-step-ahead forecast}. Notably, the \FOG model allows to foresee if the patient at the next time point is likely to experience a transition from \RR to \SP, or not.
 
 \end{enumerate}
-
-All these predictive models assume the temporal structure outlined in Figure~\ref{fig:pipeline}.
-
-\input{part1/pipeline}
 
 
 \subsection{Experimental design}\label{sec:experimental_design}
 Our final goal is predicting MS course evolution of  \RR and  \SP patients, hence the subjects with \PR, \PP and benign forms are not further taken into account.
 
-We considered all the patients with a minimum of $1$ time point (the most recently enrolled) up to $T=11$ time points for a total of $3398$ samples, of which $1451$ \RR and $1947$ \SP. As this is an ongoing project, the number of PwMS decreases with time.
+We considered all the patients with a minimum of $1$ time point (the most recently enrolled) up to $T=11$ time points for a total of $3398$ samples, of which $1451$ \RR and $1947$ \SP.
+%As this is an ongoing project, the number of PwMS decreases with time.
 %We expect to fill the gap of samples between \textit{Exam~$1$} and \textit{Exam~$11$} by the end of the funded study.
-
 Following the EDA, we opted for a preliminary feature-wise min-max scaling.
-However, to promote unbiasedness on the results, this preprocessing phase is not performed on the entire data collection, but it is embedded into the model fitting procedure.
+However, to promote unbiasedness of the results, this preprocessing phase is not performed on the entire data collection, but it is embedded into the model fitting procedure. This trick, jointly applied with cross-validation techniques, guarantees that even the feature-wise range used for data preprocessing is \textit{learned} from training set and it is applied on previously unseen validation sets.
 %separately evaluated prior to each model fitting process on its training cross-validation portion of the data.
-
-
-We shall discuss separately the experimental designs used to learn $f(\bm{x})$ and $g(\bm{x})$.
+However, the experimental design adopted to learn $f(\bm{x})$ and $g(\bm{x})$ is slightly different. Therefore, each of them is separately discussed in the remainder of this section.
 
 % In particular, the training set comprises all samples collected at time points $t = 1, \dots ,T_{tr}$, the validation set at $t=T_{tr}+1,\dots,T_{vld}$ and the test set at $t=T_{vld}+1,\dots,T$.
 % Here, as the maximum number of collected time points is $T=8$, we fixed $T_{tr} = 3$ and $T_{vld} = 4$.
@@ -293,23 +289,25 @@ We shall discuss separately the experimental designs used to learn $f(\bm{x})$ a
 	We split the dataset in three temporal chunks, namely \textit{training}, \textit{validation} and \textit{test} sets, consisting of all samples collected at time points $t=1,2,3$, $t=4$ and $t=5,6,7,8,9,10,11$, respectively.
 	Accordingly, we used $1993$ samples for training $f(\bm{x})$, $463$ for validation leaving the remaining $942$ for test.
 	
-	Five candidate models for $f(\bm{x})$ are fitted on $100$ Monte Carlo (MC) random sampling of the training set each time keeping $\frac{1}{4}$ of the samples aside~\cite{molinaro2005prediction}. For each MC sampling the fitting procedure is performed on the remaining $\frac{3}{4}$ of the samples and it includes an inner parameter optimization via grid-search cross-validation~\cite{hastie2009elements}. In particular, we require the MS course prediction to be based on a reduced number of variables (see Section~\ref{sec:learning_f}), therefore we enforce sparsity in each candidate model.
+	Seven candidate models, see Section~\ref{sec:learning_f}, for $f(\bm{x})$ are fitted on $100$ Monte Carlo random sampling of the training set each time keeping $\frac{1}{4}$ of the samples aside, see Section~\ref{sec:model_evaluation}. For each Monte Carlo sampling the fitting procedure is performed on the remaining $\frac{3}{4}$ of the samples and it includes an inner parameter optimization via grid-search cross-validation, as described in Section~\ref{sec:model_selection}. In particular, we require the MS course prediction to be based on a reduced number of variables, therefore we enforce sparsity in each candidate model.
 	% Each candidate model is required to be sparse, therefore the MS course prediction is based on a reduced number of variables (see Section~\ref{sec:learning_f}).
-	Leveraging on the MC strategy, we rank the variables according to their selection frequency~\cite{barbieri16palladio, meinshausen2010stability}.
-	Once a variable ranking is achieved for each candidate model, the list of selected variables is identified by thresholding the corresponding ranking with the threshold that maximizes the accuracy \todo{or MCC} on the validation set. Finally, the last training step consists in fitting each candidate model on the union of training and validation sets taking only into account the corresponding reduced subset of selected variables. The final \F model $\hat{f}(\bm{x})$ is chosen as the one that performs better on the previously unseen test set in terms of accuracy, \todo{MCC}, precision, recall and $\text{F}_1$ score.
+	Leveraging on this Monte Carlo-based stability selection strategy, we rank the variables according to their selection frequency, see Section~\ref{subsec:feature_selection}.
+	Once a variable ranking is achieved for each candidate model, the list of selected variables is identified by thresholding the corresponding ranking with the threshold that maximizes the MCC on the validation set. Finally, the last training step consists in fitting each candidate model on the union of training and validation sets taking only into account the corresponding reduced subset of selected variables. The final \F model $\hat{f}(\bm{x})$ is chosen as the one that performs better on the previously unseen test set in terms of accuracy, MCC, precision, recall and $\text{F}_1$ score.
+	These performance metrics for classification are defined in Section~\ref{sec:performance_metrics}.
 
 	\item[] \textbf{\G} %presents the answers provided by the MS patients to the \PCOs questionnaires, while the label vector $\bm{y}$ has the corresponding disease form diagnosis.
-	On the other hand, learning the \G model $g(\bm{x})$ implies solving a multiple-output regression problem and each input $\bm{x}_i^t$ is associated with the output vector $\bm{x}_i^{t+1}$.
+	On the other hand, learning the \G model $g(\bm{x})$ implies solving a multiple-output regression problem as to each input $\bm{x}_i^t$ is associated the output vector $\bm{x}_i^{t+1}$.
 	% and the class labels are not taken into account.
 	Therefore, we can only consider samples at time point $t$ with an available follow-up at the next time point $t+1$, which reduces the overall number of available samples.
-	The dataset splitting is consistent with the one followed for learning $f(\bm{x})$, although there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8,9,10,11$ for test, resulting in $XXXX$ and $XXX$ samples, respectively.
+	The dataset splitting is consistent with the one followed for learning $f(\bm{x})$, although in this case there is no need for a separate validation set, as learning $g(\bm{x})$ does not require any variable selection process. We used the samples collected at time points $t=1,2,3,4$ for training and those at $t=5,6,7,8,9,10,11$ for test, resulting in $1946$ and $714$ samples, respectively.
 	The fitting procedure includes an inner parameter optimization via grid-search cross-validation. Each candidate model is a function
 	$g: \mathbb{R}^{165} \rightarrow \mathbb{R}^k$ where $k$ is the number of variables selected by the best \F model.
 	% that predicts the evolution of the variables selected by the best \F model starting from the full set of \PCOs.
-	The final \G model $\hat{g}(\bm{x})$ is chosen as the candidate model that performs better on the previously unseen test set in terms of mean absolute error (MAE).
+	Three candidate models are evaluated to solve this problem.
+	The final \G model $\hat{g}(\bm{x})$ is chosen as the candidate model that performs better on the previously unseen test set in terms of MAE, defined in Section~\ref{sec:performance_metrics}.
 	
 
-	\item[] \textbf{\FOG} The predictive capability of the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$ is finally evaluated on the test set. The \F model $\hat{f}(\bm{x}_i^t)$ predicts the MS course $\hat{y}_i^t$ from the \PCO data vector $\hat{\bm{x}}_i^t$ that, in turn, is predicted by the \G model $\hat{g}(\bm{x}_i^{t-1})$. We shall notice here that the predictions $\hat{f} \circ \hat{g}(\bm{x}_i^t)=y_i^{t+1}$ for $t=11$ are foreseeing possible \RR to \SP transitions that are beyond our data observation, hence predictions at the last time point cannot be used to assess the \FOG model performance. Therefore, its performance is evaluated only on $XXXX$ test samples.
+	\item[] \textbf{\FOG} The predictive capability of the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$ is finally evaluated on the test set. The \F model $\hat{f}(\bm{x}_i^t)$ predicts the MS course $\hat{y}_i^t$ from the \PCO data vector $\hat{\bm{x}}_i^t$ that, in turn, is predicted by the \G model $\hat{g}(\bm{x}_i^{t-1})$. We shall notice here that the predictions $\hat{f} \circ \hat{g}(\bm{x}_i^t)=y_i^{t+1}$ for $t=11$ are foreseeing possible \RR to \SP transitions that are beyond our data observation, hence predictions at the last time point cannot be used to assess the \FOG model performance. Therefore, its performance is evaluated only on $616$ test samples.
 	
 \end{itemize}
 
@@ -325,16 +323,33 @@ We shall discuss separately the experimental designs used to learn $f(\bm{x})$ a
 
 %First, we will require the diagnosis function $f(\bm{x})$ to be sparse, hence the MS outcome prediction will be based on a reduced number of variables.
 We imposed $f(\bm{x})$ to be sparse. This requirement is helpful from two distinct respects:
-\begin{enumerate*}[label=\alph*)]
-	\item the performance of the predictive model may increase thanks to a reduced effect the course of dimensionality~\cite{hastie2015statistical} and
+\begin{enumerate*}[label=(\roman*)]
+	\item an increase of the predictive model performance which can be achieved thanks to a reduced effect the course of dimensionality~\cite{hastie2015statistical} and
 	% \item the effect the course of dimensionality~\cite{hastie2015statistical} may be attenuated, hence increasing the performance of the predictive model, and
 	\item the identification of a reduced subset of meaningful \PCOs provides interpretability of the results for the clinicians.
 \end{enumerate*}
-In order to achieve such sparse model, we take advantage of two main variable selection strategies: embedded and wrapper methods (see Section~\ref{subsec:feature_selection}).
-When using embedded methods, we exploited the sparsity inducing penalties of EN to take into account possible correlation between \PCO variables and of SLR to benefit from the renowned classification capability of the logistic loss function.
-We applied the RFE wrapper method to
-% Concerning the use of wrapper methods, which exploit a RFE schema, we chose
-two tree-based learning machines (RF and GB) that are capable of capturing nonlinear relationship between input and output and are intrinsically well-suited to deal with categorical/ordinal variables. We also explored the use of RFE with SVM, as in~\cite{guyon2002gene}.
+
+In order to achieve a sparse model, we take advantage of two variable selection strategies: embedded and wrapper methods, see Section~\ref{subsec:feature_selection}.
+When using embedded methods, we exploited the sparsity inducing penalties of three methods:
+\begin{itemize}
+	\item the Elastic-Net, that presents square loss and a penalty which is a convex combination of $\ell_1$- and $\ell_2$-norm of the variable weights (see Section~\ref{sec:elastic_net}),
+
+	\item sparse logistic regression, which combines the logistic loss with a Lasso penalty on the variable weights (see Section~\ref{sec:logistic_regression}),
+	
+	\item $\ell_1$-penalized SVM (see Section~\ref{sec:svm}).
+\end{itemize}
+We expect that with Elastic-Net the correlations between \PCOs, which we assume in our dataset, can be exploited. On the other hand, the use of sparse logistic regression and $\ell_1$-penalized SVM can benefit from the renowned classification capability of their loss function.
+
+Moreover, we applied the RFE wrapper method to four other methods:
+\begin{itemize}
+	\item logistic regression, that achieves smooth solutions thanks to its $\ell_2$-norm penalty;
+	\item SVM, which also has an $\ell_2$-norm penalty;
+	\item Random Forests (RF), a tree-based ensemble that can capture nonlinear relationship between \PCOs and disease course, that it is also well suited to deal with categorical/ordinal variables and that, thanks to the inner bagging strategy, is less prone to overfitting;
+	\item Gradient Boosting (GB), that has recently demonstrated to be an excellent nonlinear model for structured data~\cite{chollet2018deep}, but it is more prone to overfitting.
+\end{itemize}
+RFE produces a variable ranking. The list of selected variables, for each Monte Carlo iteration, is obtained by an inner $K$-fold cross-validation optimization (with $K=3$).
+
+%tree-based learning machines (RF and GB) that are capable of capturing nonlinear relationship between input and output and are intrinsically well-suited to deal with categorical/ordinal variables. We also explored the use of RFE with SVM, as in~\cite{guyon2002gene}.
 % which is a state-of-the-art machine learning method for classification.
 
 \subsection{Learning $g(x)$}
@@ -356,7 +371,7 @@ Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Tab
 We also see that, whenever possible, the model tends to select aggregate scores (total and subtotal) rather that single items. This is consistent with the clinical practice, where neurologists are more likely to assess patient's health status by using the aggregate scores, rather than the single questions.
 Quite surprisingly, the recent number of relapses is the only additional information not selected by the model.
 Finally, we note that all the domains that are known to be affected by the disease are well covered: mobility (upper and lower limbs), cognition, emotional, fatigue, bladder and psychosocial.
-The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the five \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
+The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the seven \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
 
 Regarding \G, MTEN outperforms the other candidate models in terms of MAE ( $\text{MAE}_{\text{MTEN}}=0.095$, $\text{MAE}_{\text{NNM}}=0.102$, $\text{MAE}_{\text{MLP}}=0.105$), hence we select it as our \G model $\hat{g}(\bm{x})$.
 
