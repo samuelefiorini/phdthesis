@@ -3,6 +3,7 @@
 **/results
 **/__partial
 **/__trash
+**/winner_model.pkl
 
 ## Notebooks checkpoints
 **/*.ipynb_checkpoints
