@@ -364,39 +364,76 @@ As no prior information on the relationship between \PCOs evaluated at different
 
 Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}). The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach.
 
-\section{Results}\label{sec:aism_results}
+\section{Results and discussion}\label{sec:aism_results}
 
 % \todo{add table of selected features}
-We shall discuss separately the results achieved in terms of \F, \G and \FOG models.
+We shall separately discuss the results achieved in terms of \F, \G and \FOG models.
 
-Regarding \F, the GB method outperforms the other candidate models reaching accuracy $0.900$, precision $0.936$, recall $0.899$ and $\text{F}_1$ score $0.917$, as shown in Figure~\ref{fig:diagnosis_competition}. Therefore we chose it as \F model $\hat{f}(\bm{x})$.
-Insights on the use of \PCOs for MS assessment are provided by the sparsity of the \F model induced by the RFE schema.
-The $31$ selected variables are reported in Table~\ref{tab:selected}.
-Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Table~\ref{tab:selected}, we observe that each \PCO used in this study is represented at least once, except \EDINB, and the most represented is \FIM.
-We also see that, whenever possible, the model tends to select aggregate scores (total and subtotal) rather that single items. This is consistent with the clinical practice, where neurologists are more likely to assess patient's health status by using the aggregate scores, rather than the single questions.
-Quite surprisingly, the recent number of relapses is the only additional information not selected by the model.
-Finally, we note that all the domains that are known to be affected by the disease are well covered: mobility (upper and lower limbs), cognition, emotional, fatigue, bladder and psychosocial.
-The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the seven \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
+\begin{itemize}
+	\item[] \textbf{\F}
+	The first step toward the definition of this model consisted in the Monte Carlo-based stability selection assessment of the seven candidate models. Table~\ref{tab:f_scoreboard} summarizes the performance scores obtained by the seven models across the $100$ cross-validation iterations, expressed in terms of average and standard deviations. We can observe that the tree-based methods perform quite similarly, consistently outperforming the linear models.
+	
+	\input{part2/f_scoreboard}
+	
+	Each of these models generates a corresponding variable ranking (results not shown). Once each variable ranking is thresholded by optimizing the MCC on the validation set, the model selects the number of variables represented in Figure~\ref{fig:n_selected}. Interestingly, RF and GB achieve the most parsimonious representation (only $34$ variables out of $165$) and the top cross-validated classification scores. This confirms that the relationship between \PCOs and disease course is nonlinear and that the \F problem can be achieved by observing a reduced number of variables.
+	
+	\begin{figure}[]
+		\centering
+		\includegraphics[width=0.8\textwidth]{part2/aism_selected_features.png}
+		\caption{The number of variables selected by each of the seven candidate models.} \label{fig:n_selected}
+	\end{figure}
 
-Regarding \G, MTEN outperforms the other candidate models in terms of MAE ( $\text{MAE}_{\text{MTEN}}=0.095$, $\text{MAE}_{\text{NNM}}=0.102$, $\text{MAE}_{\text{MLP}}=0.105$), hence we select it as our \G model $\hat{g}(\bm{x})$.
+	Once refitted on the union of training and validation, but each one considering only the corresponding relevant features, the seven candidate models reach on the test set the performance summarized in Table~\ref{tab:f_final_scores} and visually represented in Figure~\ref{fig:f_final_scores}.
+	
+	\begin{figure}[]
+		\centering
+		\includegraphics[draft=false, width=0.8\textwidth]{part2/aism_f_final_scores.png}
+		\caption{The classification scores achieved by the seven candidate models on the test set.} \label{fig:f_final_scores}
+	\end{figure}
 
+	\input{part2/f_final_scoreboard}
+	
+	
+	
+	
+	
+	The GB method outperforms the other candidate models reaching accuracy $0.900$, precision $0.936$, recall $0.899$ and $\text{F}_1$ score $0.917$, as shown in  and Figure~\ref{fig:diagnosis_competition}. Therefore we chose it as \F model $\hat{f}(\bm{x})$.
+	
+	Insights on the use of \PCOs for MS assessment are provided by the sparsity of the \F model induced by the RFE schema.
+	The $31$ selected variables are reported in Table~\ref{tab:selected}.
+	Comparing the full list of \PCO questionnaires of Table~\ref{tab:proms} with Table~\ref{tab:selected}, we observe that each \PCO used in this study is represented at least once, except \EDINB, and the most represented is \FIM.
+	We also see that, whenever possible, the model tends to select aggregate scores (total and subtotal) rather that single items. This is consistent with the clinical practice, where neurologists are more likely to assess patient's health status by using the aggregate scores, rather than the single questions.
+	Quite surprisingly, the recent number of relapses is the only additional information not selected by the model.
+	Finally, we note that all the domains that are known to be affected by the disease are well covered: mobility (upper and lower limbs), cognition, emotional, fatigue, bladder and psychosocial.
+	The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the seven \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
+	
 
- \begin{figure}[h!]
+	
+	
+	\item[] \textbf{\G}
+	MTEN outperforms the other candidate models in terms of MAE ( $\text{MAE}_{\text{MTEN}}=0.095$, $\text{MAE}_{\text{NNM}}=0.102$, $\text{MAE}_{\text{MLP}}=0.105$), hence we select it as our \G model $\hat{g}(\bm{x})$.
+	
+	\item[] \textbf{\FOG}
+	Finally, the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$, obtained by combining MTEN and GB achieves the following performance scores on the $220$ test samples: accuracy $0.841$, precision $0.900$, recall $0.824$ and $\text{F}_1$ score $0.860$.
+	
+	
+\end{itemize}
+
+ \begin{figure}[]
 	\centering
 	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/final_scores_2_copy.png}
+		\includegraphics[draft=false, width=0.8\textwidth]{part2/final_scores_2_copy.png}
 		\label{fig:diagnosis_competition}%
 	}%
 	 \hfill%
 	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/selection_heatmap_copy.png} \label{fig:selection_heatmap}
+		\includegraphics[draft=false, width=0.8\textwidth]{part2/selection_heatmap_copy.png} \label{fig:selection_heatmap}
 	}%
 	\caption{A visual representation of the results obtained from the \F model. On the left panel (a) we show the classification performance achieved on the test set by the candidate models. Precision, recall and $\text{F}_1$ score are estimated considering \SP as the positive class. As GB outperforms the other methods on each performance metric, it is chosen as \F model. On the right panel (b) a heatmap displays the distance between the lists of variables selected by each model in terms of their hamming distance. \todo{break figure in two}}\label{fig:f}
 \end{figure}
 
 
-%
-Finally, the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$, obtained by combining MTEN and GB achieves the following performance scores on the $220$ test samples: accuracy $0.841$, precision $0.900$, recall $0.824$ and $\text{F}_1$ score $0.860$.
+
 
 
 \section{Conclusions and future works}

@@ -1,0 +1,18 @@
+\begin{table}
+
+\begin{tabular}{lrrrrr}
+\toprule
+{} &       MCC &  Accuracy &  Precision &    Recall &        F\textsubscript{$1$}-score \\
+\midrule
+GB      &  0.664097 &  0.838641 &   0.873214 &  0.857895 &  0.865487 \\
+RF         &  \textbf{0.711918} &  \textbf{0.859873} &   \textbf{0.904059} &  \textbf{0.859649} &  \textbf{0.881295} \\
+Elastic-Net                   &  0.587672 &  0.784501 &   0.899782 &  0.724561 &  0.802721 \\
+$\ell_2$ LR &  0.595848 &  0.791932 &   0.894515 &  0.743860 &  0.812261 \\
+$\ell_1$ LR &  0.594176 &  0.794055 &   0.885246 &  0.757895 &  0.816635 \\
+$\ell_2$ SVM          &  0.589783 &  0.788747 &   0.892178 &  0.740351 &  0.809204 \\
+$\ell_1$ SVM          &  0.594076 &  0.791932 &   0.891213 &  0.747368 &  0.812977 \\
+\bottomrule
+\end{tabular}
+
+\caption{Classification performance scores of the seven candidate models (for the \F problem) achieved on the test set.} \label{tab:f_final_scores}
+\end{table}

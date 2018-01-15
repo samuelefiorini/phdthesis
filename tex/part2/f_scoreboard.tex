@@ -1,0 +1,17 @@
+\begin{table}
+
+\begin{tabular}{llllll}
+\toprule
+{} &                MCC &           Accuracy &          Precision &             Recall &                 F\textsubscript{$1$}-score \\
+\midrule
+GB      &  0.688 $\pm$ 0.035 &  0.846 $\pm$ 0.017 &  0.863 $\pm$ 0.021 &  0.858 $\pm$ 0.023 &  0.860 $\pm$ 0.016 \\
+RF         &  0.687 $\pm$ 0.032 &  0.845 $\pm$ 0.016 &  0.865 $\pm$ 0.019 &  0.853 $\pm$ 0.021 &  0.859 $\pm$ 0.014 \\
+Elastic-Net                   &  0.612 $\pm$ 0.029 &  0.804 $\pm$ 0.015 &  0.850 $\pm$ 0.031 &  0.789 $\pm$ 0.047 &  0.817 $\pm$ 0.018 \\
+$\ell_2$ LR &  0.620 $\pm$ 0.032 &  0.809 $\pm$ 0.016 &  0.857 $\pm$ 0.020 &  0.787 $\pm$ 0.027 &  0.820 $\pm$ 0.016 \\
+$\ell_1$ LR &  0.632 $\pm$ 0.031 &  0.814 $\pm$ 0.016 &  0.867 $\pm$ 0.019 &  0.786 $\pm$ 0.026 &  0.824 $\pm$ 0.016 \\
+$\ell_2$ SVM          &  0.621 $\pm$ 0.032 &  0.808 $\pm$ 0.016 &  0.863 $\pm$ 0.019 &  0.779 $\pm$ 0.026 &  0.819 $\pm$ 0.017 \\
+$\ell_1$ SVM          &  0.632 $\pm$ 0.030 &  0.814 $\pm$ 0.015 &  0.872 $\pm$ 0.020 &  0.779 $\pm$ 0.025 &  0.823 $\pm$ 0.016 \\
+\bottomrule
+\end{tabular}
+\caption{Classification performance scores of the seven candidate models (for the \F problem) achieved on $100$ Monte Carlo cross-validation iterations and expressed in terms of average $\pm$ standard deviation. GB and RF outperform linear models, while performing almost identically.} \label{tab:f_scoreboard}
+\end{table}
