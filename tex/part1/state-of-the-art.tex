@@ -343,6 +343,8 @@ As of today ML is the workhorse of data science.
 				\end{aligned}
 			\end{equation}
 			and it is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
+			
+			\todo{add few words on nuclear-norm minimization}
 
 			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, \textit{sparse logistic regression} (see Section~\eqref{sec:logistic_regression}) is often preferred~\cite{tong2009genome}.
 
@@ -398,13 +400,13 @@ As of today ML is the workhorse of data science.
 			% In~\cite{csala2017sparse} the authors propose an iterative algorithm that exploits the variable selection capabilities of this method to estimate explanatory variables weights  in sparse redundancy analysis; such method is applied to explain the variability in gene expressions by epigenomic data (\ie methylation markers) collected from blood leukocytes of Marfan Syndrome patients.
 
 
-			The Elastic-Net can also be extended to vector-valued regression problems by using a convex combination of the $L_{2,1}$- and the Frobenius norms. This multiple output regression problem is known as Multi-task Elastic-Net~\cite{chen2012adaptive} can be written as in Equation~\eqref{eq:multitask_enet}.
+			The Elastic-Net can also be extended to vector-valued regression problems by using a convex combination of the $L_{2,1}$- and the Frobenius norms. This multiple output regression problem is known as Multi-task Elastic-Net~\cite{chen2012adaptive} (\ac{MTEN}) can be written as in Equation~\eqref{eq:multitask_enet}.
 			\begin{equation} \label{eq:multitask_enet}
 				\begin{aligned}
 					\hat W_{\ell_1\ell_2}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda \bigg[ \alpha \sum_{j=1}^d \sqrt{\Bigg(\sum_{t=1}^k |w_j^t|^2\Bigg)} + (1-\alpha)  \sum_{j=1}^d \sum_{t=1}^k |w_j^t|^2 \bigg] \\
 					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda [\alpha\,||W||_{2,1} + (1-\alpha)\,\norm{W}_F^2]
 				\end{aligned}
-   		\end{equation}
+   		    \end{equation}
 
 			Even though originally proposed to solve regression problems, as already seen for Lasso and ridge regression, the Elastic-Net can be adopted in binary classification tasks. Nevertheless, for classification problems, the use of the logistic loss is usually preferred.
 

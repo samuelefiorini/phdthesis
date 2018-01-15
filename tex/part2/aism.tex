@@ -324,13 +324,13 @@ However, the experimental design adopted to learn $f(\bm{x})$ and $g(\bm{x})$ is
 %First, we will require the diagnosis function $f(\bm{x})$ to be sparse, hence the MS outcome prediction will be based on a reduced number of variables.
 We imposed $f(\bm{x})$ to be sparse. This requirement is helpful from two distinct respects:
 \begin{enumerate*}[label=(\roman*)]
-	\item an increase of the predictive model performance which can be achieved thanks to a reduced effect the course of dimensionality~\cite{hastie2015statistical} and
+	\item predictive model performance increases thanks to a reduced effect of the course of dimensionality~\cite{hastie2015statistical} and
 	% \item the effect the course of dimensionality~\cite{hastie2015statistical} may be attenuated, hence increasing the performance of the predictive model, and
-	\item the identification of a reduced subset of meaningful \PCOs provides interpretability of the results for the clinicians.
+	\item the identification of a reduced subset of meaningful \PCOs provides easily interpretable results for the clinicians.
 \end{enumerate*}
 
 In order to achieve a sparse model, we take advantage of two variable selection strategies: embedded and wrapper methods, see Section~\ref{subsec:feature_selection}.
-When using embedded methods, we exploited the sparsity inducing penalties of three methods:
+When using embedded methods, we exploited the sparsity inducing penalties of three models:
 \begin{itemize}
 	\item the Elastic-Net, that presents square loss and a penalty which is a convex combination of $\ell_1$- and $\ell_2$-norm of the variable weights (see Section~\ref{sec:elastic_net}),
 
@@ -338,16 +338,21 @@ When using embedded methods, we exploited the sparsity inducing penalties of thr
 	
 	\item $\ell_1$-penalized SVM (see Section~\ref{sec:svm}).
 \end{itemize}
-We expect that with Elastic-Net the correlations between \PCOs, which we assume in our dataset, can be exploited. On the other hand, the use of sparse logistic regression and $\ell_1$-penalized SVM can benefit from the renowned classification capability of their loss function.
-
+We expect Elastic-Net to exploit correlations between \PCOs, which we assume in our dataset. On the other hand, the use of sparse logistic regression and $\ell_1$-penalized SVM can benefit from the renowned classification capability of their loss function.
 Moreover, we applied the RFE wrapper method to four other methods:
 \begin{itemize}
 	\item logistic regression, that achieves smooth solutions thanks to its $\ell_2$-norm penalty;
 	\item SVM, which also has an $\ell_2$-norm penalty;
-	\item Random Forests (RF), a tree-based ensemble that can capture nonlinear relationship between \PCOs and disease course, that it is also well suited to deal with categorical/ordinal variables and that, thanks to the inner bagging strategy, is less prone to overfitting;
+	\item Random Forests (RF), a tree-based ensemble that:
+	\begin{enumerate*}[label=(\roman*)]
+		\item can capture nonlinear relationship between \PCOs and disease course,
+		\item it is also well suited to deal with categorical/ordinal variables and
+		\item thanks to the inner bagging strategy, it is less prone to overfitting;
+	\end{enumerate*}
 	\item Gradient Boosting (GB), that has recently demonstrated to be an excellent nonlinear model for structured data~\cite{chollet2018deep}, but it is more prone to overfitting.
 \end{itemize}
-RFE produces a variable ranking. The list of selected variables, for each Monte Carlo iteration, is obtained by an inner $K$-fold cross-validation optimization (with $K=3$).
+As shown in Section~\ref{subsec:feature_selection}, using embedded methods it is possible to achieve a list of selected variable for each Monte Carlo iteration.
+Conversely, RFE produces a variable ranking. The list of selected variables, in this case, is obtained here by a further nested $K$-fold cross-validation optimization (with $K=3$).
 
 %tree-based learning machines (RF and GB) that are capable of capturing nonlinear relationship between input and output and are intrinsically well-suited to deal with categorical/ordinal variables. We also explored the use of RFE with SVM, as in~\cite{guyon2002gene}.
 % which is a state-of-the-art machine learning method for classification.
@@ -357,7 +362,7 @@ RFE produces a variable ranking. The list of selected variables, for each Monte 
 As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
 % To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
 
-Concerning the linear models, we explored two different solutions: NNM and MTEN. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to the state-of-the-art MLP approach.
+Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}). The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach.
 
 \section{Results}\label{sec:aism_results}
 
