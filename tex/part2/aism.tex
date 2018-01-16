@@ -361,7 +361,7 @@ Conversely, RFE produces a variable ranking. The list of selected variables, in 
 As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
 % To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
 
-Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}). The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of EN, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach.
+Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}). The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach.
 
 \section{Results and discussion}\label{sec:aism_results}
 
@@ -407,32 +407,40 @@ We shall separately discuss the results achieved in terms of \F, \G and \FOG mod
 	
 	\input{part2/rf_selection}
 	
-	The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance estimated across the list of variables selected by the seven \F candidate models. Interestingly, tree-based methods are more prone to select similar variables with respect to linear methods. As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
+	The heatmap in Figure~\ref{fig:selection_heatmap} shows the Hamming distance of the lists of variables selected by the seven \F candidate models. Observing this figure, a block structure clearly emerges. Interestingly, at a higher level, we can see that linear methods are more prone to select similar variables with respect to tree-based methods.
+	Moreover, across linear methods, $\ell_1$-based and RFE-based methods select more similar variables, as their Hamming distance is lower.
+	Whereas, as expected, Elastic-Net selects collinear variables and its Hamming distance from the other linear models is higher.
+%	As expected, the sparsity induced by the $\ell_1$-norm of SLR allows the method to achieve a list of variables similar to the one obtained by SVM-RFE, while the list obtained by ENET includes collinear variables and it is significantly different from the others.
 	
-
+	\begin{figure}[]
+	\centering
+	\includegraphics[draft=false,width=0.8\textwidth]{part2/aism_heatmap.png}
+	\caption{Heatmap displaying the distance between the lists of variables selected by each model in terms of their hamming distance.} \label{fig:selection_heatmap}
+	\end{figure}
+	
 	
 	
 	\item[] \textbf{\G}
-	MTEN outperforms the other candidate models in terms of MAE ( $\text{MAE}_{\text{MTEN}}=0.095$, $\text{MAE}_{\text{NNM}}=0.102$, $\text{MAE}_{\text{MLP}}=0.105$), hence we select it as our \G model $\hat{g}(\bm{x})$.
+	MTEN outperforms the other candidate models in terms of MAE ($\text{MAE}_{\text{MTEN}}=0.099$, $\text{MAE}_{\text{NNM}}=0.101$, $\text{MAE}_{\text{MLP}}=0.107$), hence we select it as our \G model $\hat{g}(\bm{x})$.
 	
 	\item[] \textbf{\FOG}
-	Finally, the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$, obtained by combining MTEN and GB achieves the following performance scores on the $220$ test samples: accuracy $0.841$, precision $0.900$, recall $0.824$ and $\text{F}_1$ score $0.860$.
+	Finally, the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$, obtained by combining MTEN and RF achieves the following performance scores on the $616$ test samples: accuracy $0.826$, precision $0.882$, recall $0.828$, F\textsubscript{$1$}-score score $0.854$ and MCC score of $0.642$. Predicting the MS course at the next time point is of course a harder task than the predictions at the current time. However, the performance loss of \FOG with respect to \F, mainly due to the accumulation of errors introduced by \G, are relatively small.
 	
 	
 \end{itemize}
 
- \begin{figure}[]
-	\centering
-	\subfloat[]{%
-		\includegraphics[draft=false, width=0.8\textwidth]{part2/final_scores_2_copy.png}
-		\label{fig:diagnosis_competition}%
-	}%
-	 \hfill%
-	\subfloat[]{%
-		\includegraphics[draft=false, width=0.8\textwidth]{part2/selection_heatmap_copy.png} \label{fig:selection_heatmap}
-	}%
-	\caption{A visual representation of the results obtained from the \F model. On the left panel (a) we show the classification performance achieved on the test set by the candidate models. Precision, recall and $\text{F}_1$ score are estimated considering \SP as the positive class. As GB outperforms the other methods on each performance metric, it is chosen as \F model. On the right panel (b) a heatmap displays the distance between the lists of variables selected by each model in terms of their hamming distance. \todo{break figure in two}}\label{fig:f}
-\end{figure}
+% \begin{figure}[]
+%	\centering
+%	\subfloat[]{%
+%		\includegraphics[draft=false, width=0.8\textwidth]{part2/final_scores_2_copy.png}
+%		\label{fig:diagnosis_competition}%
+%	}%
+%	 \hfill%
+%%	\subfloat[]{%
+%%		\includegraphics[draft=false, width=0.8\textwidth]{part2/selection_heatmap_copy.png} \label{fig:selection_heatmap}
+%	}%
+%	\caption{A visual representation of the results obtained from the \F model. On the left panel (a) we show the classification performance achieved on the test set by the candidate models. Precision, recall and $\text{F}_1$ score are estimated considering \SP as the positive class. As GB outperforms the other methods on each performance metric, it is chosen as \F model. On the right panel (b) \todo{break figure in two}}\label{fig:f}
+%\end{figure}
 
 
 
@@ -445,7 +453,7 @@ In particular, we address the tasks of current course assignment, \PCOs evolutio
 
 % The measures are categorical or ordinal answers to a given set of \PCOs.
 \PCOs data are typically used to corroborate evidence provided by quantitative exams, in our case the absence of clear MS disease form predictors makes the information extracted from \PCOs data the only available resource.
-The proposed temporal model was able to correctly assign the current MS form and to foresee future ones with accuracy of $90.0\%$ and $84.1\%$, respectively \todo{fixme}.
+The proposed temporal model was able to correctly assign the current MS form and to foresee future ones with accuracy of $\approx 86.0\%$ and $\approx 82.6\%$, respectively.
 This demonstrates that \PCOs can effectively be used as MS disease course predictor.
 %In the next future, we plan to expand the data collection with respect to the amount of enrolled subjects as well as the number of time points.
 
@@ -459,6 +467,4 @@ In the context of neurodegenerative diseases, clinicians typically use \PCOs dat
 %Our result shows that a timely prediction of the disease course can be obtained from patient-friendly and low-cost measures.
 
 In the era of precision medicine, the problem of predicting MS course evolution still relies on stressful exams and clinical judgement.
-To the best of our knowledge, this is the first attempt to solve this delicate task leveraging only on patient-friendly measures and ML.
-
-
+To the best of our knowledge, this is the first work that aims at solving this delicate task leveraging only on patient-friendly measures and ML.
