@@ -3,7 +3,7 @@
 \chapter{Machine learning state of the art} \label{chap:state-of-the-art}
 
 \begin{displayquote}
-	\textit{This chapter starts defining the concept of machine learning in its two major declinations: supervised and unsupervised learning. It continues providing a comprehensive overview  of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
+	\textit{This chapter defines the concept of machine learning in its two major declinations: supervised and unsupervised. It continues providing a comprehensive overview  of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
 \end{displayquote}
 
 The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
@@ -12,20 +12,20 @@ With a simple search on Google Trends\footnote{Source \url{https://trends.google
 \begin{figure}[h!]
   \centering
     \includegraphics[width=0.8\textwidth]{part1/google_trends_MLDS.png}
-  \caption{The Internet popularity over the past five years of two terms: \textit{data science} and \textit{machine learning}. The vertical axis represents the number of Google searches of an input term normalized with respect to its maximum (source: Google Trends).} \label{fig:google_trend_ML}
+  \caption{The Internet popularity over the past five years of two terms: \textit{data science} and \textit{machine learning}. The vertical axis represents the number of Google searches of an input term normalized with respect to its maximum.} \label{fig:google_trend_ML}
 \end{figure}
 
 A partial explanation to this phenomenon can be found in a recent article published on Science~\cite{appenzeller2017revolution}, where the authors observed how the explosion of modern data collection abilities is leading the human kind toward another \textit{scientific revolution}.
 Biomedical applications are prototypical in this sense. For instance, the volume of the raw data acquired from a genome sequencer for a single \ac{DNA} has a volume of approximately 140 GB~\cite{marx2013biology}. Another example can be the 3D reconstruction of cardiac MRI acquisition which needs around 20 GB for a single human heart, or the 3D \ac{CT} scan which has a volume in the order of GB for each patient, and so on. It has been estimated that an average hospital currently stores more than 665 TB of data that needs to be analyzed and understood.
 %the typical resolution of MRI images is currently $512 \times 512$
-Such massive amounts of data have long overwhelmed human analysis and insights potential. This makes ML a key element for clinicians and scientists that try to make sense of large-scale observations.
+Such massive amounts of data have long overwhelmed human analysis and insights potential. This makes ML, and artificial intelligence in general, a key element for clinicians and scientists that try to make sense of large-scale observations.
 
 But, what is \textit{machine learning}? And how does it differ from classical statistics?
 
 A unique answer to this question is not easy to provide. In fact, ML can be defined in different ways and from several standpoints. Let's see three remarkable examples.
 
 \begin{enumerate}
-  \item Kevin P. Murphy in its \emph{Machine Learning - A Probabilistic Perspective}~\cite{murphy2012machine} defines machine learning as follows.
+  \item Kevin P. Murphy in its \emph{Machine Learning - A Probabilistic Perspective}~\cite{murphy2012machine} defines ML as follows.
 
   \begin{displayquote}
   "$[\dots]$ \emph{a set of methods that can automatically detect patterns in data, and then use the uncovered patterns to predict future data, or to perform other kinds of decision making under uncertainty} $[\dots]$"
@@ -63,7 +63,7 @@ As of today ML is the workhorse of data science.
 
 	  Input samples throughout this thesis are represented as $d$-dimensional vectors $\bm{x}$ belonging to an input space $\mathcal{X}$, where typically $\mathcal{X}\subseteq\mathbb{R}^d$ and labels are represented with the variable $y$ belonging to an output space $\mathcal{Y}$.
 	  The nature of $\mathcal{Y}$ defines the learning task as \textit{binary classification} if  $\mathcal{Y} = \{-1,+1\}$, \textit{multiclass classification} if $\mathcal{Y} = \{1,2,\dots,k\}$,
-	  \textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ and
+	  \textit{regression} if $\mathcal{Y}\subseteq\mathds{R}$ or
 	  \textit{vector-valued regression} if $\mathcal{Y}\subseteq\mathds{R}^k$.
 	%  In the second part of this thesis each of these learning problems will be faced.
 	  The remainder of this section summarizes the methods that are most relevant with the data-driven strategies adopted to tackle the biomedical data science challenges described in the second part of in this thesis.
@@ -101,12 +101,12 @@ As of today ML is the workhorse of data science.
 	  \begin{figure}[!h]
 	  	\centering
 	  	\subfloat[]{%
-	  		\includegraphics[width=0.5\textwidth]{part1/regression_losses.png}
+	  		\includegraphics[width=0.8\textwidth]{part1/regression_losses.png}
 	  		\label{fig:regression}%
 	  	}%
-	  	% \hfill%
+       \hfill%
 	  	\subfloat[]{%
-	  		\includegraphics[width=0.5\textwidth]{part1/classification_losses.png} \label{fig:classification}
+	  		\includegraphics[width=0.8\textwidth]{part1/classification_losses.png} \label{fig:classification}
 	  	}%
 	  	\caption{An overview on the most common loss functions for regression (a) and classification (b) problems plotted against the corresponding prediction error.}\label{fig:loss}
 	  \end{figure}
@@ -143,7 +143,7 @@ As of today ML is the workhorse of data science.
 	  		\includegraphics[width=0.5\textwidth]{part1/regression_fit.png}
 	  		\label{fig:regression_f}%
 	  	}%
-	  	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear regression problem. The data are a downsampled version ($f_s = 546~Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14\textsuperscript{th}, 2015, 09:50:45 {\sc utc} at LIGO Hanford (WA).}\label{fig:regression_fit}
+	  	\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear regression problem. The data are a downsampled version ($f_s = 546~Hz$) of the first observation of gravitational waves from a binary black hole merger detected on September 14\textsuperscript{th}, 2015, 09:50:45 {\sc utc} at LIGO, Hanford (WA).}\label{fig:regression_fit}
 	  \end{figure}
 
 	  \begin{figure}[!h]
@@ -162,7 +162,7 @@ As of today ML is the workhorse of data science.
 				\includegraphics[width=0.5\textwidth]{part1/classification_fit.png}
 				\label{fig:regression_ff}%
 			}%
-			\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and their dimensionality is reduced by the \ac{t-SNE} algorithm~\cite{van2008visualizing}. }\label{fig:classification_fit}
+			\caption{An example of underfit (a), overfit (b) and optimal fit (c) for a nonlinear binary classification problem. Each data point is a pulsar candidate randomly sampled from the High Time Resolution Universe Survey (South) dataset. The data are standardized and and projected on a two-dimensional plane by the \ac{t-SNE}~\cite{van2008visualizing}. }\label{fig:classification_fit}
 	  \end{figure}
 
 
@@ -185,7 +185,7 @@ As of today ML is the workhorse of data science.
 			Choosing different $\mathcal{R}(f)$ implies inducing different effects on the solution and it also leads to the definition of different learning machines (see Section~\ref{subsec:regularization_methods}).
 			With the regularization parameter $\lambda$ it is possible to control the trade-off between adherence to the training data and strength of the effect induced by $\mathcal{R}(f)$.
 			As an example, we can think of using a penalty that induces smoothness, such as the $\ell_2$-norm, or sparsity, such as the $\ell_1$-norm, in the solution.
-			A pictorial representation of a learning machine working in overfitting, underfitting and optimal fitting regime in a regression and a classification case can be seen in
+			A pictorial representation of a learning machine working in overfitting, underfitting and optimal fitting regime in regression and classification cases can be seen in
 			Figure~\ref{fig:regression_fit}~\footnote{ Source \url{https://losc.ligo.org/events/GW150914/}.}
 			and
 		  Figure~\ref{fig:classification_fit}~\footnote{ Source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}.}, respectively.
@@ -209,7 +209,7 @@ As of today ML is the workhorse of data science.
 				\bm{\hat w}_{\text{OLS}} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2
 			\end{equation}
 
-			The minimization problem in Equation~\eqref{eq:ols} is convex and differentiable, hence its solution can be achieved in closed-form as
+			The minimization problem in Equation~\eqref{eq:ols} is convex and differentiable and its solution can be achieved in closed-form as
 			$$
 				\bm{\hat w}_{\text{OLS}} = (X^TX)^{-1}X^T\bm{y}
 			$$
@@ -296,16 +296,17 @@ As of today ML is the workhorse of data science.
 			%In the first case,
 
 			Let's see what happens when this method is applied to a real regression problem. For ease of comparison, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}.
-			Compared to OLS, ridge regression has the parameter $\lambda$ that must be fixed before fitting the model. In this example, we estimated the best value $\hat \lambda_{\text{cv}}$ according to a standard grid-search cross-validation strategy~\cite{hastie2009elements}.
+			Compared to OLS, ridge regression has the parameter $\lambda$ that must be fixed before fitting the model. In this example, we estimated the best value $\hat \lambda_{\text{cv}}$ according to a standard grid-search cross-validation strategy. %~\cite{hastie2009elements}.
 			This consists in fixing a range of ($30$) possible values for $\lambda$ (in a logarithmic scale from $10^{-3}$ to $10^2$) and
-			pick the best value as the one achieving the lowest validation error, estimated via ($5$-fold) cross-validation.
-			Therefore, once the best value for the regularization parameter is fixed ($\hat \lambda_{\text{cv}} = 20.43$), the experimental setup used for OLS is preserved.
-			The ridge coefficients $\bm{\hat w}_{\ell_2}$ are represented in Figure~\ref{fig:coefs_ridge}.
-			\begin{figure}[!h]
+			pick the best value as the one achieving the lowest validation error, estimated via ($5$-fold) cross-validation (see Section~\ref{sec:model_evaluation}).
+			Therefore, once the best value for the regularization parameter is fixed ($\hat \lambda_{\text{cv}} = 20.43$), in this case. the experimental setup used for OLS is preserved.
+			
+			\begin{figure}[]
 				\centering
 				\includegraphics[width=0.8\textwidth]{part1/coefs_ridge.png}
 				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_2}$ obtained fitting a ridge regression model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_ridge}
 			\end{figure}
+			The ridge coefficients $\bm{\hat w}_{\ell_2}$ are represented in 	Figure~\ref{fig:coefs_ridge}.
 			Comparing Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols} we can see that the amplitude of the ridge regression coefficients is, in absolute value, decreased by the use of the $\ell_2$ penalty. Indeed, several entries of $\bm{\hat w}_{\ell_2}$ are very small, but none of them is exactly zero. This is the expected behavior of the $\ell_2$-norm penalty. Evaluating $\bm{\hat w}_{\ell_2}$ on the test set, this model has  $\text{MAE}=8.615$ years and explains the $81.19\%$ of the variance, outperforming OLS.
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -325,7 +326,7 @@ As of today ML is the workhorse of data science.
 				\bm{\hat w}_{\ell_1} = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \sum_{i=1}^n (\bm{x}_i^T\bm{w} - y_i)^2 + \lambda  \sum_{j=1}^d |w_j| = \argmin_{\bm{w} \in \mathbb{R}^d} \frac{1}{n} \norm{X\bm{w} - \bm{y}}_2^2 + \lambda |\bm{w}|_1
 			\end{equation}
 
-			The Lasso can be used to perform linear model fitting and, thanks to its desirable properties, it is a popular choice for embedded variable selection~\cite{guyon2003introduction}, see Section~\ref{subsec:feature_selection}. At first, the $\ell_1$-norm enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and, although non-differentiable, it is computationally feasible even in very high dimensional scenarios. Popular minimization algorithms for the Lasso problem are, for instance, the \textit{Fast Iterative Shrinkage-Thresholding Algorithm}  (\ac{FISTA})~\cite{beck2009fast} and the \textit{coordinate descent algorithm}~\cite{wu2008coordinate}. A pictorial representation of the Lasso solution can be seen in Figure~\ref{fig:w_lasso}.
+			The Lasso can be used to perform linear model fitting and, thanks to its desirable properties, it is a popular choice for embedded variable selection~\cite{guyon2003introduction}, as described in Section~\ref{subsec:feature_selection}. At first, the $\ell_1$-norm enforces sparsity in the solution, hence producing compact and easily interpretable results. Secondly, the Lasso optimization problem is convex and, although non-differentiable, it is computationally feasible even in very high dimensional scenarios. Popular minimization algorithms for the Lasso problem are, for instance, the \textit{Fast Iterative Shrinkage-Thresholding Algorithm}  (\ac{FISTA})~\cite{beck2009fast} and the \textit{coordinate descent algorithm}~\cite{wu2008coordinate}. A pictorial representation of the Lasso solution can be seen in Figure~\ref{fig:w_lasso}.
 
 			A popular application of the Lasso is to perform shrinkage and variable selection in survival analysis for Cox proportional hazard regression \cite{tang2017spike, gui2005penalized, tibshirani1997lasso} and additive risk models~\cite{ma2007additive}.
 			Such $\ell_1$-penalized methods are extensively applied in literature to predict survival time from molecular data collected from patients affected by different kinds of tumor.
@@ -343,10 +344,8 @@ As of today ML is the workhorse of data science.
 				\end{aligned}
 			\end{equation}
 			and it is known as Multi-task Lasso~\cite{lee2010adaptive}. Such norm enforces a row-structured sparsity in the regression weights, hence preserving the interpretability of the solution.
-			
-			\todo{add few words on nuclear-norm minimization}
 
-			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, \textit{sparse logistic regression} (see Section~\eqref{sec:logistic_regression}) is often preferred~\cite{tong2009genome}.
+			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, \textit{sparse logistic regression} is often preferred~\cite{tong2009genome} (see Section~\eqref{sec:logistic_regression}).
 
 			Let's see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\hat \lambda_{\text{cv}}=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
 			\begin{figure}[!h]
@@ -354,7 +353,7 @@ As of today ML is the workhorse of data science.
 				\includegraphics[width=0.8\textwidth]{part1/coefs_lasso.png}
 				\caption{A pictorial representation of the vector $\bm{\hat w}_{\ell_1}$ obtained fitting a Ridge model on $74$ randomly selected training samples of $\mathcal{D}_{\text{aging}}$. Variables associated with positive (\ie directly proportional to the output) and a negative (\ie inversely proportional) weight are represented in blue and red, respectively.} \label{fig:coefs_lasso}
 			\end{figure}
-			Comparing $\bm{\hat w}_{\ell_1}$ with $\bm{\hat w}_{\ell_2}$ and $\bm{\hat w}_{\text{OLS}}$ (Figure~\ref{fig:coefs_lasso}, Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols}, respectively) we can observe that, for the first time, to only $6$ variables, out of $12$, a non-negative value is assigned. This is an example of the \textit{sparsity}-enforcing effect of the $\ell_1$-norm regularization penalty.
+			Comparing $\bm{\hat w}_{\ell_1}$ with $\bm{\hat w}_{\ell_2}$ and $\bm{\hat w}_{\text{OLS}}$ (Figure~\ref{fig:coefs_lasso}, Figure~\ref{fig:coefs_ridge} and Figure~\ref{fig:coefs_ols}, respectively) we can observe that, for the first time, to only $6$ variables, out of $12$, a non-negative value is assigned. This is an example of the sparsity-enforcing effect of the $\ell_1$-norm regularization penalty.
 			The $6$ variables with nonzero weight can be considered as \textit{selected} for the prediction problem at hand.
 			Evaluating $\bm{\hat w}_{\ell_1}$ on the test set, the Lasso has  $\text{MAE}=8.387$ years and explains the $81.51\%$ of the variance, slightly outperforming ridge.
 
@@ -471,8 +470,26 @@ As of today ML is the workhorse of data science.
 			\end{figure}
 
 			%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-			% \subsubsection{Other sparsity-inducing penalties} \label{sec:other_sparsity}
-			% asd
+%			\subsubsection{Other sparsity-inducing penalties} \label{sec:other_sparsity}
+    		\subsubsection{Nuclear norm minimization} \label{sec:nucelear_norm_minimization}
+			% 
+			Dealing with vector-valued linear regression problems, $L_{2,1}$- and the Frobenius norms are not the only options. Another popular sparsity-enforcing penalty is the nuclear norm (also known as trace norm) that, given the matrix $W \in \mathbb{R}^{d \times k}$, is defined as
+			
+			$$
+				\norm{W}_* = \text{trace}\big(\sqrt{W^TW}\big) = \sum_{j=1}^{\min[d, k]} \sigma_j(W)
+			$$
+			
+			where $\sigma_j(W)$ is the $j^{\text{th}}$ singular value of $W$.
+			The nuclear norm minimization problem, widely adopted for instance in matrix completion tasks, can be stated as in Equation~\ref{eq:nnm}.
+			
+			\begin{equation} \label{eq:nnm}
+				\begin{aligned}
+					\hat W_{*}={} & \argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \sum_{i=1}^n \sum_{t=1}^k (\bm{x}_i^T\bm{w}^t - y_i^t)^2 + \lambda  \sum_{j=1}^{\min[d, k]} \sigma_j(W) \\
+					& =	\argmin_{W \in \mathbb{R}^{d \times k}} \frac{1}{n} \norm{XW - Y}_F^2 + \lambda ||W||_{*}
+				\end{aligned}
+			\end{equation}
+			
+			With the nuclear norm penalty it is possible to achieve a low-rank solution~\cite{candes2009exact}.
 
 			% \begin{table}[htb]
 			% 	\centering

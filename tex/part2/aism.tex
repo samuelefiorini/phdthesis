@@ -361,7 +361,7 @@ Conversely, RFE produces a variable ranking. The list of selected variables, in 
 As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
 % To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
 
-Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}). The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach.
+Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}), see Section~\cite{sec:nucelear_norm_minimization} and~\cite{sec:elastic_net}, respectively. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach, see Section~\ref{sec:mlp}.
 
 \section{Results and discussion}\label{sec:aism_results}
 
