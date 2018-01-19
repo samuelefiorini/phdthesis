@@ -981,17 +981,6 @@ As of today ML is the workhorse of data science.
 	
 	In such cases, the main goal of the analysis is often to identify a meaningful subset of relevant variables that are the most representative of the observed phenomenon. In ML, this is known as variable/feature selection and several techniques addressing this task were presented so far~\cite{guyon2002gene}. Variable selection does not only increase the prediction power of the learning machine, but it also promotes model interpretability, that is crucial in biology~\cite{altmann2010permutation}.
 
-    Regardless of the learning machine, regularization can be introduced in several ways and it is of fundamental use in order to achieve the following desired properties~\citep{okser2014regularized}:
-  %
-    \begin{itemize}
-    	\item identify models with good generalization properties, even with a limited amount of collected samples;
-    	\item achieve solutions that are robust to noise;
-    	\item learn the data structure when unknown;
-    	\item exploit prior knowledge on the data structure;
-        \item promote interpretability reducing the number of variables in the model;
-    	\item reduce the feasible set in order to help solving inverse problems.
-   \end{itemize}
-
 	Variable selection techniques are traditionally organized in three groups: filter, wrapper and embedded methods~\cite{guyon2003introduction}.
 
 	\begin{itemize}
@@ -1018,6 +1007,16 @@ As of today ML is the workhorse of data science.
 		Embedded variable selection can be achieved by two families of learning machines: tree-based and regularization methods.
 		Decision trees can be used for variable selection as only some of the input variables are used to partition the feature space and variables not involved in any split are can be discarded, see Section~\ref{sec:decision_trees}. Moreover, ensemble of decision trees natively offer a feature importance measure~\ref{sec:ensemble_methods}.
 		On the other hand, regularization methods as extensively discussed in Section~\ref{subsec:regularization_methods}, can easily be used for variable selection by exploiting sparsity enforcing penalties. Only the variables having nonzero weight will be considered as selected by the model.
+		Regardless of the learning machine, regularization can be introduced in several ways and it is of fundamental use in order to achieve the following desired properties~\citep{okser2014regularized}:
+		%
+		\begin{itemize}
+			\item identify models with good generalization properties, even with a limited amount of collected samples;
+			\item achieve solutions that are robust to noise;
+			\item learn the data structure when unknown;
+			\item exploit prior knowledge on the data structure;
+%			\item promote interpretability reducing the number of variables in the model;
+			\item reduce the feasible set in order to help solving inverse problems.
+		\end{itemize}
 		
 	\end{itemize}
 
@@ -1288,7 +1287,7 @@ As of today ML is the workhorse of data science.
  	Compared to standard grid-search, this algorithm may perform slightly worse, but it comes with a way less demanding computational burden.
   \end{enumerate}
 
-  Interestingly, both these hyperparameters optimization strategies involve independently fitting multiple models multiple times. In practice, this embarrassingly parallel problem is in practice often accelerated by parallel computing strategies. This allows to reduce the computational time needed to test several models exploiting the computing capabilities of modern multi-core processors, or multi-node high performance computing facilities, where available. More details about computational requirements and implementation of modern ML models will be further discussed in Section~\ref{sec:implementation}.
+  Interestingly, both these hyperparameters optimization strategies involve independently fitting multiple models multiple times. In practice, this embarrassingly parallel problem is in practice often accelerated by parallel computing strategies. This allows to reduce the computational time needed to test several models exploiting the computing capabilities of modern multi-core processors, or multi-node high-performance computing facilities, where available. More details about computational requirements and implementation of modern ML models will be further discussed in Section~\ref{sec:implementation}.
 
 
 %    \subsection{Feature selection stability}
