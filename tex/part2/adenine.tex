@@ -4,7 +4,7 @@
 % ADENINE
 
 \begin{displayquote}
-\textit{This chapter presents the first original contribution of the thesis, which is the 	 development of a machine learning framework designed for biological data exploration and visualization called \ade.
+\textit{This chapter presents the first original contribution described in this thesis, which is the 	 development of a ML framework designed for biological data exploration and visualization called \ade.
 The goal of this framework is to help biomedical data scientists achieving a first and quick overview of the main structures underlying their data.
 % researchers and data scientists
 % and choosing the most suitable unsupervised learning pipeline for the problem at hand.
@@ -12,42 +12,42 @@ This software tool encompasses state of the art techniques for missing values im
 \ade has a scalable architecture which seamlessly work on a single workstation as well as on a high-performance computing facility.
 % \ade exploits both process- and thread-level parallelism and
 \ade is capable of generating publication-ready plots along with quantitative descriptions of the results.
-At the end of the chapter, few examples of exploratory analysis with \ade on biological datasets are presented.}
+The end of the chapter presents an exploratory analysis of a biological dataset carried out with \ade.}
 \end{displayquote}
 
 
 \section{Exploratory data analysis} \label{sec:data_exploration}
-In biology, as well as in any other scientific domain, exploring and visualizing the collected measures is an insightful starting point for every data analysis process.
+In biology, as well as in any other scientific domain, exploring and visualizing the collected measures is an insightful starting point for every analytical process.
 For instance, the aim of a biomedical study can be detecting groups of patients that respond differently to a given treatment, or inferring possible molecular relationships among all, or a subset, of the measured variables.
 In both cases, data scientists will be asked to extract meaningful information from collections of complex and possibly high-dimensional measures, such as gene sequencing data, biomedical imaging, patients assessment questionnaires, and so on.
 
 In these cases, a preliminary Exploratory Data Analysis (\ac{EDA}) is not only a good practice, but also a fundamental step to run before further and deeper investigations can take place.
-Representative examples are, for instance, Kaggle competitions (source: \url{www.kaggle.com}). Kaggle is the most popular community-based data science challenge platform online. Browsing through the hosted competitions, we can see that people runs EDAs to get a grasp on the datasets before testing their own prediction strategy.
+Representative examples are, for instance, Kaggle competitions (source: \url{www.kaggle.com}). Kaggle is the most popular community-based data science challenge platform online. Browsing through the hosted competitions, we can see that people run EDAs to get a grasp on the datasets before testing their own prediction strategy.
 
 Running EDA, despite being a valuable and widely applied data science practice, is definitely a nontrivial task.
-Indeed, for a given a dataset, it is usually unclear which algorithm will provide the most insightful results. A common practice is to empirically test some of them and compare their results from a qualitative/quantitative standpoint.
-Moreover, applying EDA methods on large-scale data can be burdensome or even computationally unfeasible.
+Indeed, for a given dataset, it is usually unclear which algorithm will provide the most insightful results. A common practice is to empirically test some of them and compare their results from a qualitative/quantitative standpoint.
+However, applying EDA methods on large-scale data can be burdensome or even computationally unfeasible.
 
 %\section{Popular data exploration tools} \label{sec:data_exploration_tools}
 
 In the last few years, a fair number of data exploration software and libraries were released. Such tools may be grouped in two families: \ac{GUI}-based and command-line applications.
 
-Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however, its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis \cite{scholkopf1997kernel} or hierarchical clustering \cite{hastie2009elements}, it does not offer strategies to perform automatic discovery of the number of clusters and it is only available for macOS.
-One of the most popular GUI-based data analysis software is {\sc KNIME} (source: \url{www.knime.com}). {\sc KNIME} has a rather user-friendly interface where creating EDA pipelines is as simple as drawing small trees, where each node is a box representing some algorithm. {\sc KNIME} is also suitable for large datasets as it can distribute the computation on Oracle Grid Engine clusters.
-The main drawback of such GUI-based softwares is that they do not allow to automatically generate EDA pipelines. Moreover, plugging in hand-crafted algorithm is not easy. One possibility is to use {\sc KNIME} Meta Nodes, but programming relatively complex algorithms just using them can be cumbersome.
+Among the first group we recall \text{Divvy} \cite{lewis2013divvy}, a software tool that performs dimensionality reduction and clustering on input data sets. \emph{Divvy} is a light framework; however, its collection of {C/C++} algorithm implementations does not cover common strategies such as kernel principal component analysis or hierarchical clustering (see Section~\ref{sec:dimred}), it does not offer strategies to perform automatic discovery of the number of clusters and it is only available for macOS.
+One of the most popular GUI-based data analysis software is {\sc KNIME}\footnote{ Source: \url{www.knime.com}.}. {\sc KNIME} has a rather user-friendly interface where creating EDA pipelines is as simple as drawing small trees, where each node is a box representing some algorithm. {\sc KNIME} is also suitable for large datasets as it can distribute the computation on Oracle Grid Engine\footnote{ Source \url{http://www.univa.com/products/}.} clusters.
+The main drawback of such GUI-based softwares is that they do not allow to automatically generate EDA pipelines. Moreover, plugging in hand-crafted algorithm is not easy. One possibility is to use {\sc KNIME} Meta Nodes, but programming relatively complex algorithms completely relying on this tool can be cumbersome.
 
-\textit{Nextflow} (source: \url{www.nextflow.io}) is a command-line workflow framework that allows to easily distribute the computations of complex pipelines. One of the strength of \textit{Nextflow} pipelines is that they are made by chaining together differently many processes that can even be written in differently many languages. \textit{Nextflow} is not just a simple computational framework, it is also a proper Domain Specific Language (\ac{DSL}) which extends Groovy.
-Although very powerful, \textit{Nextflow} is more tailored toward the bioinformatics and computational biology area than a more general data science audience.
+\textit{Nextflow}\footnote{source: \url{www.nextflow.io}.} is a command-line workflow framework that allows to easily distribute the computations of complex pipelines. One of the strength of \textit{Nextflow} pipelines is that they are made by chaining together differently many processes that can even be written in differently many languages. \textit{Nextflow} is not just a simple computational framework, it is also a proper Domain Specific Language (\ac{DSL}) which extends Groovy\footnote{ Source \url{http://groovy-lang.org/}.}.
+Although very powerful, \textit{Nextflow} is more tailored toward the bioinformatics and computational biology area than a more general biomedical data science audience.
 Using \textit{Nextflow}, everything must be hard-coded, therefore plugging in custom algorithms is as hard as using standard libraries.
-Similar considerations can be made for Snakemake (source \url{https://snakemake.bitbucket.io}), which is a pythonic workflow management system which is mainly tailored for the parallelization of the analysis of DNA data.
+Similar considerations can be made for Snakemake\footnote{ Source \url{https://snakemake.bitbucket.io}.}, which is a pythonic workflow management system which is mainly tailored for the parallelization of the analysis of DNA data.
 
 
 The most notable project that spans between the two families is \emph{Orange}\footnote{ If I have to pick one, this is definitely my favorite -- Ed.} \cite{demvsar2013orange}, a data mining software suite that offers both visual programming front-end and Python \ac{API}s. In the context of data exploration, \emph{Orange} can be successfully employed. However, in order to test different data analysis pipelines, each one must be manually created as it does not support their automatic generation.
 Moreover, large data sets are difficult to analyze as it can run only on a single workstation, lacking of distributed computing support.
 
-\section{\ade overview} \label{sec:adenine_overview}
+\section{ADENINE overview} \label{sec:adenine_overview}
 
-This chapter introduces \ade (source : \url{http://slipguru.github.io/adenine}), a command-line Python tool for data exploration and visualization that, combining different EDA methods, creates textual and graphical analytical reports of large scale, data collections.
+This chapter introduces \ade\footnote{Source : \url{http://slipguru.github.io/adenine}.}, a command-line Python tool for data exploration and visualization that, combining different EDA methods, creates textual and graphical analytical reports of large scale, data collections.
 %of an arbitrary number of pipelines.
 
 %To run EDAs, several ML and data mining techniques are used (see Section~\ref{chap:state-of-the-art}).
@@ -61,9 +61,9 @@ This chapter introduces \ade (source : \url{http://slipguru.github.io/adenine}),
 
 
 Missing data imputing, preprocessing, dimensionality reduction and clustering strategies are considered as building blocks for data analysis pipelines. The user is simply required to specify the input data and to select the desired blocks. \ade, then, takes care of generating and running the pipelines obtained by all possible combinations of the selected blocks.
-Table~\ref{tab:blocks} shows the list of building blocks currently available.
+Table~\ref{tab:blocks} shows the list of building blocks available in the current release.
 Every algorithm implementation in \ade is inherited, or extended, from \sklearn \cite{scikit-learn} which, as of today, is definitely the most complete ML open source Python library available.
-Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeline, as long as it is implemented following the \sklearn standard.
+Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeline, as long as it is implemented following the \sklearn standard, see Section~\ref{sec:adenine_implementation}.
 
 
 \begin{table}[h!]
@@ -108,19 +108,19 @@ Moreover, virtually any custom algorithm can be easily plugged in an \ade pipeli
 	\caption{Pipeline building blocks currently available in \ade.}\label{tab:blocks}
 \end{table}
 
-\ade is developed with the aim of speeding-up EDA on large biomedical data collections.
+\ade is developed with the aim of speeding-up EDAs on large biomedical data collections.
 It has a scalable architecture, that allows its pipelines to seamlessly run in parallel as separate Python processes on a single workstation or as 
 %MPI\footnote{ Source \url{http://mpi-forum.org/}.}
 separate tasks in a High-Performance Computing (HPC) cluster facility. This remarkable feature allows to explore and visualize massive amounts of data in a reasonable computational time.
 % \ade pipelines are designed to be independent from each other, therefore they all run in parallel as separate Python processes on different cores/machines.
 Moreover, as \ade makes large use of {\sc NumPy} and {\sc SciPy}, it automatically benefits from their bindings with optimized linear algebra libraries (such as OpenBLAS or Intel\textsuperscript{\textregistered}~MKL).
-Thanks to this hybrid parallel architecture, with \ade it is possible to get a grasp on the main structures underlying your data in a reasonable computational time.
+Thanks to this hybrid parallel architecture, with \ade it is possible to get a grasp on the main structures underlying some data in a reduced computational time.
 
-In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on) can be given as input. Moreover, as genomic is one of the major sources of data in the biological world, \ade also natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}; which data sets can be retrieved specifying their GEO accession number.
+In \ade, any tabular data format ({\tt .csv}, {\tt .tsv}, {\tt .json}, and so on) can be given as input. Moreover, as genomic is one of the major sources of data in the biological world, \ade also natively supports data integration with the NCBI Gene Expression Omnibus (GEO) archive~\cite{barrett2013ncbi}; which datasets can be simply retrieved by specifying their GEO accession number.
 
 
 \section{Software description} \label{sec:adenine_implementation}
-\ade is developed around the data analysis concept of \emph{pipeline}. A pipeline is a sequence of the following fundamental steps:
+\ade is developed around the data analysis concept of \emph{pipeline}. An \ade pipeline is a sequence of the following fundamental steps:
 \begin{enumerate}
   \item missing values imputing;
   \item data preprocessing;
@@ -133,19 +133,19 @@ For each task, is it possible to use either the off-the-shelf algorithms in Tabl
 
 \sklearn also provides an utility object called {\tt FunctionTransformer} that returns a {\tt Transformer} given any arbitrary input callable (\ie function), which can be very resourceful for our purposes.
 
-Data collected in biomedical research studies often present missing values.
-Devising imputing strategies is a common practice to deal with such issue~\cite{de2015impact}.
+Data collected in biomedical research studies often present missing values and
+devising imputing strategies is a common practice to deal with such issue~\cite{de2015impact}.
 \ade offers an improved version of the {\tt Imputer} class provided by \sklearn. In addition to the pre-existent feature-wise {\color{string} {\tt "mean"}}, {\color{string} {\tt "median"}} and {\color{string} {\tt "most\_frequent"}} strategies, this extension adds {\color{string} {\tt "nearest\_neighbors"}}, \ie an implementation of the $k$-nearest neighbors imputing method proposed for microarray data in~\cite{troyanskaya2001missing}.
 
 % \ade presents different data preprocessing strategies to tackle undesired effects that may arise from heterogeneous measures possibly lying in very different numerical range.
  % when dealing with data collected from heterogeneous sources.
-Collecting data from heterogeneous sources may imply dealing with variables lying in very different numerical ranges and this could have a negative influence on the behavior of data analysis techniques. To tackle this issue \ade offers different strategies to preprocess data, such as re-centering, standardizing or rescaling. We recall here that any other preprocessing step, such as feature exclusion, log-transformation and so on, can be implemented as {\tt Transformer} to be easily chained in an \ade pipeline.
+Collecting data from heterogeneous sources may imply dealing with variables lying in very different numerical ranges and this could have a negative influence on the behavior of further data analysis techniques. To tackle this issue \ade offers different strategies to preprocess data, such as re-centering, standardizing or rescaling. We recall here that any other preprocessing step, such as feature exclusion, log-transformation and so on, can be implemented as {\tt Transformer} to be easily chained in an \ade pipeline.
 
 \ade includes a set of linear and nonlinear dimensionality reduction and manifold learning algorithms that are particularly suited for projection and visualization of high-dimensional data. Such techniques rely on the fact that it is often possible to \emph{decrease} the dimensionality of the problem estimating a low-dimensional embedding in which the data lie, as described in Section~\ref{sec:dimred}.
 
 Besides offering a wide range of clustering techniques,
 \ade implements strategies and heuristics to automatically estimate parameters that yield the most suitable cluster separation.
-The selection of the optimal number of clusters in centroid-based algorithms follows the $B$-fold cross-validation strategy presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
+The selection of the optimal number of clusters in centroid-based algorithms follows the $B$-fold cross-validation strategy\footnote{ We call it $B$-fold instead of $K$-fold, as in Section~\ref{sec:model_evaluation}, to avoid confusion with the number of clusters, which is indicated with the letter "$K$" as well.} presented in Algorithm~\ref{alg:clusters}, where $\mathcal{S}(X,\hat y)$ is the mean silhouette coefficient of the input samples, see Equation~\eqref{eq:metrics_silhouette}.
 
 \begin{algorithm}[]
   \caption{Automatic discovery of the optimal clustering parameter.}\label{alg:clusters}
@@ -163,15 +163,15 @@ The selection of the optimal number of clusters in centroid-based algorithms fol
     \end{algorithmic}
 \end{algorithm}
 
-For affinity propagation \cite{frey2007clustering} and $k$-means \cite{bishop2006pattern} clustering parameters can be automatically defined ({\color{string} {\tt "preference"}}  and {\color{string} {\tt "n\_clusters}}, respectively).
+For affinity propagation \cite{frey2007clustering} and $k$-means (see Section~\ref{sec:k-means}) clustering parameters can be automatically defined ({\color{string} {\tt "preference"}}  and {\color{string} {\tt "n\_clusters"}}, respectively).
 % Clustering parameters for affinity propagation \cite{frey2007clustering} and k-means \cite{bishop2006pattern}, that are \emph{preference} and \emph{number of clusters}, can be automatically defined.
 Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an implicit cluster discovery.
-For hierarchical~\cite{hastie2009elements} and spectral clustering~\cite{shi2000normalized}, no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{ See the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
+For hierarchical and spectral clustering (see Sections~\ref{sec:hierarchical_clustering} and~\ref{sec:spectral_clustering}), no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{ See the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
 % \todo{@fede DBSCAN}
 
-In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc numpy} and {\sc scipy} and it comes \textit{for free}. So, let's focus on multiprocessing.
-This parallel program paradigm consists in dividing the workload among different tasks which can possibly run on different nodes of an HPC infrastructure.
-The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of distributed computing schemes.
+In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc NumPy} and {\sc SciPy} and it comes \textit{for free}. So, let's focus on multiprocessing.
+This simply consists in dividing the workload among different tasks which can possibly run on different nodes of an HPC infrastructure.
+The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of simple distributed computing schemes.
 \ade offers different job distribution strategies.
 \begin{enumerate}
 	\item When \ade is running on a single workstation (or on a single node of an HPC architecture), each pipeline is parallelized by using the standard multiprocessing Python library.
@@ -180,13 +180,13 @@ The input of each \ade pipeline is the raw dataset to which successive transform
 	
 	\item When an HPC architecture is available, \ade is capable of distributing its pipelines across multiple nodes. In particular, the following two options are available.
 	\begin{enumerate}
-		\item[\textbf{MPI}] \ade implements an MPI-based (source: \url{http://mpi-forum.org/}) master/slave job distribution strategy.
+		\item[] \textbf{MPI} \ade implements an MPI-based\footnote{Source: \url{http://mpi-forum.org/}.} master/slave job distribution strategy.
 		A single master task $T_0$ creates a queue of jobs $Q = \{J_1, \dots, J_M\}$, where $M$ is the number of pipelines. The jobs in $Q$ are assigned to a pool of slaves $S = \{T_1, \dots, T_S\}$.
 		Once the slave $T_j$ (with $j>0$) has completed its task, it communicates the results to $T_0$ and becomes idle. At this point, $T_0$ assigns to $T_j$ the next task in $Q$. This procedure is repeated several times, until $Q$ is empty.
-		The number of slaves $S$ can be controlled by the user with the parameter {\tt -np} of the {\tt mpirun} command. $S$ must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
-		Thanks to MPI, the assignment of each task to its node is completely transparent to the user. When all the computation is done, the results are simply stored in a single result folder.
+		The number of slaves $S$ can be controlled by the user with the parameter {\tt np} of the {\tt mpirun} command. $S$ must be carefully chosen according to the size of the dataset, the number of pipelines generated and the available hardware.
+		Thanks to MPI, the assignment of each task to its node is completely transparent to the user. When all the computation is done, the results are collected in a single result folder.
 
-		\item[\textbf{Dask}] \ade can also exploit the Dask parallel computing library (source: \url{https://dask.pydata.org}). While MPI is a recognized standard in the HPC world, Dask is relatively recent project developed for dynamic task scheduling focused on big data applications. In particular, \ade exploits the Dask-based backend of Joblib (source: \url{https://pythonhosted.org/joblib/}), which is the parallel computing library mainly used in \sklearn to parallelize independent tasks.
+		\item[] \textbf{Dask} \ade can also exploit the Dask parallel computing library\footnote{Source: \url{https://dask.pydata.org}.}. While MPI is a recognized standard in the HPC world, Dask is relatively recent project developed for dynamic task scheduling focused on big data applications. In particular, \ade exploits the Dask-based backend of Joblib\footnote{ Source: \url{https://pythonhosted.org/joblib/}.}, which is the parallel computing library mainly used in \sklearn to parallelize independent tasks.
 		Dask can be used by simply running a {\tt dask-scheduler} executable process on one node and the {\tt dask-worker} executable on several processes, which can run on other nodes of the HPC architecture.
 		After an initial hand-shake between the scheduler and its workers, a list of jobs to run can be sent to the scheduler which automatically distributes the workload among its workers and collects the results.
 		Using Dask in ML applications, where communications between tasks is usually negligible, can be easier with respect to MPI.
@@ -228,7 +228,7 @@ $ ade_run.py config.py
 
 \noindent Each \texttt{step} variable refers to a dictionary having the name of the building block as key and a list as value. Each list has a \emph{on$\backslash$off} trigger in first position followed by a dictionary of keyword arguments for the class implementing the corresponding method. When more than one method is specified in a single step, or more than a single parameter is passed as {list}, \ade generates the pipelines composed of all possible combinations.
 
-The configuration snippet above generates eight pipelines with similar structure. The first and the second halves have recentered and $\ell_2$-normalized samples, respectively. Each sample is then projected on a 2D space by isomap or by linear, Gaussian or polynomial kernel PCA. $k$-means clustering with automatic cluster discovery is eventually performed on each dimensionality-reduced data set, as in Algorithm~\ref{alg:clusters}.
+The configuration snippet above generates eight pipelines with similar structure. Each one has samples centered in zero, then projected on a 2D space by isomap or by linear, Gaussian or polynomial kernel PCA. $k$-means clustering with $K=2$ and with automatic cluster discovery is eventually performed on each dimensionality-reduced data set, as in Algorithm~\ref{alg:clusters}.
 Results of such pipelines are all stored in a single output folder. Once this process is completed, plots and reports can be automatically generated running the following command.
 
 {\small
@@ -250,7 +250,7 @@ Three partially overlapping sublists compose this signature.
   \item[\emph{S3)}] Genes involved in hereditary syndromes which predispose to CRC (\ie~\apc, \msh, \mlh, \pms, \pten, \smad, \stk)~\cite{schulz2005molecular}.
 \end{enumerate}
 
-A reduced version of the GEO data set that comprises only such genes can be easily created calling {\tt ade\_GEO2csv.py} with the option {\tt -{}-signature GENE\_1,GENE\_2,...,GENE\_N}. On the same line, the option {\tt -{}-phenotypes P\_1,P\_2,...,P\_M} can be used to keep only mucosa or rectal tumor samples.
+A reduced version of the GEO data set that comprises only such genes can be easily created calling {\tt ade\_GEO2csv.py} with the option {\tt -{}-signature GENE\_1,GENE\_2,...,GENE\_N}. Moreover, the option {\tt -{}-phenotypes P\_1,P\_2,...,P\_M} can be used to keep only mucosa or rectal tumor samples.
 To run such experiment, one simply needs to select and activate the hierarchical clustering building block and to follow the same steps presented above.
 % procedures that are similar to the one described above can be followed.
 
@@ -261,26 +261,26 @@ To run such experiment, one simply needs to select and activate the hierarchical
 
 In the first EDA, we compared the clustering performance achieved by the eight \ade pipelines and we reported in Figure~\ref{fig:scatter} an intuitive visualization of the results achieved by the top three, evaluated in terms of silhouette score~\cite{rousseeuw1987silhouettes}. As expected, the top performing pipelines show a clear separation between the two sample groups, as the $k$-means algorithm devises a domain partitioning that is consistent with the actual tissue types.
 
-\begin{figure}[!ht]
+\begin{figure}[]
     \centering
     \subfloat[]{%
-        \includegraphics[width=0.32\textwidth]{part2/KMeans_2-clusts_linear.png}
+        \includegraphics[width=0.5\textwidth]{part2/KMeans_2-clusts_linear.png}
         \label{fig:a}%
     }%
-    \hfill%
+%    \hfill%
     \subfloat[]{%
-        \includegraphics[width=0.32\textwidth]{part2/KMeans_2-clusts_rbf.png}
+        \includegraphics[width=0.5\textwidth]{part2/KMeans_2-clusts_rbf.png}
         \label{fig:b}%
     }%
     \hfill%
     \subfloat[]{%
-        \includegraphics[width=0.32\textwidth]{part2/KMeans_2-clusts_isomap.png}
+        \includegraphics[width=0.5\textwidth]{part2/KMeans_2-clusts_isomap.png}
         \label{fig:c}%
     }%
     \caption{Three different 2D projections of the samples of the GEO gene expression data set used in this work. Projections on the left (a), middle (b) and right (c) panes are obtained via linear PCA, Gaussian PCA and isomap, respectively. The color of each point corresponds to the actual tissue type, while the background color is automatically learned by the $k$-means clustering algorithm. White hexagons correspond to cluster centroids.}\label{fig:scatter}
 \end{figure}
 
-For the second EDA, the relationships among the probe sets corresponding to the genes of the signature are separately explored learning a different hierarchical clustering~\cite{hastie2009elements} tree for mucosa (Figures~\ref{fig:mucosatree}) and CRC samples (Figure~\ref{fig:tumortree}), separately.
+For the second EDA, the relationships among the probe sets corresponding to the genes of the signature are separately explored learning a different hierarchical clustering tree for mucosa (Figures~\ref{fig:mucosatree}) and CRC samples (Figure~\ref{fig:tumortree}), separately.
 % shows some differences but some similarities too. This is easy explained by the fact that the mucosa samples derive from the same subjects from which the CRC samples are taken.
 % The most evident similarities between these graphs are the following:
 % such genes are also closely connected to TP53 and its isoform.
@@ -290,25 +290,25 @@ Moreover, two probe sets of the the genes of \emph{S1}, namely \apc and \ctnnb, 
 % An interesting difference is the position of APC and CTNNB1 with respect to TP53 and its isoform. While in the CRC tree (Figure~\ref{fig:tumortree}) they
 % it is evident that there is a direction in the connections of these genes (\ie the first gene is APC, the second is CTNNB1 and the last is TP53 with its isoform) this is not the case for the mucosa tree.
 % The position of KRAS with respect to APC and CTNNB1 is another difference that emerges from the comparison of the two graphs: while in the CRC case, KRAS and KRAS.1 are located more or less on the same level in the middle of the graph, the reciprocal position of these two genes is quite different in the mucosa graph. KRAS is positioned close to the bottom of the graph while KRAS.1 is above KRAS and looks quite distant from it.
-Two interesting differences between the two trees can also be noticed. First, most of the elements of the sublist \emph{S3}, which contains genes that enhance the risk of developing CRC, tend to be grouped together in Figure~\ref{fig:tumortree}, while the same observation cannot be done for Figure~\ref{fig:mucosatree}. Secondly, probe sets of the genes belonging to sublists \emph{S2} and \emph{S3} tend more to more closely connected in Figure~\ref{fig:tumortree} than in Figure~\ref{fig:mucosatree}.
+Two interesting differences between the two trees can also be noticed. First, most of the elements of the sublist \emph{S3}, which contains genes that enhance the risk of developing CRC, tend to be grouped together in Figure~\ref{fig:tumortree}, while the same observation cannot be done for Figure~\ref{fig:mucosatree}. Secondly, probe sets of the genes belonging to sublists \emph{S2} and \emph{S3} tend more to be closely connected in Figure~\ref{fig:tumortree} than in Figure~\ref{fig:mucosatree}.
 
 % The Pearson correlations calculated among all the couples of the considered gene signature, produced two heatmaps one for each tissue type (see Figures XX and XX). From the comparison of these plots it is evident that there is a higher correlation in mucosa with respect to cancer tissue. We expected a clear difference in the appearance of the two heatmaps and the higher correlation in the mucosa samples could be related with the fact that the majority of these samples, disease-free, comes from the same subjects from which the cancer samples are retrieved. Therefore several genes of the signatures looks arelady altered in the mucosa while the same alteration in the tumor is not visible any more because the occurrence of many chromosomal aberrations (e.g., chromosomal translocation, inversions, deletion, gene mutations) it is expected to take place.
 
-\begin{figure}[h!]
+\begin{figure}[]
     \centering
     \subfloat[]{%
-        \includegraphics[width=0.45\textwidth]{part2/mucosa_tree_color.png}%
+        \includegraphics[width=0.51\textwidth]{part2/mucosa_tree_color.png}%
         \label{fig:mucosatree}%
     }%
     \hfill%
     \subfloat[]{%
-        \includegraphics[width=0.45\textwidth]{part2/tumor_tree_color.png}%
+        \includegraphics[width=0.51\textwidth]{part2/tumor_tree_color.png}%
         \label{fig:tumortree}%
     }%
     \caption{An example of hierarchical trees visualization learned by two \ade pipelines on mucosa (a) and CRC (b) samples. Each probe set is color coded according to the corresponding sublist. This visualization provides insights on the underlying structure of the measured gene expression level.}\label{fig:trees}
 \end{figure}
 
-\todo{add more usage examples?!}
+%\todo{add more usage examples?!}
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
@@ -334,13 +334,16 @@ Two interesting differences between the two trees can also be noticed. First, mo
 % Pip3
 % median Impute-NaN $\to$ Recenter $\to$ rbf KernelPCA $\to$ 2-clusts KMeans
 
+\section{Conclusions}
+
+In this Chapter we presented \ade, a biomedical data exploration and visualization tool that can seamlessly run on single workstations as well as on HPC clusters.
+Thanks to its scalable architecture, \ade is suitable for the analysis of large and high-dimensional data collections, that are nowadays ubiquitous in biomedicine.
 %
-%In this Chapter we presented \ade, a biomedical data exploration and visualization tool that can seamlessly run on single workstations as well as on HPC clusters.
-%Thanks to its scalable architecture, \ade is suitable for the analysis of large and high-dimensional data collections, that are nowadays ubiquitous in biomedicine.
+This software natively supports the integration with the GEO repository. Therefore, a user provided with the accession number of the data set of interest can select target phenotypes and genotypes and \ade takes care of automatically downloading the data and plugging them into the computational framework.
+\ade offers a wide range of missing values imputing, data preprocessing, dimensionality reduction and clustering techniques that can be easily selected and applied to any input data.
 %
-%\ade natively supports the integration with the GEO repository. Therefore, a user provided with the accession number of the data set of interest can select target phenotypes and genotypes and \ade takes care of automatically downloading the data and plugging them into the computational framework.
-%\ade offers a wide range of missing values imputing, data preprocessing, dimensionality reduction and clustering techniques that can be easily selected and applied to any input data.
-%
-%In this paper we showed \ade capabilities performing two EDAs on a CRC gene expression data set. From the obtained results we can observe that a clear discrimination between CRC and control samples can be achieved by unsupervised data analysis pipeline.
+We showed \ade capabilities performing two EDAs on a CRC gene expression data set. From the obtained results we can observe that a clear discrimination between CRC and control samples can be achieved by unsupervised data analysis pipeline.
 %% \apc and \ctnnb,
-%Moreover, a meaningful description of the relationships among the group of genes strongly associated with CRC can be represented as hierarchical trees.
+Moreover, a meaningful description of the relationships among the group of genes strongly associated with CRC can be represented as hierarchical trees.
+
+\ade is developed for biomedical data scientists, with it can be used for any kind of tabular data. Hence meeting the needs of a more general purpose class of scientists that aim at understanding complex high-dimensional data.
