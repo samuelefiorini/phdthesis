@@ -13,7 +13,7 @@
 	% One of the open questions in the field is the use of patient-centered outcomes to assess multiple sclerosis impact on patients' lives and to predict the evolution of the disease.
 	%To date, a clear understanding on whether it is possible to define a predictive model based on them is still an open question.
 	%the use of such measures to assess neurodegenerative diseases evolution is still lacking. Moreover,
-	To this aim, we build a novel temporal model based on gradient boosting classification and multiple-output elastic-net regression. The model
+	To this aim, we build a novel temporal model based on random forests classification and multiple-output elastic-net regression. The model
 	%  is entirely based on patient-centered outcomes and it
 	provides clinically interpretable results along with accurate predictions of the disease course evolution.
 \end{displayquote}
@@ -25,7 +25,7 @@ Multiple Sclerosis (MS) is a neurodegenerative and chronic disease of the centra
 % \todo{In clinical practice, accurate patient evaluation and clinical judgement remain the basics in MS diagnosis, as the identification of a validated set of biomarkers is still an open problem~\cite{milo2014revised}.}
 
 People with MS (PwMS) are mainly classified according to their disease course:
-relapsing-remitting (\ac{RR}), secondary-progressive (\ac{SP}), primary-progressive (\ac{PP}) and progressive-relapsing (\ac{PR})~\cite{giovannoni2016brain} and benign (\ac{B}).
+relapsing-remitting (\ac{RR}), secondary-progressive (\ac{SP}), primary-progressive (\ac{PP}), progressive-relapsing (\ac{PR}) and benign (\ac{B})~\cite{giovannoni2016brain} .
 Neurological disability in \RR patients is mainly due to the development of multifocal inflammatory lesions and it results in relapses, that are attacks of neurological worsening (\ie \textit{relapses}), followed by partial or complete recovery. Disability accrues predominantly in progressive courses (\SP, \PP, \PR) that are more characterized from diffuse immune mechanisms and neurodegeneration.
 Benign MS occurs when the patient remains fully functional in all neurologic systems for at least $15$ years after the onset.
 Figure~\ref{fig:ms_mock} shows a representative disability progression of MS patients according to their disease course.
@@ -89,44 +89,11 @@ Nevertheless, it is still unclear which are the most informative \PCOs and, cont
 
 The biomedical data science challenge presented in this chapter is based on a \PCO dataset acquired from a cohort of PwMS progressively enrolled within an ongoing funded project \footnote{ Ethical review committee approval \textit{023REG2014} was obtained for this work.}.
 
-Each patient is evaluated every four months through the items of the \PCOs reported in Table~\ref{tab:proms} which cover physical, cognitive and psychosocial domains. A comprehensive description of the \PCOs involved in the study is presented below.
-
-
-\begin{itemize}
-	\item[] {\sc \textbf{MFIS}} This is a $21$-item self-reported questionnaire typically administered in $5$ to $10$ minutes. \MFIS provides an assessment of the effects of fatigue in terms of physical, cognitive, psychosocial functioning and it is considered a valuable tool by clinicians.
-	
-	\item[] {\sc \textbf{HADS}} This is a $14$-item self-reported questionnaire typically administered in $2$ to $6$ minutes which aims at detecting clinically significant symptoms of depression and anxiety in patients. \HADS consists in $7$ questions for depression and the remaining $7$ for anxiety.
-	
-	\item[] {\sc \textbf{LIFE}} This is an $11$-item self-reported questionnaire which investigates on patients quality of life. \LIFE can be typically administered in approximately $5$ minutes. To each of the $11$ items, the patient can assign an ordinal score $0,1,2$ which corresponds to "\textit{disagree}", "\textit{not sure}" and "\textit{agree}" answers.
-	
-	\item[] {\sc \textbf{OAB}} This is an $8$-item self-reported questionnaire which investigates on patients bladder control. \OAB can be administered in approximately $5$ to $8$ minutes and it is a reliable tool to investigate on possible stress or discomfort lead by unexpected urinary urgencies that patients may experience during day or night.
-	
-	\item[] {\sc \textbf{EDINB}} This $10$-item self-reported questionnaire can be used to assess dominance of a person's right/left hand during daily activities. The items are very straightforward, so \EDINB can be administered in $3$ to $5$ minutes.
-	
-	\item[] {\sc \textbf{ABILH}} This is a $23$-item self-reported questionnaire which can be used to measure hand ability in adults with upper limb impairments. \ABILH assesses a person's ability to manage daily activities that require the use of the upper limbs, whatever the strategies involved. \ABILH is usually administered in $5$ to $10$ minutes.
-	
-	\item[] {\sc \textbf{FIM}} This is $19$-item clinical scale assessing the amount of assistance required for the patient to carry out activities of daily living. \FIM is typically administered by trained examiner in $35$ to $40$ minutes and it covers both motor and cognitive domains.
-
-	\item[] {\sc \textbf{MOCA}} This is an $11$-item clinical scale assessing several cognitive domains such as short-term memory recall, visuospatial abilities, phonemic fluency, attention, concentration and so on. \MOCA is typically administered in less than $10$ minutes.
-	
-	\item[] {\sc \textbf{PASAT}} This clinical scale is a measure of cognitive function that assesses patients' auditory processing speed and flexibility,  as well as their calculation ability. It can be administered in $10$ to $15$ minutes and it consists in audio stimuli in which single digits are presented every $3$ seconds. The patient is asked to add each new digit to the one immediately prior to it. \PASAT must be administered by trained examiner.
-	
-	\item[] {\sc \textbf{SDMT}} This clinical scale is a test for organic cerebral dysfunctions. This test simply involves a substitution task: using a reference key the patients has few seconds to pair specific numbers with specific geometric measures.
-	\SDMT is typically administered by trained examiner in less than $5$ minutes.
-	
-	\item[] {\sc \textbf{EDSS}} This is probably the oldest assessment instrument for MS. \EDSS is based on a neurological examination consisting of $7$-items. Each item rates a different function, all the items are then combined in the final \EDSS score which is an ordinal scale ranging from $0$ (normal neurological examination) to $10$ (death due to MS), in half-point increment. The use of \EDSS in modern MS assessment is somewhat controversial. Although usually adopted as an index of the disability level, \EDSS focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
-	
-	
-\end{itemize}
-
+Each patient is evaluated every four months through the items of the \PCOs reported in Table~\ref{tab:proms} which cover physical, cognitive and psychosocial domains.
 \PCO data are intrinsically noisy due to the subjectivity of self-reported measures provided by the patients that can be influenced by personal feelings and opinions. In order to ameliorate this issue, $4$ questionnaires out of $10$ are administered by medical staff which is trained to keep a homogeneous level of evaluation.
+A comprehensive description of the \PCOs involved in the study is presented below.
 
-In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} except \EDSS.
-%\todo{other comments here?}
-
-% The model considered all the \PCOs except \EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.
-
-\begin{table}[htb]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{l|l|l}%{@{} l*{4}{l} @{}}
 		\toprule
@@ -153,6 +120,38 @@ In our analysis we considered all the \PCOs reported in Table~\ref{tab:proms} ex
 \end{table}
 
 
+\begin{itemize}
+	\item[] {\sc \textbf{MFIS}} This is a $21$-item self-reported questionnaire typically administered in $5$ to $10$ minutes. \MFIS provides an assessment of the effects of fatigue in terms of physical, cognitive, psychosocial functioning and it is considered a valuable tool by clinicians.
+	
+	\item[] {\sc \textbf{HADS}} This is a $14$-item self-reported questionnaire typically administered in $2$ to $6$ minutes which aims at detecting clinically significant symptoms of depression and anxiety in patients. \HADS consists in $7$ questions for depression and the remaining $7$ for anxiety.
+	
+	\item[] {\sc \textbf{LIFE}} This is an $11$-item self-reported questionnaire which investigates on patients quality of life. \LIFE can be administered in approximately $5$ minutes. To each of the $11$ items, the patient can assign an ordinal score $0,1,2$ which corresponds to "\textit{disagree}", "\textit{not sure}" and "\textit{agree}" answers.
+	
+	\item[] {\sc \textbf{OAB}} This is an $8$-item self-reported questionnaire which investigates on patients bladder control. \OAB can be administered in approximately $5$ to $8$ minutes and it is a reliable tool to investigate on possible stress or discomfort lead by unexpected urinary urgencies that patients may experience during day or night.
+	
+	\item[] {\sc \textbf{EDINB}} This $10$-item self-reported questionnaire can be used to assess dominance of a person's right/left hand during daily activities. The items are very straightforward, so \EDINB can be administered in $3$ to $5$ minutes.
+	
+	\item[] {\sc \textbf{ABILH}} This is a $23$-item self-reported questionnaire which can be used to measure hand ability in adults with upper limb impairments. \ABILH assesses a person's ability to manage daily activities that require the use of the upper limbs, whatever the strategies involved. \ABILH is usually administered in $5$ to $10$ minutes.
+	
+	\item[] {\sc \textbf{FIM}} This is $19$-item clinical scale assessing the amount of assistance required for the patient to carry out activities of daily living. \FIM is typically administered by trained examiner in $35$ to $40$ minutes and it covers both motor and cognitive domains.
+
+	\item[] {\sc \textbf{MOCA}} This is an $11$-item clinical scale assessing several cognitive domains such as short-term memory recall, visuospatial abilities, phonemic fluency, attention, concentration and so on. \MOCA is typically administered in less than $10$ minutes.
+	
+	\item[] {\sc \textbf{PASAT}} This clinical scale is a measure of cognitive function that assesses patients' auditory processing speed and flexibility,  as well as their calculation ability. It can be administered in $10$ to $15$ minutes and it consists in audio stimuli in which single digits are presented every $3$ seconds. The patient is asked to add each new digit to the one immediately prior to it. \PASAT must be administered by trained examiner.
+	
+	\item[] {\sc \textbf{SDMT}} This clinical scale is a test for organic cerebral dysfunctions. This test simply involves a substitution task: using a reference key the patients has few seconds to pair specific numbers with specific geometric measures.
+	\SDMT is typically administered by trained examiner in less than $5$ minutes.
+	
+	\item[] {\sc \textbf{EDSS}} This is probably the oldest assessment instrument for MS. \EDSS is based on a neurological examination consisting of $7$-items. Each item rates a different function, all the items are then combined in the final \EDSS score which is an ordinal scale ranging from $0$ (normal neurological examination) to $10$ (death due to MS), in half-point increment. The use of \EDSS in modern MS assessment is somewhat controversial. Although usually adopted as an index of the disability level, \EDSS focuses mainly on deambulation disability without taking into account other aspects that could impact patient disability, such as upper limb or cognitive functions~\cite{meyer2014systematic, uitdehaag2014clinical}.
+	
+	
+\end{itemize}
+
+In our analysis we considered all these \PCOs except \EDSS.
+%\todo{other comments here?}
+
+% The model considered all the \PCOs except \EDSS, that is a physician reported outcome that, although usually adopted as an index of the disability level, exclusively depends on the deambulation for scores greater than 4, consequently not taking into account the other aspects impairing the patient.
+
 % we focus on the use of $10$ of the clinically validated questionnaires reported in Table~\ref{tab:proms}. Each questionnaire consists of a different number of items testing the capabilities of the patients in different domains, such as physical, cognitive or psychosocial.
 % Moreover, the set of variables considered by our
 The collected \PCO dataset comprises additional information such as:
@@ -162,7 +161,8 @@ The collected \PCO dataset comprises additional information such as:
 	\item height ({\sc h}) expressed in $\text{cm}$ and
 	\item weight ({\sc w}) expressed in $\text{kg}$.
 \end{enumerate*}
-Moreover, a neurologist assigns to each patient the corresponding disease course. The global distribution of MS types across time points is depicted in Figure~\ref{fig:PPRRSP}.
+Moreover, a neurologist assigns to each patient the corresponding disease course.
+%The global distribution of MS types across time points is depicted in Figure~\ref{fig:PPRRSP}.
 
 % \todo{@AISM: add here the motivations that lead us to exclude \EDSS from the analysis.}
 
@@ -193,9 +193,9 @@ Analyzing \PCO data is challenging from several respects.
 For instance, items belonging to different questionnaires are encoded with numerical values in different ranges.
 For example, the items of the \MFIS questionnaire have ordinal scale values in $[0-4]$, whereas the \SDMT outcome is the global number of correctly answered items of the test (max $110$) and the \EDINB test consists in $10$ categorical items measuring the dominance of right or left hand in the activities of daily living.
 To tackle such issues, in this EDA we opted for a preliminary data preprocessing of the ordinal answers and a binary one-hot-encoding of the categorical ones, the latter increases the dimensionality of the samples, leading to $d=165$ variables in the dataset.
-The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature $x^j$ in a fixed range, \ie $x^{j'} \in [0, 1]$. The min-max scaling is obtained by the transformation described in Equation~\eqref{eq:minmax}.
+The adopted data preprocessing strategy, namely min-max scaling, consists in casting each feature $\bm{x}^j$ in a fixed range, \ie $\bm{x}^{j'} \in [0, 1]$. The min-max scaling is obtained by the transformation described in Equation~\eqref{eq:minmax}.
 \begin{equation} \label{eq:minmax}
-	x^{j'} = \frac{x^j - \min(x^j)}{\max(x^j) - \min(x^j)}
+	\bm{x}^{j'} = \frac{\bm{x}^j - \min(\bm{x}^j)}{\max(\bm{x}^j) - \min(\bm{x}^j)}
 %	X_std = (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))
 \end{equation}
 The effect of the data preprocessing on the ordinal input variables is visually represented in Figure~\ref{fig:ms_boxplots}. As we can see, this preprocessing step allows to compare more easily the input features.
@@ -210,24 +210,24 @@ The effect of the data preprocessing on the ordinal input variables is visually 
 	\subfloat[]{%
 		\includegraphics[trim={0 6cm 0 6cm}, width=0.5\textwidth]{part2/ms_mm_boxplot.png} \label{fig:ms_boxplots_post}
 	}%
-	\caption{The effect of the data preprocessing on the input ordinal \PCOs. The left panel (a) shows the distribution of the raw collected variables, whereas the right panel (b) shows the distribution of the same variables after the preprocessing step.}\label{fig:ms_boxplots}
+	\caption{The effect of the data preprocessing on the input \PCOs. The left panel (a) shows the distribution of the raw collected variables, whereas the right panel (b) shows the distribution of the same variables after the preprocessing step.}\label{fig:ms_boxplots}
 \end{figure}
 
 Furthermore, in order to visually inspect the data we investigate on how to reduce their dimensionality. To this aim, we project the data in a 3D space with linear PCA and Isomap (see Section~\ref{sec:dimred}).
 These algorithms are sensitive to outliers, which we expect to affect our dataset. Therefore, we follow a preliminary isolation forests-based anomalies detection and removal as described in~\cite{liu2008isolation, liu2012isolation}.
 The obtained scatter plots are shown in Figure~\ref{fig:ms_3dscatterplot}.
-As we can see, both the obtained projections hint some sort of class separation between \RR and \SP subjects, while the same conclusion cannot be drawn for the other classes. Moreover, considering only the first three principal components, PCA explains only the $37.4\%$ of the variance of the dataset. This suggests that most of the information, which may be useful for classification purposes, is spread across several input variables.
+As we can see, both the obtained projections hint suggest a class separation between \RR and \SP subjects, while the same conclusion cannot be drawn for the other classes. Moreover, considering only the first three principal components, PCA explains only the $37.4\%$ of the variance of the dataset. This suggests that most of the information, which may be useful for classification purposes, is spread across several input variables.
 %in this dataset the low dimensionality projection and visualization is not insightful. From the scatter plots in Figure~\ref{fig:ms_3dscatterplot} a clear class separation cannot be firmly observed.
 
 \begin{figure}[h!]
 	\centering
 	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/ms_pca.png}
+		\includegraphics[width=0.8\textwidth]{part2/ms_pca.png}
 		\label{fig:ms_ms_pca}%
 	}%
-%	\hfill
+	\hfill
 	\subfloat[]{%
-		\includegraphics[width=0.5\textwidth]{part2/ms_isomap.png}
+		\includegraphics[width=0.8\textwidth]{part2/ms_isomap.png}
 		\label{fig:ms_ms_isomap}%
 	}
 %	\subfloat[]{%
@@ -241,7 +241,7 @@ As we can see, both the obtained projections hint some sort of class separation 
 	\caption{A random extraction of the $20\%$ of the MS dataset projected on a 3D space by linear PCA, on panel (a), and Isomap, on panel (b).} \label{fig:ms_3dscatterplot}
 \end{figure}
 
-This EDA raised our hopes to successfully perform a further supervised MS course classification and evolution prediction.
+This EDA raised our hopes to successfully perform a further supervised MS course classification.
 
 % The number of considered samples across examinations is hence $2699$, of which $1220$ \RR and $1579$ \SP.
 
@@ -277,7 +277,7 @@ We considered all the patients with a minimum of $1$ time point (the most recent
 Following the EDA, we opted for a preliminary feature-wise min-max scaling.
 However, to promote unbiasedness of the results, this preprocessing phase is not performed on the entire data collection, but it is embedded into the model fitting procedure. This trick, jointly applied with cross-validation techniques, guarantees that even the feature-wise range used for data preprocessing is \textit{learned} from training set and it is applied on previously unseen validation sets.
 %separately evaluated prior to each model fitting process on its training cross-validation portion of the data.
-However, the experimental design adopted to learn $f(\bm{x})$ and $g(\bm{x})$ is slightly different. Therefore, each of them is separately discussed in the remainder of this section.
+However, the experimental design adopted to learn $f(\bm{x})$ and $g(\bm{x})$ is slightly different. Therefore, they are separately discussed in the remainder of this section.
 
 % In particular, the training set comprises all samples collected at time points $t = 1, \dots ,T_{tr}$, the validation set at $t=T_{tr}+1,\dots,T_{vld}$ and the test set at $t=T_{vld}+1,\dots,T$.
 % Here, as the maximum number of collected time points is $T=8$, we fixed $T_{tr} = 3$ and $T_{vld} = 4$.
@@ -306,7 +306,7 @@ However, the experimental design adopted to learn $f(\bm{x})$ and $g(\bm{x})$ is
 	The final \G model $\hat{g}(\bm{x})$ is chosen as the candidate model that performs better on the previously unseen test set in terms of MAE, defined in Section~\ref{sec:performance_metrics}.
 	
 
-	\item[] \textbf{\FOG} The predictive capability of the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$ is finally evaluated on the test set. The \F model $\hat{f}(\bm{x}_i^t)$ predicts the MS course $\hat{y}_i^t$ from the \PCO data vector $\hat{\bm{x}}_i^t$ that, in turn, is predicted by the \G model $\hat{g}(\bm{x}_i^{t-1})$. We shall notice here that the predictions $\hat{f} \circ \hat{g}(\bm{x}_i^t)=y_i^{t+1}$ for $t=11$ are foreseeing possible \RR to \SP transitions that are beyond our data observation, hence predictions at the last time point cannot be used to assess the \FOG model performance. Therefore, its performance is evaluated only on $616$ test samples.
+	\item[] \textbf{\FOG} The predictive capability of the \FOG model $\hat{f} \circ \hat{g}(\bm{x})$ is finally evaluated on the test set. The \F model $\hat{f}(\bm{x}_i^t)$ predicts the MS course $\hat{y}_i^t$ from the \PCO data vector $\hat{\bm{x}}_i^t$ that, in turn, is predicted by the \G model $\hat{g}(\bm{x}_i^{t-1})$. We shall notice here that the predictions $\hat{f} \circ \hat{g}(\bm{x}_i^t)=y_i^{t+1}$ for $t=11$ are foreseeing possible \RR to \SP transitions that are beyond our data observation, hence predictions at the last time point cannot be used to assess the \FOG model performance. Therefore, its performance is evaluated on $616$ test samples.
 	
 \end{itemize}
 
@@ -331,7 +331,7 @@ We imposed $f(\bm{x})$ to be sparse. This requirement is helpful from two distin
 In order to achieve a sparse model, we take advantage of two variable selection strategies: embedded and wrapper methods, see Section~\ref{subsec:feature_selection}.
 When using embedded methods, we exploited the sparsity inducing penalties of three models:
 \begin{itemize}
-	\item the Elastic-Net, that presents square loss and a penalty which is a convex combination of $\ell_1$- and $\ell_2$-norm of the variable weights (see Section~\ref{sec:elastic_net}),
+	\item Elastic-Net, that presents square loss and a penalty which is a convex combination of $\ell_1$- and $\ell_2$-norm of the variable weights (see Section~\ref{sec:elastic_net}),
 
 	\item sparse logistic regression, which combines the logistic loss with a Lasso penalty on the variable weights (see Section~\ref{sec:logistic_regression}),
 	
@@ -342,16 +342,16 @@ Moreover, we applied the RFE wrapper method to four other methods:
 \begin{itemize}
 	\item logistic regression, that achieves smooth solutions thanks to its $\ell_2$-norm penalty;
 	\item SVM, which also has an $\ell_2$-norm penalty;
-	\item Random Forests (RF), a tree-based ensemble that:
+	\item Random Forests (RF), a tree-based bagging ensemble that:
 	\begin{enumerate*}[label=(\roman*)]
 		\item can capture nonlinear relationship between \PCOs and disease course,
-		\item it is also well suited to deal with categorical/ordinal variables and
+		\item it is well suited to deal with categorical/ordinal variables and
 		\item thanks to the inner bagging strategy, it is less prone to overfitting;
 	\end{enumerate*}
-	\item Gradient Boosting (GB), that has recently demonstrated to be an excellent nonlinear model for structured data~\cite{chollet2018deep}, but it is more prone to overfitting.
+	\item Gradient Boosting (GB), a tree-based boosting ensemble that has recently demonstrated to be an excellent nonlinear model for structured data~\cite{chollet2018deep}, but it is more prone to overfitting.
 \end{itemize}
 As shown in Section~\ref{subsec:feature_selection}, using embedded methods it is possible to achieve a list of selected variable for each Monte Carlo iteration.
-Conversely, RFE produces a variable ranking. The list of selected variables, in this case, is obtained here by a further nested $K$-fold cross-validation optimization (with $K=3$).
+Conversely, RFE produces a variable ranking. The list of selected variables, in this case, is obtained by a further nested $K$-fold cross-validation optimization (with $K=3$).
 
 %tree-based learning machines (RF and GB) that are capable of capturing nonlinear relationship between input and output and are intrinsically well-suited to deal with categorical/ordinal variables. We also explored the use of RFE with SVM, as in~\cite{guyon2002gene}.
 % which is a state-of-the-art machine learning method for classification.
@@ -361,7 +361,7 @@ Conversely, RFE produces a variable ranking. The list of selected variables, in 
 As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
 % To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
 
-Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}), see Section~\cite{sec:nucelear_norm_minimization} and~\cite{sec:elastic_net}, respectively. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach, see Section~\ref{sec:mlp}.
+Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}), see Section~\ref{sec:nucelear_norm_minimization} and~\ref{sec:elastic_net}, respectively. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach, see Section~\ref{sec:mlp}.
 
 \section{Results and discussion}\label{sec:aism_results}
 
@@ -374,7 +374,7 @@ We shall separately discuss the results achieved in terms of \F, \G and \FOG mod
 	
 	\input{part2/f_scoreboard}
 	
-	The stability selection procedure leads to the definition of a variable ranking for each of these models (results not shown). Such variable rankings are then cut according to the threshold of the selection frequency that gives best MCC on the validation set. The number of variables selected by each model is then represented in Figure~\ref{fig:n_selected}. Interestingly, RF and GB achieve the most parsimonious representation (only $33$ variables out of $165$) and the top cross-validated classification scores. This confirms that the relationship between \PCOs and disease course is better represented by a nonlinear estimator and that the \F problem can be solved by observing a reduced number of \PCO variables.
+	The stability selection procedure leads to the definition of a variable ranking for each of these models (results not shown). Such variable rankings are then cut according to the threshold of the selection frequency that gives best MCC on the validation set. The number of variables selected by each model is then represented in Figure~\ref{fig:n_selected}. Interestingly, RF and GB achieve the most parsimonious representation (only $33$ variables out of $165$) and the top cross-validation scores. This confirms that the relationship between \PCOs and disease course is better represented by a nonlinear estimator and that the \F problem can be solved by observing a reduced number of \PCO variables.
 	
 	\begin{figure}[]
 		\centering
@@ -383,14 +383,14 @@ We shall separately discuss the results achieved in terms of \F, \G and \FOG mod
 	\end{figure}
 
 	The second step consisted in refitting each model on the union of training and validation sets always considering only the corresponding relevant features.
-	The seven candidate models reach on the test set the performance summarized in Table~\ref{tab:f_final_scores} and visually represented in Figure~\ref{fig:f_final_scores}.
+	The seven candidate models on the test set reach the performance summarized in Table~\ref{tab:f_final_scores} and visually represented in Figure~\ref{fig:f_final_scores}.
 	In this case, the RF method outperforms the other candidate models, therefore we chose it as \F model $\hat{f}(\bm{x})$.
 
 	\input{part2/f_final_scoreboard}
 	
 	\begin{figure}[]
 		\centering
-		\includegraphics[draft=false,width=0.8\textwidth]{part2/aism_f_final_scores.png}
+		\includegraphics[width=0.8\textwidth]{part2/aism_f_final_scores.png}
 		\caption{Classification performance scores of the seven candidate models (for the \F problem) achieved on the test set.} \label{fig:f_final_scores}
 	\end{figure}
 
@@ -452,9 +452,9 @@ This chapter describes a temporal model based on \PCOs and ML for disease form p
 In particular, we address the tasks of current course assignment, \PCOs evolution prediction and future course assignment. The model is built on a collection of \PCOs acquired on a cohort of individuals enrolled in an ongoing funded study (\textit{DETECT-MS PRO}).
 
 % The measures are categorical or ordinal answers to a given set of \PCOs.
-\PCOs data are typically used to corroborate evidence provided by quantitative exams, in our case the absence of clear MS disease form predictors makes the information extracted from \PCOs data the only available resource.
+\PCOs data are typically used to corroborate evidence provided by quantitative exams, in our case the absence of clear MS course predictors makes the information extracted from \PCOs data the only available resource.
 The proposed temporal model was able to correctly assign the current MS form and to foresee future ones with accuracy of $\approx 86.0\%$ and $\approx 82.6\%$, respectively.
-This demonstrates that \PCOs can effectively be used as MS disease course predictor.
+This demonstrates that \PCOs can effectively be used to build an effective ML-based MS disease course predictor.
 %In the next future, we plan to expand the data collection with respect to the amount of enrolled subjects as well as the number of time points.
 
 In the next future, we plan to further investigate on the predictive capabilities of the proposed model with longer temporal horizons and to compare it with different approaches, such as probabilistic graphical models.
