@@ -171,7 +171,7 @@ As of today ML is the workhorse of data science.
 %	    The most widely adopted common strategy to build predictive models out of noisy data is called \textit{regularization}.
       In ML literature, \textit{regularization} is the most important countermeasure to overfitting and it is widely adopted, under several forms, to build predictive models out of noisy data.
 
-	    The original contribution of this PhD thesis mainly relies on the application of data science and ML concepts to noisy domains. Therefore, regularization strategies are of primary interest in this discussion.
+	    The original contribution of this thesis mainly relies on the application of data science and ML concepts to noisy domains. Therefore, regularization strategies are of primary interest in this discussion.
 	    For each learning algorithm described, particular emphasis will be put on the relevant regularization strategies.
 
 	    In its broader definition \textit{regularization} can be seen as the process of introducing additional information in order to solve a possibly ill-posed problem.
@@ -898,7 +898,7 @@ As of today ML is the workhorse of data science.
 	    \subsection{Deep learning} \label{sec:deep_learning}
 	    
 		Deep Learning (DL) is a branch of ML that, in the recent past, is becoming extremely appealing thanks to the high predictive power that it has empirically shown on real-world problems.
-		This section is definitely not an attempt to summarize the heterogeneous plethora of the DL methods presented in literature so far. Indeed, even a dedicated PhD thesis may not be enough to accomplish this task.
+		This section is definitely not an attempt to summarize the heterogeneous plethora of the DL methods presented in literature so far. Indeed, even a dedicated thesis may not be enough to accomplish this task.
 		In this section we will only get a grasp on the mechanisms behind the supervised DL methods applied in Part II\footnote{ Unsupervised DL methods were presented in literature as well, but as they are not used in Part II, their discussion is not presented here. We recall to~\cite{chollet2018deep, lecun2015deep} for a more comprehensive overview.}.
 	    
 	    % I shall not forget that this is Regularization in bio studies, there are plenty of ML in bio studies out there
@@ -1224,7 +1224,7 @@ As of today ML is the workhorse of data science.
 
   \section{Model selection and evaluation} \label{subsec:model_selection}
   
-  The previous chapters present an overview of ML techniques and algorithms that are most relevant with the data science challenges presented in the second part of this PhD thesis.
+  The previous chapters present an overview of ML techniques and algorithms that are most relevant with the data science challenges presented in the second part of this thesis.
   The described algorithms are very different for both goals and mathematical structure.
   However, they all share a common trait: the presence of one, or more, free parameters.
   These free parameters must be specified before the actual learning step and, in ML literature, they are usually referred to as \textit{hyperparameters}\footnote{ This term is inherited from the filed of statistics, where an hyperparameter is a parameter of a prior distribution probability. This sometimes generates confusion and possible misunderstanding in technical literature.}.
@@ -1252,7 +1252,7 @@ As of today ML is the workhorse of data science.
   This form of overfitting leads to an overoptimistic estimate of the model performance.
   Hence, in order to avoid too optimistic estimations of the generalization error, ML practitioners should rely on nested resampling protocols, as shown for instance in~\cite{de2009regularized}.
   
-  This section briefly presents the cross-validation resampling routines that are most relevant for the second part of this PhD thesis.
+  This section briefly presents the cross-validation resampling routines that are most relevant for the second part of this thesis.
   
   \begin{itemize}
   	\item[] \textbf{Monte Carlo cross-validation}
@@ -1275,7 +1275,7 @@ As of today ML is the workhorse of data science.
   
   Nevertheless, different statistically sound techniques to perform hyperparameters optimization were presented over the years . At the time of writing, model selection is a hot-topic in ML research. It often happens that several ML solutions adopted to tackle data science competitions\footnote{ Such as the ones hosted on the Kaggle website: \url{www.kaggle.com}.} are based on the same model. What really makes the difference, and defines the most competitive prediction strategy, is to adopt an efficient and effective model selection strategy.
   
-  The model selection procedure applied in the data science challenges described in this PhD thesis are carried out by one of the strategies described below.
+  The model selection procedure applied in the data science challenges described in this thesis are carried out by one of the strategies described below.
   
   \begin{enumerate}
   	\item[] \textbf{Grid-search cross-validation} This is a very straightforward hyperparameter optimization strategy which, for given ML model and cross-validation scheme, takes as input a multi-dimensional grid of possible hyperparameter values and creates a different model for each hyperparameter tuple. Then, for each model, a given performance metric (see Section~\ref{sec:performance_metrics}) is estimated by the adopted cross-validation scheme.
