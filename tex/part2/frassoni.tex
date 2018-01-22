@@ -22,7 +22,7 @@ In this chapter we present the first biomedical data science challenge of the th
 This consists in devising a ML model capable of predicting the age of an individual starting from a set of molecular biomarkers collected from $118$ volunteers\footnote{ This was referred to as \textit{the aging problem} throughout Chapter~\ref{chap:state-of-the-art}.}.
 
 This chapter describes the extensive EDA and the thorough model selection procedures which lead to the development of the final predictive model.
-Before diving into the details of the experimental setup, let's see some preliminary biological notions of how aging influences our metabolism.
+Before diving into the details of the experimental setup, let us see some preliminary biological notions of how aging influences our metabolism.
 
 Aging is a multifactorial process characterized by a progressive decline of physiological functions~\cite{campisi2013aging} which leads to an increment of vulnerability and the relative risk of disease and death ~\cite{bratic2010mitochondrial}.
 
@@ -115,14 +115,14 @@ The data collection process entirely ran on voluntary basis. So, it is interesti
 
 Next, we aim at investigating on how the distribution of the molecular biomarkers is influenced by the age of individuals. To this aim we perform a preliminary univariate analysis. We group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
 As we can see, most of the biomarkers are clearly influenced by the age.
-Let's start the visual inspection from the variables related to the mitochondrial aerobic metabolism, \ie Figure~\ref{fig:frassoni_boxplot_copyrmal} to \ref{fig:frassoni_boxplot_atpamp}.
+Let us start the visual inspection from the variables related to the mitochondrial aerobic metabolism, \ie Figure~\ref{fig:frassoni_boxplot_copyrmal} to \ref{fig:frassoni_boxplot_atpamp}.
 
 In particular, focusing our attention on the \atpamp ratio (Figure~\ref{fig:frassoni_boxplot_atpamp}), which is known to be an energy status monitor of the cells, we can see that the values decrease progressively with the decades, with a drastic drop between $40$ and $50$ years. Moreover, from an observation of \atp and \amp intracellular concentration (Figure~\ref{fig:frassoni_boxplot_atp} and Figure~\ref{fig:frassoni_boxplot_amp}, respectively) we can sense how the decrease of the \atpamp ratio is mainly due to the growth of \amp in the aging process.
 Similar considerations can be made for the efficiency of oxidative phosphorylation, evaluated by \popyrmal and \posucc. In particular, \popyrmal oscillates around its reference level of $2.5~\text{nmol~O}_2/(\text{min}\cdot\text{mg})$~\cite{hinkle2005p} in subjects having from $0$ to $30$ years starting to decrease afterwards. Moreover, \popyrmal, similarly to \atpamp, is fairly stable at its lowest level for elderly (age $\geq 70$).
 
-Let's now focus on the activity of \LDH (Figure~\ref{fig:frassoni_boxplot_ldh}). As we can see, this metabolic biomarker almost monotonically increases with the aging process.
+Let us now focus on the activity of \LDH (Figure~\ref{fig:frassoni_boxplot_ldh}). As we can see, this metabolic biomarker almost monotonically increases with the aging process.
 This is mainly due to the fact that \LDH is involved in the glycolysis metabolism, which is a metabolic pathway chosen by the cell to compensate its altered aerobic metabolism.
-Finally, let's focus on the distributions of \mda (Figure~\ref{fig:frassoni_boxplot_mda}). As expected, \mda has an opposite trend with respect to \atpamp and \popyrmal. In fact, it increases from $21$ to $80$ years. This can be due to the increased oxidative stress production induced by uncoupled oxidative phosphorylation~\cite{dai2014mitochondrial}.
+Finally, let us focus on the distributions of \mda (Figure~\ref{fig:frassoni_boxplot_mda}). As expected, \mda has an opposite trend with respect to \atpamp and \popyrmal. In fact, it increases from $21$ to $80$ years. This can be due to the increased oxidative stress production induced by uncoupled oxidative phosphorylation~\cite{dai2014mitochondrial}.
 \mda is more stable for elderly, mainly because of their physiological metabolic slowdown.
 
 \begin{figure}[]
@@ -187,7 +187,7 @@ Finally, let's focus on the distributions of \mda (Figure~\ref{fig:frassoni_boxp
 	\caption{Distribution of the collected molecular biomarker values grouped per decade: \copyrmal panel (a), \cosucc panel (b), \atppyrmal panel (c), \atpsucc panel (d), \popyrmal panel (e), \posucc panel (f), \atp panel (g), \amp panel (h), \atpamp panel (i), \mda panel (j) and \ldh panel (k).} \label{fig:frassoni_boxplot}
 \end{figure}
 
-So far, we have investigated on the relationship between the collected measures and the age of the individuals. Let's now focus on the relationship between the variables themselves. In order to investigate on possible collinearities in the data, we can evaluate for each pair of variables the Pearson correlation coefficient
+So far, we have investigated on the relationship between the collected measures and the age of the individuals. Let us now focus on the relationship between the variables themselves. In order to investigate on possible collinearities in the data, we can evaluate for each pair of variables the Pearson correlation coefficient
 $$
 	\rho(a, b) = \frac{\sum_{i=1}^n (a_i - \bar a)(b_i - \bar b)}{\sqrt{\sum_{i=1}^n(a_i-\bar a)^2 \sum_{i=1}^n(b_i-\bar b)^2}}
 $$
@@ -230,7 +230,7 @@ This is in line with the cellular need to increase the anaerobic metabolism that
 \end{figure}
 
 
-Let's now try to visualize the collected data in a scatter plot. In order to do that, we shall first reduce the dimensionality of the problem, as described in Section~\ref{sec:dimred}.
+Let us now try to visualize the collected data in a scatter plot. In order to do that, we shall first reduce the dimensionality of the problem, as described in Section~\ref{sec:dimred}.
 In this EDA, most of the variables showed strong inner linear correlation and correlation with the age. We then reduce the dimensionality of the problem following a two step pipeline:
 \begin{enumerate*}[label=(\roman*)]
 	\item data standardization followed by
@@ -238,7 +238,7 @@ In this EDA, most of the variables showed strong inner linear correlation and co
 \end{enumerate*}
 Our hope is to recognize some quasi-linear temporal structure. The resulting scatter plot is presented in Figure~\ref{fig:frassoni_PCA}.
 Each point in the scatter plot represents a subject that is color coded according to the age.
-Let's read the image from left to right.
+Let us read the image from left to right.
 As we can see, it looks like the subjects are partially grouped according to their age. In the top left corner of Figure~\ref{fig:frassoni_PCA} subjects with approximately $20$ years (or less) are clustered together. At the center bottom of the plot we can recognize individuals around their thirties. Then, following an approximately linear law from center bottom to top right we can see that the age increases until reaching the elderly, color coded in dark red.
 The insightful data visualization in Figure~\ref{fig:frassoni_PCA}, lets us sense that it is possible to devise a supervised strategy to predict the age of a given individual from the collected molecular biomarkers.
 

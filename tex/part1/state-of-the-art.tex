@@ -22,7 +22,7 @@ Such massive amounts of data have long overwhelmed human analysis and insights p
 
 But, what is \textit{machine learning}? And how does it differ from classical statistics?
 
-A unique answer to this question is not easy to provide. In fact, ML can be defined in different ways and from several standpoints. Let's see three remarkable examples.
+A unique answer to this question is not easy to provide. In fact, ML can be defined in different ways and from several standpoints. Let us see three remarkable examples.
 
 \begin{enumerate}
   \item Kevin P. Murphy in its \emph{Machine Learning - A Probabilistic Perspective}~\cite{murphy2012machine} defines ML as follows.
@@ -232,7 +232,7 @@ As of today ML is the workhorse of data science.
 			\end{equation}
 			exploiting the fact that the two classes are encoded with binary labels: $\bm{y} \in \{+1,-1\}^n$. For multiclass classification problems, strategies such as \textit{One-vs-One} (\ac{OVO}) or \textit{One-vs-All} (\ac{OVA}) can be adopted to reduce the problem to multiple binary classifications~\cite{hastie2009elements}.
 
-			OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let's see what happens when we use the OLS model on a real regression problem.
+			OLS is probably the most na\"ive prediction strategy, nevertheless it is widely adopted in several studies. Let us see what happens when we use the OLS model on a real regression problem.
 
 			For this example, and the following ones, we take into account the dataset $\mathcal{D}_{\text{aging}} = \{(\bm{x}_i, y_i)\}_{i=1}^{n=111}$ where each input sample $\bm{x}_i \in \mathbb{R}^{12}$ presents a set of measures describing the metabolic state of a healthy subject and $y_i \in \mathbb{N}_+$ is its age expressed in years.
 			For the sake of this discussion a  thorough description of $\mathcal{D}_{\text{aging}}$ at this point is irrelevant\footnote{ This regression problem is widely described and analyzed in Chapter~\ref{chap:frassoni}.}, we can simply think as the $d=12$ variables as predictors of the outcome $y$ and we look for some linear input-output relationship.
@@ -295,7 +295,7 @@ As of today ML is the workhorse of data science.
 			%Ridge regression can be extended to the case of multiple-output prediction for both vector-valued regression and multi-category classification problems.
 			%In the first case,
 
-			Let's see what happens when this method is applied to a real regression problem. For ease of comparison, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}.
+			Let us see what happens when this method is applied to a real regression problem. For ease of comparison, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}.
 			Compared to OLS, ridge regression has the parameter $\lambda$ that must be fixed before fitting the model. In this example, we estimated the best value $\hat \lambda_{\text{cv}}$ according to a standard grid-search cross-validation strategy. %~\cite{hastie2009elements}.
 			This consists in fixing a range of ($30$) possible values for $\lambda$ (in a logarithmic scale from $10^{-3}$ to $10^2$) and
 			pick the best value as the one achieving the lowest validation error, estimated via ($5$-fold) cross-validation (see Section~\ref{sec:model_evaluation}).
@@ -347,7 +347,7 @@ As of today ML is the workhorse of data science.
 
 			Originally proposed to solve regression problems, the Lasso can also be adopted in binary classification tasks; although, in this case, \textit{sparse logistic regression} is often preferred~\cite{tong2009genome} (see Section~\eqref{sec:logistic_regression}).
 
-			Let's see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\hat \lambda_{\text{cv}}=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
+			Let us see what happens when the Lasso model is applied to a real regression problem. Once again, for ease of comparison with OLS and ridge, we take into account the dataset $\mathcal{D}_{\text{aging}}$, introduced in Section~\ref{sec:ols}. The experimental setup in this case is identical to the one previously applied for ridge regression. The best value for the regularization parameter, chosen via grid-search cross-valudation, is $\hat \lambda_{\text{cv}}=1.27$. The Lasso coefficients $\bm{ \hat w}_{\ell_1}$ are represented in Figure~\ref{fig:coefs_lasso}.
 
 			\begin{figure}[]
 				\centering
@@ -413,7 +413,7 @@ As of today ML is the workhorse of data science.
 
 			Even if originally proposed to solve regression problems, as already seen for Lasso and ridge regression, the Elastic-Net can be adopted in binary classification tasks. Nevertheless, for classification problems, the use of the logistic loss is usually preferred.
 
-			Let's see what happens when the Elastic-Net model is applied to an actual regression problem. As usually, we tackle the aging task (introduced in Section~\ref{sec:ols}).
+			Let us see what happens when the Elastic-Net model is applied to an actual regression problem. As usually, we tackle the aging task (introduced in Section~\ref{sec:ols}).
 			The experimental setup in this case is the same already adopted for the Lasso in Section~\ref{sec:the_lasso}. The only difference is that the grid-search cross-validation routine looks for the optimal values for the two regularization parameters $(\hat \lambda_{\text{cv}}, \hat \alpha_{\text{cv}}) = (0.57, 0.48)$ in a 2D grid consisting of $30 \times 30$ values ($\alpha$ candidates range from $0$ to $1$ in a linear scale, whilst $\lambda$ candidates range from $10^{-3}$ to $10^{2}$ in a logarithmic scale). The Elastic-Net coefficients $\bm{\hat w}_{\ell_1\ell_2}$ are represented in Figure~\ref{fig:coefs_enet}.
 
 			\begin{figure}[!h]
@@ -566,7 +566,7 @@ As of today ML is the workhorse of data science.
 
 			The standard formulation of SVM does not cope well with high-dimensional data, as no sparsity-enforcing penalty is adopted. Recently, $\ell_1$-norm penalized SVM were proposed as well in~\cite{zhu20041, peng2016error}.
 
-			As for the square loss-based methods, let's apply ($\ell_2$-penalized) SVR to the aging problem (introduced in Section~\ref{sec:ols}).
+			As for the square loss-based methods, let us apply ($\ell_2$-penalized) SVR to the aging problem (introduced in Section~\ref{sec:ols}).
 			The experimental setup in this case is the same already adopted for Lasso and ridge regression (see Sections~\ref{sec:the_lasso} and~\ref{sec:ridge_regression}).
 			The weights $\bm{\hat w}_{\text{SVR}}$ are represented in Figure~\ref{fig:coefs_svr}. As expected, none of the is exactly zero and they look similar to ridge coefficients in Figure~\ref{fig:coefs_ridge}, as the two model share the same regularization penalty.
 			\begin{figure}[!h]
@@ -640,7 +640,7 @@ As of today ML is the workhorse of data science.
 			% The problem in Equation~\eqref{eq:kernel_learning_problem}, for the
 			% can be casted in the so-called \textit{dual} representation in which the outputs are predicted exploiting a \textit{kernel function} defined as in Equation~\eqref{eq:kernel_function}.
 
-			Let's see a practical example: kernel ridge regression. We recall that standard ridge regression problem can be rewritten as
+			Let us see a practical example: kernel ridge regression. We recall that standard ridge regression problem can be rewritten as
 			$$
 			\bm{\hat w}_{\ell_2} = \argmin_{\bm{w} \in \mathbb{R}^d} J(\bm{w})
 			$$
@@ -731,7 +731,7 @@ As of today ML is the workhorse of data science.
 		
 		Fitting a decision tree implies learning from the data the structure of the tree itself, including the selection of the input variable for each splitting recursion, as well as the optimal splitting threshold. Moreover, the value of the prediction for each region must also be defined.
 		
-		Let's take into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$. Even when the number of nodes is fixed, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
+		Let us take into account the usual setting: $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n = (X, \bm{y})$. Even when the number of nodes is fixed, defining at the same time: which variables to split, their splitting threshold and the predictive value is computationally unfeasible as it has a combinatorially large number of possible solutions. Therefore, starting from the root note, \ie the whole input space, and fixing a maximum tree depth, we resort to a greedy approximation.
 		
 		Let the data at the node $m$ be denoted by $Q_m$, then for each candidate split $\theta=(j, s_m)$, consisting of the $j^{\text{th}}$ feature and the threshold $s_m$, we define two half-planes as follows.
 		$$
@@ -817,7 +817,7 @@ As of today ML is the workhorse of data science.
 	    RF naturally handles numerical, ordinal and categorical variables, multiple scales and non-linearities. They also require little parameter tuning. This makes them popular for the analysis of diverse types of biological data, such as gene expression, Genome-wide Association Studies (\ac{GWAS}) data or mass spectrometry~\cite{qi2012random}.
 		In practice, feature selection schemes that rely on RF may to be unstable~\cite{kursa2014robustness}, therefore feature selection stability measures must be adopted to avoid drawing inconsistent conclusions.
 		
-		Let's see what happens when RF are applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is identical to the one previously applied for ridge and Lasso regression (see Section~\ref{sec:ridge_regression} and~\ref{sec:the_lasso}), where the only parameter optimized via grid-search cross-validation is the maximum number of features each tree can grow on (and in this case it is chosen as $4$). The number of trees in the ensemble is fixed to $500$. The RF model on the test set achieves $\text{MAE} = 6.321$ and Explained Variance $\text{EV} = 88.17\%$.
+		Let us see what happens when RF are applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is identical to the one previously applied for ridge and Lasso regression (see Section~\ref{sec:ridge_regression} and~\ref{sec:the_lasso}), where the only parameter optimized via grid-search cross-validation is the maximum number of features each tree can grow on (and in this case it is chosen as $4$). The number of trees in the ensemble is fixed to $500$. The RF model on the test set achieves $\text{MAE} = 6.321$ and Explained Variance $\text{EV} = 88.17\%$.
 		Figure~\ref{fig:rf_feature_importance} shows the feature importance measure estimated by this model.
 		
 		\begin{figure}[]
@@ -858,7 +858,7 @@ As of today ML is the workhorse of data science.
 
 	    In a recent paper~\cite{lusa2015boosting}, the authors show that in high-dimensional balanced binary classification problems, if the base learner is likely to overfit the training data, the use of \textit{Stochastic GB}~\cite{friedman2002stochastic} is preferable. The latter is a modified version of the original method, where each base learner is fitted on a random extraction without resubmission of a fraction $\eta$ of the training data, where $\eta$ is another regularization parameter to choose.
 	    
-	    Let's see what happens when GB is used to tackle the aging problem (see Section~\ref{sec:ols}).
+	    Let us see what happens when GB is used to tackle the aging problem (see Section~\ref{sec:ols}).
 	    The experimental setup is identical to the one previously applied for Elastic-Net regression (see Section~\ref{sec:elastic_net}), where the two parameters optimized via grid-search cross-validation are the maximum depth of the trees (in a range from $3$ to $20$) and the number of boosting iterations (with a maximum value of $500$).
 	    The selected tree depth is $8$ and the number of boosting iterations is $31$.
 		The GB model on the test set achieves $\text{MAE} = 7.955$ and Explained Variance $\text{EV} = 84.88\%$.
@@ -958,7 +958,7 @@ As of today ML is the workhorse of data science.
 		CNN are a different class of DL methods that exploit convolutional masks with weights estimated from the data to learn a suitable feature representation. This class of methods is largely applied to computer vision and image recognition problems.
 		Describing CNN architectures is beyond the scope of this thesis, as they are not mentioned in the Part II. A thorough description of CNN can be found here~\cite{chollet2018deep, goodfellow2016deep}.
 
-		Let's see what happens when a relatively simple MLP is applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is the same used for RF in Section~\ref{sec:random_forests}, where the only parameter optimized via grid-search cross-validation is the weight decay constant.
+		Let us see what happens when a relatively simple MLP is applied to the aging problem (see Section~\ref{sec:ols}). The experimental setup is the same used for RF in Section~\ref{sec:random_forests}, where the only parameter optimized via grid-search cross-validation is the weight decay constant.
 		The resulting MLP has $1$ hidden layer with $1024$ units, ReLu activation and constant weight decay $0.001$.
 		Such MLP is trained with early stopping and, after $329$ iterations reaches $\text{MAE} = 9.14$ explaining the $78.84\%$ of the variance of the test set.
 		The relatively worse performance of this method, compared, for instance, to RF, may be due to the fact that this dataset has a reduced number of samples. It is known that training DL models from scratch, in order to reach optimal solutions, it is necessary to have more training samples than conventional (shallow) learning machines.
@@ -1026,7 +1026,7 @@ As of today ML is the workhorse of data science.
 	Variable selection stability is widely studied in literature and different strategies to achieve stable variable selection were proposed in literature~\cite{kuncheva2007stability, de2009elastic, hofner2015controlling, nogueira2016measuring}.
 	
 	In particular, in~\cite{meinshausen2010stability} the authors propose the so-called \textit{stability selection} framework.
-	For a given variable selection strategy (let's think about the Lasso, for simplicity) this can be seen as an extension of standard regularization paths (see Section~\ref{subsec:regularization_methods}). For increasing values of the free parameter of the chosen variable selection strategy (\eg the regularization parameter $\lambda$), a \textit{selection probability} is estimated for each variable. Such probability is estimated by evaluating the variable selection algorithm on several random extractions of a portion of the training set. This produces the so-called \textit{stability path}.
+	For a given variable selection strategy (let us think about the Lasso, for simplicity) this can be seen as an extension of standard regularization paths (see Section~\ref{subsec:regularization_methods}). For increasing values of the free parameter of the chosen variable selection strategy (\eg the regularization parameter $\lambda$), a \textit{selection probability} is estimated for each variable. Such probability is estimated by evaluating the variable selection algorithm on several random extractions of a portion of the training set. This produces the so-called \textit{stability path}.
 	A stable list of selected variables can therefore be obtained by including the variables that, for a given value of the free parameter, are selected with high probability.
 	As shown in the original paper, this framework is not heavily influenced by the values of free parameter and probability threshold. However, they can be chosen by validation on an external validation set, which is fundamental in order to avoid selection bias~\cite{ambroise2002selection}. Similar strategies are also explored in~\cite{de2009regularized, barbieri16palladio}
 	
@@ -1036,7 +1036,7 @@ As of today ML is the workhorse of data science.
   Actually, in order to understand concepts, human beings need way less supervision than modern learning algorithms.
   In some circumstances it may be even the case that little/no supervision at all is needed to accomplish a task.
 
-  For instance, let's say that a kid growing with a Brittany dog at home visit some friend having a Bernese Mountain Dog.
+  For instance, let us say that a kid growing with a Brittany dog at home visit some friend having a Bernese Mountain Dog.
   The kid, so far, has only being taught what his dog looks like and these two dog breeds definitely look different one another.
   Nevertheless, the kid will certainly be able to understand that both of them are animals and, in particular, dogs.
   Who taught the kid the appearance of every possible dog breed?
@@ -1076,7 +1076,7 @@ As of today ML is the workhorse of data science.
     J(\bm{\mu}) = \sum_{i=1}^n\sum_{k=1}^K r_k(\bm{x}_i) \norm{\bm{x}_i- \bm{\mu}_k}_2^2
     \end{equation}
     Our goal is to find the centroids $\bm{\mu}_k$ for $k=1,\dots,K$ that minimize $J(\bm{\mu})$.
-    We can argue that, given the best centroids, the samples can be simply associated to the cluster with the nearest centroid. So, let's focus on the problem of finding $\bm{\mu}_k$.
+    We can argue that, given the best centroids, the samples can be simply associated to the cluster with the nearest centroid. So, let us focus on the problem of finding $\bm{\mu}_k$.
     Fixing $r_k(\bm{x})$ for all $k$, the objective function in Equation~\eqref{eq:kmeans} is quadratic in $\bm{\mu}$, thus the minimization problem can be easily solved setting its derivative to zero, see Equation~\eqref{eq:kmeans_solved}.
     \begin{equation} \label{eq:kmeans_solved}
 	2\sum_{i=1}^n r_k(\bm{x}_i)(\bm{x}_i - \bm{\mu}_k) = 0 \Rightarrow \bm{\mu}_k = \frac{\sum_{i=1}^n r_k(\bm{x}_i)\bm{x}_i}{\sum_{i=1}^nr_k(\bm{x}_i)}
@@ -1120,7 +1120,7 @@ As of today ML is the workhorse of data science.
 	For instance, in the so-called $\varepsilon$-neighborhood graph, the vertexes corresponding to $\bm{x}_i$ and $\bm{x}_j$ are connected if $s(\bm{x}_i, \bm{x}_j) > \varepsilon$, for a given $\varepsilon$.
 	Our hope is then to achieve a graph structure where the edges between points of the same group is high and it is low between points belonging to different groups.
 
-	Therefore, let's consider a set of points $\mathcal{D}=\{\bm{x}_i\}_{i=1}^n$, the steps of the unnormalized spectral algorithm are summarized as follows\footnote{ Normalized version this algorithm is identical but the formulation of $L$ which is substituted by the normalized graph Laplacian~\cite{von2007tutorial}.}.
+	Therefore, let us consider a set of points $\mathcal{D}=\{\bm{x}_i\}_{i=1}^n$, the steps of the unnormalized spectral algorithm are summarized as follows\footnote{ Normalized version this algorithm is identical but the formulation of $L$ which is substituted by the normalized graph Laplacian~\cite{von2007tutorial}.}.
 	\begin{algorithm}[h!]
 	\begin{algorithmic}[1]
 		\State fix a symmetric and non-negative similarity function $s(\bm{x}_i, \bm{x}_j)$ and compute the similarity matrix $S=
@@ -1230,7 +1230,7 @@ As of today ML is the workhorse of data science.
   These free parameters must be specified before the actual learning step and, in ML literature, they are usually referred to as \textit{hyperparameters}\footnote{ This term is inherited from the filed of statistics, where an hyperparameter is a parameter of a prior distribution probability. This sometimes generates confusion and possible misunderstanding in technical literature.}.
   As opposed to the model parameters, which are learned from data, hyperparameters are tuning knobs that must be user-defined.
   
-  In order to better understand this difference, let's see a practical example: a regularized least square approach (such as Ridge or Lasso).
+  In order to better understand this difference, let us see a practical example: a regularized least square approach (such as Ridge or Lasso).
   In this case, the weights of the input variables $w_j$ (for $j=1,\dots,d$) are learned from training data and they are the model \textit{parameters}; whereas the regularization parameter $\lambda$ is the only hyperparameter of the model.
   This simple example has only one hyperparameter, but more complicated models, such as gradient boosting or deep architectures (see Section~\ref{sec:deep_learning} and~\ref{sec:gradient_boosting}), present way more hyperparameters to tune (\eg depth and size of the tree, learning rate, number of layers, \etc).
   

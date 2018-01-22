@@ -169,7 +169,7 @@ Mean shift~\cite{comaniciu2002mean} and DBSCAN~\cite{ester1996density} offer an 
 For hierarchical and spectral clustering (see Sections~\ref{sec:hierarchical_clustering} and~\ref{sec:spectral_clustering}), no automatic discovery of clustering parameters is offered. However, graphical aids are generated to evaluate clustering performance such as dendrogram tree and a plot of the eigenvalues of the Laplacian of the affinity matrix\footnote{ See the \textit{eigengap heuristics}~\cite{von2007tutorial}.}, respectively.
 % \todo{@fede DBSCAN}
 
-In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc NumPy} and {\sc SciPy} and it comes \textit{for free}. So, let's focus on multiprocessing.
+In order to speed-up EDA on large-scale datasets, \ade exploits two main parallel computing paradigms: multiprocessing and multithreading. The latter is provided by the use of optimized linear algebra libraries of {\sc NumPy} and {\sc SciPy} and it comes \textit{for free}. So, let us focus on multiprocessing.
 This simply consists in dividing the workload among different tasks which can possibly run on different nodes of an HPC infrastructure.
 The input of each \ade pipeline is the raw dataset to which successive transformations and algorithms are applied. Therefore, each pipeline is independent and this makes \ade suitable for the application of simple distributed computing schemes.
 \ade offers different job distribution strategies.
