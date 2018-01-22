@@ -6,8 +6,8 @@
 	\textit{This chapter defines the concept of machine learning in its two major declinations: supervised and unsupervised. It continues providing a comprehensive overview  of algorithms, models and techniques relevant for the biomedical data science applications described in Part II. At the end of this chapter, an overview on the computational requirements and the most recent machine learning technologies is given.}
 \end{displayquote}
 
-The term \textit{Machine Learning} (ML) first appeared in the late 50's in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
-With a simple search on Google Trends\footnote{Source \url{https://trends.google.com}.} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward both the terms \textit{machine learning} and \textit{data science} is growing, with the first consistently superior to the second.
+The term \textit{Machine Learning} (ML) first appeared in the late '50s in the field of computer science and it is now becoming a buzzword used in several contexts spanning from particle physics and astronomy to medicine and social sciences~\cite{service2017ai}.
+With a simple search on Google Trends\footnote{ Source: \url{https://trends.google.com} (last visit 2017-09).} it is possible to roughly quantify the pervasiveness of this term on the Internet in the last few years. From Figure~\ref{fig:google_trend_ML} we can see that the interest toward both the terms \textit{machine learning} and \textit{data science} is growing, with the first consistently superior to the second.
 
 \begin{figure}[h!]
   \centering
@@ -31,7 +31,7 @@ A unique answer to this question is not easy to provide. In fact, ML can be defi
   "$[\dots]$ \emph{a set of methods that can automatically detect patterns in data, and then use the uncovered patterns to predict future data, or to perform other kinds of decision making under uncertainty} $[\dots]$"
   \end{displayquote}
 
-  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{ Part of Data Science @ Stanford Seminar series (source: \url{https://goo.gl/UFgqxU}).}, held in October 2015 at the Stanford University, gave the following three definitions.
+  \item Trevor Hastie, a well-known applied statistician, in a famous seminar\footnote{ Part of Data Science @ Stanford Seminar series. Source: \url{https://goo.gl/UFgqxU} (last visit 2018-01).}, held in October 2015 at the Stanford University, gave the following three definitions.
 
   \begin{displayquote}
     \begin{itemize}
@@ -186,9 +186,9 @@ As of today ML is the workhorse of data science.
 			With the regularization parameter $\lambda$ it is possible to control the trade-off between adherence to the training data and strength of the effect induced by $\mathcal{R}(f)$.
 			As an example, we can think of using a penalty that induces smoothness, such as the $\ell_2$-norm, or sparsity, such as the $\ell_1$-norm, in the solution.
 			A pictorial representation of a learning machine working in overfitting, underfitting and optimal fitting regime in regression and classification cases can be seen in
-			Figure~\ref{fig:regression_fit}~\footnote{ Source \url{https://losc.ligo.org/events/GW150914/}.}
+			Figure~\ref{fig:regression_fit}~\footnote{ Source \url{https://losc.ligo.org/events/GW150914/} (last visit 2018-01).}
 			and
-		  Figure~\ref{fig:classification_fit}~\footnote{ Source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2}.}, respectively.
+		  Figure~\ref{fig:classification_fit}~\footnote{ Source \url{https://archive.ics.uci.edu/ml/datasets/HTRU2} (last visit 2018-01).}, respectively.
 
 
 	%    The regularization penalty $R(f)$ imposes stability on the expected function exploiting the available prior knowledge on the problem~\cite{tikhonov1963solution}. More details on $R(f)$ will be given in the next section.
@@ -1054,7 +1054,7 @@ As of today ML is the workhorse of data science.
     \subsection{Cluster analysis} \label{sec:clustering}
     \textit{Cluster analysis}, \aka \textit{data segmentation} or \textit{clustering}, is the class of unsupervised learning algorithm which aim at grouping together similar objects, by some definition of \textit{similarity}.
         
-    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures, such as gene expression, blood exams, and so on. This section presents an overview on the most popular clustering algorithms\footnote{ A good reference for the clustering algorithms proposed in literature is \textit{Section 2.3. - Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering}.}.
+    This task is fairly common in biomedical studies, where cluster analysis can be used, for instance, to perform patients stratification or to find groups of correlated biological measures, such as gene expression, blood exams, and so on. This section presents an overview on the most popular clustering algorithms\footnote{ A good reference for the clustering algorithms proposed in literature is \textit{Section 2.3. - Clustering} of the \sklearn documentation \url{http://scikit-learn.org/stable/modules/clustering} (last visit 2018-01).}.
 
     \subsubsection{The $k$-means algorithm} \label{sec:k-means}
     $k$-means is the most intuitive strategy for cluster analysis.
@@ -1273,7 +1273,7 @@ As of today ML is the workhorse of data science.
   \subsection{Model selection strategies} \label{sec:model_selection}
   As anticipated at the beginning of this section, hyperparameters tuning is still considered, by the majority of the ML practitioners, more an \textit{art} than a science.
   
-  Nevertheless, different statistically sound techniques to perform hyperparameters optimization were presented over the years . At the time of writing, model selection is a hot-topic in ML research. It often happens that several ML solutions adopted to tackle data science competitions\footnote{ Such as the ones hosted on the Kaggle website: \url{www.kaggle.com}.} are based on the same model. What really makes the difference, and defines the most competitive prediction strategy, is to adopt an efficient and effective model selection strategy.
+  Nevertheless, different statistically sound techniques to perform hyperparameters optimization were presented over the years . At the time of writing, model selection is a hot-topic in ML research. It often happens that several ML solutions adopted to tackle data science competitions\footnote{ Such as the ones hosted on the Kaggle website: \url{https://www.kaggle.com} (last visit 2018-01).} are based on the same model. What really makes the difference, and defines the most competitive prediction strategy, is to adopt an efficient and effective model selection strategy.
   
   The model selection procedure applied in the data science challenges described in this thesis are carried out by one of the strategies described below.
   
@@ -1467,7 +1467,7 @@ Another key aspect that characterize ML applications is the high number of indep
 In large-scale ML research, this computationally heavy workload can be distributed on the computing nodes of HPC architectures.
 A popular library in ML that exploit this parallel programming paradigm is Dask, a dynamic task scheduling manager developed for large-scale data intensive applications (see Chapter~\ref{chap:adenine}).
 
-All the data science challenge described in the second part of this PhD thesis are tackled with Python-based software solutions. In particular, the numerical computations are carried out by {\sc NumPy}\footnote{ Source: \url{http://www.numpy.org}.} and {\sc SciPy}\footnote{ Source \url{https://www.scipy.org}.}, while the data management is left to {\sc pandas}\footnote{ Source \url{https://pandas.pydata.org}.}. Moreover, for the vast majority of standard ML models (such as generalized linear models or ensemble learning strategies) I took advantage of \sklearn~\cite{scikit-learn}\footnote{ Source \url{http://scikit-learn.org}.}, which is one of the most popular ML libraries available online.
+All the data science challenge described in the second part of this PhD thesis are tackled with Python-based software solutions. In particular, the numerical computations are carried out by {\sc NumPy}\footnote{ Source: \url{http://www.numpy.org} (last visit 2018-01).} and {\sc SciPy}\footnote{ Source \url{https://www.scipy.org} (last visit 2018-01).}, while the data management is left to {\sc pandas}\footnote{ Source \url{https://pandas.pydata.org} (last visit 2018-01).}. Moreover, for the vast majority of standard ML models (such as generalized linear models or ensemble learning strategies) I took advantage of \sklearn~\cite{scikit-learn}\footnote{ Source \url{http://scikit-learn.org} (last visit 2018-01).}, which is one of the most popular ML libraries available online.
 I also relied on custom solutions, such as {\sc L1L2Py}\footnote{ Soruce: \url{https://github.com/slipguru/l1l2py}} and {\sc minimal}\footnote{ Source \url{https://github.com/samuelefiorini/minimal}}, for ML models that are not available via \sklearn API.
 
-Every figure and every experimental result obtained in this thesis can be easily reproduced by using the Python scripts and {\sc jupyter}  notebooks\footnote{ Source: \url{http://jupyter.org}.} available on a dedicated GitHub repository: \url{https://github.com/samuelefiorini/phdthesis}, which also keeps track of the~\LaTeX~source code of the thesis.
+%Every figure and every experimental result obtained in this thesis can be easily reproduced by using the Python scripts and {\sc jupyter}  notebooks\footnote{ Source: \url{http://jupyter.org} (last visit 2018-01).} available on a dedicated GitHub repository: \url{https://github.com/samuelefiorini/phdthesis}, which also keeps track of the~\LaTeX~source code of the thesis.

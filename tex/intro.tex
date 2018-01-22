@@ -1,13 +1,41 @@
 % !TEX root = ./main.tex
 
-\chapter{Introduction} \label{chapter:introduction}
 % \addcontentsline{toc}{chapter}{\nameref{chapter:introduction}}
 % cercare soluzione tramite metodi statistici di problemi complessi biomedicali con particolare attenzione ai time-evolving data
 % qui no soluzioni ma problemi: domande + esempi
+%Value and influence of data in everyday life are becoming paramount. Every action we make, every decision we take or every message we receive generates da
+%This is where artificial intelligence
+%Understanding the underlying mechanisms of biological systems can be a challenging task. Different domains are involved and their interactions can be unknown.
+%Most of the current life science research aims at extracting meaningful information from heterogeneous sources of biological data, that is continuously increasing in size, thanks to the remarkable technological progresses of the last decades.
 
-\todo{paginetta here}
+%\todo{paginetta here}
+\chapter{Introduction} \label{chapter:introduction}
 
-This thesis is divided in two parts. Part I presents a thorough description of the multi-disciplinary prerequisites that are relevant for the comprehension of Part II, which describes the original contributions of my work.
+
+The influence of data pervades our everyday lives. We are literally surrounded by data acquisition and processing devices that continuously interact with us.
+The watches at our wrists, the phones in our pockets, the house where we live and even the cars we drive, everything is equipped with devices that can automatically collect and process information in order to make data-driven suggestions affecting our daily routines.
+This is so pervasive as it often leads to effective, efficient and actionable solutions to real-world problems.
+
+It sounds remarkable already, but there is more. Data collection and processing are not only influencing our daily actions, but also every recent discovery in almost every scientific domains, such as computer science, physics, chemistry, biomedicine and so on.
+%that is always supported by data and thorough statistical analysis.
+%This applies 
+
+In these fields, data are so valuable, that it is rather common to achieve different discoveries from the same data collection. This lead to the development of a new paradigm that can be expressed by the motto: \textit{collect first, ask questions later}.
+
+However, this comes at a price. 
+Managing and maintaining infrastructure for data-intensive applications is expensive in terms of economical and human resources employed. In the last few years, the amount of generated data rapidly became overwhelming and it superseded human analysis and insights potential.
+
+
+Biomedical data are prototypical in this sense. In this field, almost every diagnosis is currently supported by quantitative observations.
+When a clinician is asked to analyze the medical records of a patient, he/she needs to deal with a large number of highly heterogeneous measures that can be hard to understand as they can be missing or incomplete and their interaction can be circumstantial or unknown.
+
+In these circumstances, classical model, that are only driven by prior knowledge of the problem, fall short as they may not explain some relevant part of the phenomenon under investigation.
+
+Nowadays, biomedical data are often analyzed with data-driven models. These models are designed to automatically infer structure and relationships hidden in the data and to use them to predict some target measure. For instance, models of this class can be used to assign a patient to a given class (\eg case/control, or the presence of some phenotype) given a number of blood or genetic measures, or they can predict some future disease-related event from historical medical records.
+
+In this thesis, we will see an overview of the data-driven solutions most commonly adopted to solve biomedical challenges. Theoretical notions with practical examples and real case studies will be presented. Great effort will be devoted toward the presentation of statistics and engineering concepts in a unified fashion. The description of each method will balance the trade-off between providing an intuitive grasp of its behavior and its mathematical foundation, presented in a more rigorous way.
+
+This thesis is divided in two parts. Part I presents a thorough description of the multi-disciplinary prerequisites that are relevant for the comprehension of Part II, which describes the original contributions of the work.
 
 Part I is organized as follows: Chapter~\ref{chap:background} introduces the concept of \textit{data science} and its declination toward life science and biomedical studies. In this chapter, the major challenges of the field are presented along with several examples of the most common clinical/biological questions and their translation to data analysis tasks (Section~\ref{sec:clinical_to_data}).
 
@@ -30,6 +58,8 @@ Chapter~\ref{chap:diabete} describes a work held in collaboration with \textit{O
 The material covered in this chapter was recently presented at an international IEEE conference, thus it is available as proceeding paper~\cite{fiorini2017data}.
 
 My conclusions are finally drawn in Chapter~\ref{chap:conclusions}.
+
+Every figure and every experimental result obtained in this thesis can be easily reproduced by using the Python scripts and {\sc jupyter}  notebooks\footnote{ Source: \url{http://jupyter.org} (last visit 2018-01).} available on a dedicated GitHub repository: \url{https://github.com/samuelefiorini/phdthesis}, which also keeps track of the~\LaTeX~source code of the thesis.
 
 \chapter{Basic notation and definitions} \label{sec:notation}
 %% the number of variables
