@@ -48,19 +48,19 @@ When CGM is employed online, an improvement of the therapy can be achieved by em
 %In many clinical situations
 
 
-To model patient-specific Glood Glucose (BG) levels, several approaches integrating various information were proposed~\cite{bunescu2013blood, zecchin2011new}. However, the problem of glycemic level prediction is still challenging, due to the high CGM signal variability among patients and acquisition devices.
+To model patient-specific Blood Glucose (BG) levels, several approaches, integrating various information, were proposed~\cite{bunescu2013blood, zecchin2011new}. However, the problem of glycemic level prediction is still challenging, due to the high CGM signal variability among patients and acquisition devices.
 
-This chapter describes the third, and last, biomedical data science challenge of the Thesis. We will assume that CGM signals have structural information on time-changes of BG concentration \cite{sparacino2007glucose, bunescu2013blood} and we perform glycemic level forecasting exploring the performance of a set of purely data-driven techniques for time-series analysis.
+This chapter describes the third, and last, biomedical data science challenge of the thesis. Throughout this chapter we assume that CGM signals have structural information on time-changes of BG concentration \cite{sparacino2007glucose, bunescu2013blood} and we perform glycemic level forecasting exploring the performance of a set of purely data-driven techniques for time-series analysis.
 
 Data-driven forecasting approaches, as opposed to models driven by an \textit{a-priori} description of the underlying phenomena, are capable of modeling input/output relationships without requiring prior knowledge on the field of use. This family of approaches can be successfully employed to obtain reliable predictions without modeling complex, and possibly not completely understood, environments. Data-driven forecasting models are widely applied in  real-world scenarios often employing a moving-window paradigm, \ie the system keeps track of the last $w$ acquisitions using them to forecast future values.
 
 In this chapter, we focus on two main groups of data-driven methods for online time-series forecasting: \textit{recursive filters} and, of course, ML models.
 The first group includes linear stationary models, such as Autoregressive Moving Average (\ac{ARMA}), non stationary models, such as Autoregressive Integrated Moving Average (\ac{ARIMA}) and adaptive filtering techniques, such as the Kalman Filter (\ac{KF}). These methods are well-established and extensively used, but they require recursive parameters adjustment for every new collected sample \cite{box2015time}.
-A quick overview of these methods is provided in Section~\ref{sec:recursive_filters}. 
+As these methods are note covered in Chapter~\ref{chap:state-of-the-art}, a quick overview is provided in Section~\ref{sec:recursive_filters}. 
 
 The second group comprises regularized kernel methods, such as Kernel Ridge Regression (\ac{KRR}) (see Sections~\ref{sec:ridge_regression} and~\ref{sec:kernel_trick}) and deep learning methods, such as Long Short-Term Memory networks (\ac{LSTM}), see Section~\ref{sec:lstm}.
 
-As we have seen in the previous chapters, ML methods showed very promising results in several applications, including time-series forecasting \cite{bunescu2013blood, schmidhuber2005evolino}. To achieve a predictive model, they need to \textit{learn} the model parameters from a training set. This learning process is done \textit{only once} and it conveys a model that does not require further parameter adjustments to predict future values. This remarkable advantage makes machine learning models more suitable to be delivered on embedded portable systems.
+As we have seen in the previous chapters, ML methods showed very promising results in several applications, also including time-series forecasting \cite{bunescu2013blood, schmidhuber2005evolino}. To achieve a predictive model, they need to learn the model parameters from a training set. This learning process is done \textit{only once} and it conveys a model that does not require further parameter adjustments to predict future values. This remarkable advantage makes machine learning models more suitable to be delivered on embedded portable systems.
 
 This chapter aims at understanding whether purely data-driven machine learning methods can be successfully employed to forecast glucose values of diabetic patients.  
 
@@ -81,7 +81,7 @@ In this work we fixed a common strategy for hyperparameters optimization whilst 
 
 \section{Recursive filters overview} \label{sec:recursive_filters}
 Recursive filters are the most widely adopted class of temporal forecasting strategies.
-In this chapter we make CGM temporal prediction by exploiting two different recursive filters approaches: ARIMA and KF. Providing a comprehensive overview of temporal forecasting strategies is beyond the scope of this Thesis, therefore Chapter~\ref{chap:state-of-the-art} does not cover this topic. This section sketches the main ideas behind this two strategies, providing the information that are necessary to understand this last biomedical data science challenge.
+In this chapter we make CGM temporal prediction by exploiting two different recursive filters approaches: ARIMA and KF. Providing a comprehensive overview of temporal forecasting strategies is beyond the scope of this thesis, therefore Chapter~\ref{chap:state-of-the-art} does not cover this topic. This section sketches the main ideas behind this two strategies, providing the information that are necessary to understand this last biomedical data science challenge.
 
 \subsection{Autoregressive Integrated Moving Average}
 ARIMA methods can be used to perform linear forecasting of non stationary time-series assuming that its $d$-th difference is a stationary ARMA process  \cite{box2015time}. The output of an ARMA process, with white input noise $u(t)\sim\mathcal{N}(0,\sigma^2)$, can be expressed as in Equation~\eqref{eq:arma}.
@@ -91,7 +91,7 @@ y(t) = -\sum_{k=1}^pa_ky(t-k)+\sum_{k=0}^qb_ku(t-k)
 The output of an ARMA$(p, q)$ model can be seen as the sum of $p$ autoregressive and $q$ moving average terms. This strategy requires the modeled processes to be stationary. On the other hand, when a time-series can be considered stationary after $d$ differentiations, ARIMA$(p, d, q)$ models can be used. 
 This is the case for non stationary time-series that exhibit local stationary behavior. In general,  $(p, d, q)$ are unknown and we will consider them as hyperparameters of the ARIMA model.
 
-The CV index (see Section~\ref{sec:diabete_expdesign}) for ARIMA models can defined as $J(\bm{\theta})= \text{AIC}(\mathcal{M}_{\mathcal{S}}(\bm{\theta})) + \bar{\varepsilon}_{\text{cv}}$, where AIC stands for Akaike Information Criterion~ \cite{box2015time} and $\bar{\varepsilon}_{\text{cv}}$ is the MSE evaluated via CV, see Section~\ref{sec:performance_metrics}. We refer to~\cite{box2015time} for a detailed description of ARIMA model fitting.
+The cross-validation index (see Section~\ref{sec:diabete_expdesign}) for ARIMA models can be defined as $J(\bm{\theta})= \text{AIC}(\mathcal{M}_{\mathcal{S}}(\bm{\theta})) + \bar{\varepsilon}_{\text{cv}}$, where AIC stands for Akaike Information Criterion~ \cite{box2015time} and $\bar{\varepsilon}_{\text{cv}}$ is the MSE evaluated via cross-validation, see Section~\ref{sec:performance_metrics}. We refer to~\cite{box2015time} for a detailed description of ARIMA model fitting.
 
 The application of this class of models to predict CGM sensor data was also explored in \cite{sparacino2007glucose,bunescu2013blood}.
 
@@ -140,7 +140,7 @@ Q=
 \end{equation}
 and the measurement noise covariance is $R = \sigma^2$, as in \cite{facchinetti2010online}. Both $\lambda^2$ and $\sigma^2$ are unknown and we will consider them as hyperparameters of the KF forecasting strategy.
 
-In this case, the CV index (see Section~\ref{sec:diabete_expdesign}) can be defined as $J(\bm{\theta})= \bar{\varepsilon}_{\text{cv}}$.
+In this case, the cross-validation index (see Section~\ref{sec:diabete_expdesign}) can be defined as $J(\bm{\theta})= \bar{\varepsilon}_{\text{cv}}$.
 
 The application of KF to predict CGM sensor data was also explored in \cite{facchinetti2010online, knobbe2005extended}.
 
@@ -157,10 +157,13 @@ On average, glycemic variability is relatively high, with $170.7\pm 70.0$ mg/dL 
 %For analysis purposes, patients having CGM acquisitions shorter than 3.5 days or presenting heavy artifacts were discarded.
 %\subsection{Data Exploration}
 
-\begin{figure}
-	\caption{An example of two glycemic profiles obtained from T1D and T2D patients. The glucose target range is set between $70$ mg/dL and $140$ mg/dL (dashed lines). The yellow area at the left hand side of the plot is the initial {\em burn-in} interval used for model {\em personalization}.}\label{fig:cgm}
+\begin{figure}[]
+	\caption{Plots reporting the distributions of LBGI (left) and HBGI (right) for T1D and T2D. Green areas at the bottom of each plot represents low risk of hypo/hyperglycemia events.
+		%  LBGI values below 2.5 indicate a low risk of hypoglycemia, while values above 5 correspond to an 
+		%  Normal range for LBGI is $2.5-5$ and for HBGI is $10-15$.
+	}\label{fig:plots}
 	\centering
-	\includegraphics[width=0.8\textwidth]{part2/cgm_values.png}
+	\includegraphics[width=0.8\textwidth]{part2/boxes.png}
 \end{figure}
 
 \section{CGM exploratory data analysis}
@@ -171,25 +174,23 @@ To estimate LBGI and HBGI from CGM data we followed~\cite{kovatchev1997symmetriz
 Figure \ref{fig:plots} shows the LBGI and HBGI distributions for T1D and T2D. The green areas at the bottom of each boxplot represents the low risk area for hypo/hyperglycaemia, as reported in literature~\cite{kovatchev1997symmetrization}.
 As expected, the fraction of T1D patients experiencing risks of hyperglycaemia episodes is higher than T2D patients.
 
-\begin{figure}[]
-	\caption{Plots reporting the distributions of LBGI (left) and HBGI (right) for T1D and T2D. Green areas at the bottom of each plot represents low risk of hypo/hyperglycemia events.
-		%  LBGI values below 2.5 indicate a low risk of hypoglycemia, while values above 5 correspond to an 
-		%  Normal range for LBGI is $2.5-5$ and for HBGI is $10-15$.
-	}\label{fig:plots}
+
+\begin{figure}
+	\caption{An example of two glycemic profiles obtained from T1D and T2D patients. The glucose target range is set between $70$ mg/dL and $140$ mg/dL (dashed lines). The yellow area at the left hand side of the plot is the initial {\em burn-in} interval used for model {\em personalization}.}\label{fig:cgm}
 	\centering
-	\includegraphics[width=0.8\textwidth]{part2/boxes.png}
+	\includegraphics[width=0.8\textwidth]{part2/cgm_values.png}
 \end{figure}
 
 \section{Experimental design} \label{sec:diabete_expdesign}
 
-Let's focus on the hyperparameters optimization strategy.
-Given $y(t)$ for time points $t=1,\dots,T$, we split the time-series in two chunks: an initial {\em burn-in} of $T' = 300$ CGM observations and the {\em experiment set} made of the subsequent $T - T'$ samples (see Figure~\ref{fig:cgm}). For each model $\mathcal{M}_\mathcal{S}(\bm{\theta})$, and for each subject, we use the burn-in samples to optimize the hyperparameters $\bm{\theta}$ via grid-search cross-validation. In other words, the best hyperparameters $\bm{\theta}^*$  are chosen in order to minimize an index $J(\bm{\theta})$ estimated on cross-validation (CV) splits and defined differently according to the model. %, hence $\bm{\theta}^* = \argmin{\bm{\theta}} J(\bm{\theta})$.
+We shall now focus on the hyperparameters optimization strategy.
+Given $y(t)$ for time points $t=1,\dots,T$, we split the time-series in two chunks: an initial {\em burn-in} of $T' = 300$ CGM observations and the {\em experiment set} made of the subsequent $T - T'$ samples (see Figure~\ref{fig:cgm}). For each model $\mathcal{M}_\mathcal{S}(\bm{\theta})$, and for each subject, we use the burn-in samples to optimize the hyperparameters $\bm{\theta}$ via grid-search cross-validation. In other words, the best hyperparameters $\bm{\theta}^*$  are chosen as the ones that minimize an index $J(\bm{\theta})$ estimated on cross-validation splits and defined differently according to the model, as anticipated in the previous sections. %, hence $\bm{\theta}^* = \argmin{\bm{\theta}} J(\bm{\theta})$.
 
-In the context of time-series, the CV training split consists only of observations occurred before the corresponding validation samples; such CV flavor is sometimes referred to as {\em rolling forecasting origin}~\cite{tashman2000out}. The grid-search CV scheme promotes the identification of models capable of returning robust predictions. %, where the negative influence of the variable SNR is reduced.
+In the context of time-series, the cross-validation training splits consist only of observations occurred before the corresponding validation samples; such cross-validation flavor is sometimes referred to as {\em rolling forecasting origin}~\cite{tashman2000out}. The grid-search cross-validation scheme promotes the identification of models capable of returning robust predictions. %, where the negative influence of the variable SNR is reduced.
 
 Once the best hyperparameters $\bm{\theta}^*$ are identified, the model $\mathcal{M}_\mathcal{S}(\bm{\theta}^*)$ is fitted on the whole burn-in and it is used to perform online forecasting on the data points of the experiment set (\ie for $t = T'+1, \dots, T)$.
 
-For each personalized model $\mathcal{M}_\mathcal{S}(\bm{\theta}^*)$ we calculate the accuracy for prediction horizons $\Delta T$ of $30, 60, \text{and}~90$ minutes. The performance is estimated by  RMSE and MAE, previously defined in Section~\ref{sec:performance_metrics}, that in the context of temporal forecasting, and assuming $n$ samples in the experiment set, can be rewritten as in Equation~\eqref{eq:forecasting_rmse} and~\eqref{eq:forecasting_mae}.
+For each personalized model $\mathcal{M}_\mathcal{S}(\bm{\theta}^*)$ we calculate the accuracy for prediction horizons $\Delta T$ of $30, 60, \text{and}~90$ minutes. The performance is estimated by  RMSE and MAE, defined in Section~\ref{sec:performance_metrics}, that in the context of temporal forecasting, and assuming $n$ samples in the experiment set, can be rewritten as in Equation~\eqref{eq:forecasting_rmse} and~\eqref{eq:forecasting_mae}.
 
 \begin{equation} \label{eq:forecasting_rmse}
 \text{RMSE} = \sqrt{\frac{\sum_t(y(t+\Delta T) - \hat{y}(t+\Delta T))^2}{n}}
@@ -237,7 +238,7 @@ Figure~\ref{fig:fit} displays an example of time-series forecast obtained with K
 
 \section{Conclusions and future works}
 
-This chapter presented the last biomedical data science challenge of the Thesis.
+This chapter presented the last biomedical data science challenge of the thesis.
 
 We compared the performance of two types of data-driven strategies for online CGM forecasting: recursive filters and ML models. We also illustrate a general procedure for model personalization based on cross-validation with hyperparameters optimization via grid-search.
 
@@ -247,7 +248,7 @@ Finally, we showed that reliable CGM predictions can be obtained with ML models 
 In the future, to improve the performance on long prediction horizon, we plan to investigate on sparse data representations with deeper architectures or regularized dictionary learning approaches.
 
 \begin{table}[b!]
-	\caption{Prediction errors $(\text{std})$ of the forecasting models for increasing prediction horizons overall and on the four groups. {\sl MP} = Microinfusion Pump, {\sl II} = Insulin Injection, {\sl RAI} = Rapid Acting Insulin, {\sl Other} = Other therapies. Bold numbers indicate best result.}
+	\caption{Prediction errors (standard deviation) of the forecasting models for increasing prediction horizons, overall and on the four groups. {\sl MP} = Microinfusion Pump, {\sl II} = Insulin Injection, {\sl RAI} = Rapid Acting Insulin, {\sl Other} = Other therapies. Bold numbers indicate best result.}
 	\label{tab:errors}
 		\begin{tabular}{lllllll}
 			& \multicolumn{6}{c}{ARIMA}                                              \\ \cline{2-7}

@@ -5,24 +5,27 @@
 % cercare soluzione tramite metodi statistici di problemi complessi biomedicali con particolare attenzione ai time-evolving data
 % qui no soluzioni ma problemi: domande + esempi
 Understanding the underlying mechanisms of biological systems can be a challenging task. Different domains are involved and their interactions can be unknown.
-Nowadays, most of the life science research aims at extracting meaningful information from heterogeneous sources of biological data, that, thanks to the remarkable technological progresses of the last decades, is continuously increasing in size.
+Most of the current life science research aims at extracting meaningful information from heterogeneous sources of biological data, that is continuously increasing in size, thanks to the remarkable technological progresses of the last decades.
 
-This PhD thesis is divided in two parts. Part I presents a thorough description of the multi-disciplinary prerequisites that are relevant for the comprehension of Part II, which, in turn, presents the original contributions of my work.
+This PhD thesis is divided in two parts. Part I presents a thorough description of the multi-disciplinary prerequisites that are relevant for the comprehension of Part II, which describes the original contributions of my work.
 
 Part I is organized as follows: Chapter~\ref{chap:background} introduces the concept of \textit{data science} and its declination toward life science and biomedical studies. In this chapter, the major challenges of the field are presented along with several examples of the most common clinical/biological questions and their translation to data analysis tasks (Section~\ref{sec:clinical_to_data}).
+
 Chapter~\ref{chap:state-of-the-art} summarizes basic notation and definitions adopted throughout the thesis (Section~\ref{sec:notation}) and presents an overview of the statistical and technological tools that are mostly relevant for this work. In particular, this chapter defines the concept of \textit{machine learning} from a general perspective and provides rigorous description of a selection of supervised and unsupervised learning strategies (Sections~\ref{subsec:supervised_learning} and~\ref{subsec:unsupervised_learning}).
 This chapter also defines the concept of variable/feature selection (Section~\ref{subsec:feature_selection}) and introduces the most relevant model selection and evaluation strategies (Section~\ref{subsec:model_selection}).
 At the end of this chapter, hints on the computational requirements and implementation strategies are presented (Section~\ref{sec:implementation}).
 
 %twofold: the development of an exploratory data analysis tool and
-Part II describes the main contributions of my PhD work which consisted in the process of devising data-driven strategies to tackle a number of biological data science challenges coming from real-world clinical environments. For each task, this second part shows how the previously introduced tools can be exploited in order to develop statistically sound models that are capable of providing insightful answers to different clinical questions.
+Part II describes the contribution of my PhD work which consisted in the process of devising data-driven strategies to tackle a number of biological data science challenges coming from real-world clinical environments. For each task, this part shows how the previously introduced tools can be exploited in order to develop statistically sound models that are capable of providing insightful answers to different clinical questions.
 
 Part II is organized as follows:
 Chapter~\ref{chap:adenine} introduces \ade, an open-source Python framework for large-scale data exploration that I developed during my PhD.
 The material covered in this chapter is also available as conference proceedings paper~\cite{fiorini2017adenine}.
-Chapter~\ref{chap:frassoni} describes the preliminary results of an ongoing work held in collaboration with \textit{Istituto Giannina Gaslini Children's Hospital} on age prediction from molecular biomarkers (paper in preparation).
-Chapter~\ref{chap:aism} describes a work held in collaboration with the \textit{Italian Multiple Sclerosis Foundation.} This work aims at devising a model to predict the evolution of multiple sclerosis patients exploiting the use of patient-friendly and inexpensive measures such as patient centered outcomes.
-Most of the material covered in this chapter also available as conference proceeding paper~\cite{fiorini2015machine}, and peer-reviewed journal articles~\cite{brichetto2015improving, fiorini2016temporal, brichetto2016predicting, pmlr-v68-fiorini17a, tacchino2017multiple}.
+Chapter~\ref{chap:frassoni} describes the preliminary results of an ongoing work held in collaboration with \textit{Istituto Giannina Gaslini Children's Hospital} (Genoa, IT) on age prediction from molecular biomarkers (paper in preparation).
+
+Chapter~\ref{chap:aism} describes a work held in collaboration with the \textit{Italian Multiple Sclerosis Foundation} (Genoa, IT). This work aims at devising a model to predict the evolution of multiple sclerosis patients exploiting the use of patient-friendly and inexpensive measures such as patient centered outcomes.
+Most of the material covered in this chapter is also available as conference proceeding paper~\cite{fiorini2015machine}, and peer-reviewed journal articles~\cite{brichetto2015improving, fiorini2016temporal, brichetto2016predicting, pmlr-v68-fiorini17a, tacchino2017multiple}.
+
 Chapter~\ref{chap:diabete} describes a work held in collaboration with \textit{Ospedale Policlinico San Martino}. In this work a machine learning time-series model is used to forecast future glucose sensor data values. This work is based on data collected by type I and type II diabetic patients.
 The material covered in this chapter was recently presented at an international IEEE conference, thus it is available as proceeding paper~\cite{fiorini2017data}.
 
@@ -31,7 +34,9 @@ My conclusions are finally drawn in Chapter~\ref{chap:conclusions}.
 \chapter{Basic notation and definitions} \label{sec:notation}
 %% the number of variables
 %\todo{bold vectors, capital matrices}
-In this thesis, datasets $\mathcal{D}$ are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
+In this thesis, the following notation is adopted.
+
+For unsupervised problems, datasets $\mathcal{D}$ are described as collection of samples $X \in \mathbb{R}^{n \times d}$. Whereas, for supervised problems, datasets are described as input-output pairs, $X \in \mathbb{R}^{n \times d}$ and $Y \in \mathbb{R}^{n \times k}$, respectively.
 The $i$-th row of $X$ is a $d$-dimensional data point $\bm{x}_{i}$ belonging to the input space $\mathcal{X}\subseteq\mathds{R}^d$. The corresponding outputs $\bm{y}_{i}$ belong to the output space $\mathcal{Y}$.
 
 The nature of the output space defines the problem as \textit{binary classification} if  $\mathcal{Y} = \{a,b\}$ (with $a\neq b$), \textit{multiclass classification} if
