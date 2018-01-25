@@ -2,39 +2,64 @@
 
 \chapter{Conclusions} \label{chap:conclusions}
 
-Data science definition: \\
-- hacking skills \\
-- statistics \\
-- domain knowledge \\
+Data science is an evolving cross-disciplinary field that has recently gained the attention of both industry and academia.
+The main goal of data science is to analyze and understand arbitrarily large data collections in order to devise actionable, data-driven and statistically sound decision making strategies.
+The main characteristics of data scientists is to be are domain experts joining a strong mathematical background with advanced computer science programming skills.
+%This new field differs from classical applied statistics as it also includes a careful attention toward computer science concepts and an extensive domain knowledge.
+%Data science definition: \\
+%- hacking skills \\
+%- statistics \\
+%- domain knowledge \\
 
-Machine learning definition: \\
-- automating task with little human supervision \\
-- solving complex problems \\
-- model interpretability \\
-- importance in clinic \\
+In this context, machine learning is undoubtedly one of the most important data science tools.
+In fact, machine learning models and algorithms are capable of uncovering hidden structure in the data with the final aim of devising some data-driven prediction strategy.
+Thanks to this approach, it is possible to tackle complex real-world tasks with little/no human supervision.
+%Machine learning definition: \\
+%- automating task with little human supervision \\
+%- solving complex problems \\
+%- model interpretability \\
+%- importance in clinic \\
 
-The importance of data exploration: \\
-- uncovering hidden structures \\
-- insights on the collected data \\
-- must be ran before supervised analysis \\
-- it helps further steps \\
+In machine learning and data science applications everything revolves around analysis and interpretation of a data collection.
+However, as it often happens, reaching the desired insights or predictive power is not straightforward.
+This can happen for several reasons: \eg data can be too large-scale or too high-dimensional, measures can be noisy, different unstratified populations may be represented, \etc.
+In this context, exploratory data analysis is a fundamental and insightful procedure that should be carried out in order to guide further predictive model developments.
 
-Molecular clock: \\
-- description of the molecular biomarkers \\
-- feature expansion \\
-- sparsity eforcing linear model \\
-- results \\
+Chapter~\ref{chap:adenine} is dedicated to the description of \ade: an open-source data exploration tool developed for large-scale structured data that can seamlessly run on a single workstation as well as on HPC cluster facility. With \ade it becomes easy to run exploratory data analysis on large datasets and to generate publication-ready plots and reports.
+%The importance of data exploration: \\
+%- uncovering hidden structures \\
+%- insights on the collected data \\
+%- must be ran before supervised analysis \\
+%- it helps further steps \\
 
-Multiple sclerosis: \\
-- disease description \\
-- pcos \\
-- temporal model \\
-- results \\
+Moreover, in this thesis we have discussed three different biomedical data science challenges.
 
-Diabetes: \\
-- modern diabetes treatment \\
-- temporal forecasting \\
-- results \\
+First, we have seen that it is possible to predict the age of healthy individuals by exploiting a sparsity-enforced linear model fitted on a polynomial expansion of a set of molecular biomarkers that are measured from peripheral blood mononuclear cells.
+Accurate data exploration, model development and assessment for this problem are described in Chapter~\ref{chap:frassoni}.
+%Molecular clock: \\
+%- description of the molecular biomarkers \\
+%- feature expansion \\
+%- sparsity eforcing linear model \\
+%- results \\
 
+Then, we have explored the use of patient centered outcomes for the assessment of quality of life in multiple sclerosis patients. These tests consist in a set of self-reported questionnaires and clinical scales administered by trained clinical staff.
+In Chapter~\ref{chap:aism} we presented a temporal model that can predict the disease evolution from the initial relapsing-remitting course, to the secondary-progressive form, from the answers provided by an individual to a number of patient centered outcomes.
+The use of this temporal model will soon be validated in clinical practice. where it can be used to take timely decisions aimed at improving management and treatment of the disease, hence increasing patients' quality of life.
+%Multiple sclerosis: \\
+%- disease description \\
+%- pcos \\
+%- temporal model \\
+%- results \\
 
+Finally, in Chapter~\ref{chap:diabete} we have investigated on the use of continuous glucose monitoring systems and data-driven forecasting models of the glycemic level in type $1$ and type $2$ diabetic patients.
+We have empirically shown that it is possible to achieve reliable predictions, at increasing prediction horizons, exploiting personalized kernel-based machine learning model that, as opposed to recursive filters strategies, do not need to recursively adjust their parameters in time.
+%Diabetes: \\
+%- modern diabetes treatment \\
+%- temporal forecasting \\
+%- results \\
+
+%Conclusions: \\
+%Thanks to the recent advances in computational resources, data collection capabilities, statistical insights and theoretical guarantees, we are moving toward a new smart approach to health care, based on machine learning models and data-driven decision making strategies.
+%The application of data science concepts to biomedical challenges is of great interest for both clinical practice and research.
+%In fact, by exploiting machine learning models, it is possible to uncover and interpret hidden structure in the data as well as
 
