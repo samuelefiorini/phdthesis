@@ -405,7 +405,7 @@ Dipartimento di Informatica, Bioingegneria,\\%[-8pt]
    {\normalsize
      Via Opera Pia, 13
      16145 Genova, Italy
-   \hfill {\texttt http://www.dibris.unige.it/}}}%
+   \hfill {\tt http://www.dibris.unige.it/}}}%
   \vfil\null
   \end{titlepage}%
 
