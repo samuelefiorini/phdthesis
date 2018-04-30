@@ -101,7 +101,7 @@ Each example of this dataset is then described by the $12$-dimensional feature s
 
 \section{Exploratory data analysis} \label{sec:frassoni_EDA}
 % BOXPLOT - PCA - HEATMAP etc
-In this section we investigate on the relationship between the collected molecular biomarkers and the age of $118$ healthy individuals which volunteered to participate to this study.
+In this section we investigate the relationship between the collected molecular biomarkers and the age of $118$ healthy individuals which volunteered to participate to this study.
 Unfortunately, $7$ subjects presented missing values (in the features \ldh and \gender). These subjects were excluded from EDA.
 
 
@@ -114,7 +114,7 @@ The data collection process entirely ran on voluntary basis. So, it is interesti
 	\caption{Age distribution of the $118$ individuals involved in the study.} \label{fig:frassoni_agehist}
 \end{figure}
 
-Next, we aim at investigating on how the distribution of the molecular biomarkers is influenced by the age of individuals. To this aim we perform a preliminary univariate analysis. We group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
+Next, we aim at investigating  how the distribution of the molecular biomarkers is influenced by the age of individuals. To this aim we perform a preliminary univariate analysis. We group the measures per decade and we represent their distribution with boxplots, see Figure~\ref{fig:frassoni_boxplot}.
 As we can see, most of the biomarkers are clearly influenced by the age.
 Let us start the visual inspection from the variables related to the mitochondrial aerobic metabolism, \ie Figure~\ref{fig:frassoni_boxplot_copyrmal} to \ref{fig:frassoni_boxplot_atpamp}.
 
@@ -188,7 +188,7 @@ Finally, let us focus on the distributions of \mda (Figure~\ref{fig:frassoni_box
 	\caption{Distribution of the collected molecular biomarker values grouped per decade: \copyrmal panel (a), \cosucc panel (b), \atppyrmal panel (c), \atpsucc panel (d), \popyrmal panel (e), \posucc panel (f), \atp panel (g), \amp panel (h), \atpamp panel (i), \mda panel (j) and \ldh panel (k).} \label{fig:frassoni_boxplot}
 \end{figure}
 
-So far, we have investigated on the relationship between the collected measures and the age of the individuals. Let us now focus on the relationship between the variables themselves. In order to investigate on possible collinearities in the data, we can evaluate for each pair of variables the Pearson correlation coefficient
+So far, we have investigated the relationship between the collected measures and the age of the individuals. Let us now focus on the relationship between the variables themselves. In order to investigate possible collinearities in the data, we can evaluate for each pair of variables the Pearson correlation coefficient
 $$
 	\rho(a, b) = \frac{\sum_{i=1}^n (a_i - \bar a)(b_i - \bar b)}{\sqrt{\sum_{i=1}^n(a_i-\bar a)^2 \sum_{i=1}^n(b_i-\bar b)^2}}
 $$
@@ -256,7 +256,7 @@ This section presents the development of the regression model for the age predic
 
 To this aim, we imputed the small fraction of missing values following the $k$-nearest neighbors (with $k=3$) proposed in~\cite{troyanskaya2001missing}. So, the development of the predictive model can take advantage of the total number of individuals ($n=118$).
 
-The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or if we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate in this direction by evaluating the so-called \textit{learning curves}~\cite{murphy2012machine}.
+The fist question we pose is whether the collected dataset is large \textit{enough} for our purpose, or if we should keep enrolling new volunteers. Providing a definitive answer for this question is, in general, unfeasible. Nevertheless, we can investigate toward this direction by evaluating the so-called \textit{learning curves}~\cite{murphy2012machine}.
 
 Such graphical insight is obtained by iteratively fitting a given regression model on increasingly large chunks of the entire dataset.
 Horizontal axis corresponds to the number of training samples, while vertical axis represents mean values of some cross-validated regression metric, such as MAE.
@@ -400,9 +400,9 @@ Nevertheless, as the Lasso regression model is trained on preprocessed data, the
 \section{Conclusions and future works} \label{sec:frassoni_conclusions}
 % CCS
 %future: collect more data (see learning curves with polyfeat) in order to have a uniformly distributed dataset
-This chapter presented the first biomedical data challenge of the thesis. The goal of this task is to investigate on the changes of energy metabolism during the physiological aging by means of a set of metabolic biomarkers obtained from mononuclear cells isolated from peripheral blood.
+This chapter presented the first biomedical data challenge of the thesis. The goal of this task is to investigate the changes of energy metabolism during the physiological aging by means of a set of metabolic biomarkers obtained from mononuclear cells isolated from peripheral blood.
 
-After a preliminary, and insightful EDA, we realized that the measured variables are highly correlated and that they also show a strong trend with the age. Therefore, we investigated on the use of several linear and nonlinear regression models used in combination with a degree $2$ polynomial feature expansion.
+After a preliminary, and insightful EDA, we realized that the measured variables are highly correlated and that they also show a strong trend with the age. Therefore, we investigated  the use of several linear and nonlinear regression models used in combination with a degree $2$ polynomial feature expansion.
 
 We devised a Lasso-based regression model that, once trained on the $75\%$ of the dataset, predicted the age of the remaining $25\%$ with MAE of $6.591$ years ($\text{MSE}=82.182$, $\text{R}^2=0.901$ and $\text{EV}=0.902$). This result is in line with what observed in the experiments summarized in Table~\ref{tab:frassoni_model_challenge}.
 
@@ -411,7 +411,7 @@ To the best of our knowledge this is the first attempt to build an age predictin
 Our goal here is not to devise an accurate and ready-to-use age prediction model, whereas we aimed at verifying that the energetic state of blood cells by itself is already a good predictor of the age of a subject.
 
 In the next future we plan to extend this study by enrolling more volunteers in order to expand the number of samples in the dataset.
-We also plan to exploit this method to investigate on possible metabolic alterations of adult patients that suffered from blood tumor in their childhood, were treated with chemotherapy and are currently considered in remission.
+We also plan to exploit this method to investigate possible metabolic alterations of adult patients that suffered from blood tumor in their childhood, were treated with chemotherapy and are currently considered in remission.
 
 %apply such method to a different cohort of 
 

@@ -5,8 +5,7 @@
 
 \begin{displayquote}
 %	This chapter describes a patient-centered outcomes-based ML model that predicts the disease evolution of multiple sclerosis patients.
-	In this chapter, we investigate on
-	use of patient-centered outcomes to predict the evolution of multiple sclerosis and to assess its impact on patients' lives.
+	In this chapter, we investigate the use of patient-centered outcomes to predict the evolution of multiple sclerosis and to assess its impact on patients' lives.
 	Multiple Sclerosis is a degenerative condition of the central nervous system that affects nearly $2.5$ million of individuals in terms of their physical, cognitive, psychological and social capabilities. Despite the high variability of its clinical presentation, \textit{relapsing} and \textit{progressive} multiple sclerosis are considered the two main disease types, with the former possibly evolving into the latter.
 	%Nowadays no acknowledged clinical tests to diagnose multiple sclerosis or to distinguish between its types have been proposed.
 	Recently, the attention of the medical community toward the use of patient-centered outcomes in multiple sclerosis has significantly increased. Such patient-friendly measures are devoted to the assessment of the impact of the disease on several domains of the patient life.
@@ -125,9 +124,9 @@ A comprehensive description of the \PCOs involved in the study is presented belo
 	
 	\item[] {\sc \textbf{HADS}} This is a $14$-item self-reported questionnaire typically administered in $2$ to $6$ minutes which aims at detecting clinically significant symptoms of depression and anxiety in patients. \HADS consists in $7$ questions for depression and the remaining $7$ for anxiety.
 	
-	\item[] {\sc \textbf{LIFE}} This is an $11$-item self-reported questionnaire which investigates on patients quality of life. \LIFE can be administered in approximately $5$ minutes. To each of the $11$ items, the patient can assign an ordinal score $0,1,2$ which corresponds to "\textit{disagree}", "\textit{not sure}" and "\textit{agree}" answers.
+	\item[] {\sc \textbf{LIFE}} This is an $11$-item self-reported questionnaire which investigates patients quality of life. \LIFE can be administered in approximately $5$ minutes. To each of the $11$ items, the patient can assign an ordinal score $0,1,2$ which corresponds to "\textit{disagree}", "\textit{not sure}" and "\textit{agree}" answers.
 	
-	\item[] {\sc \textbf{OAB}} This is an $8$-item self-reported questionnaire which investigates on patients bladder control. \OAB can be administered in approximately $5$ to $8$ minutes and it is a reliable tool to investigate on possible stress or discomfort lead by unexpected urinary urgencies that patients may experience during day or night.
+	\item[] {\sc \textbf{OAB}} This is an $8$-item self-reported questionnaire which investigates patients bladder control. \OAB can be administered in approximately $5$ to $8$ minutes and it is a reliable tool to investigate possible stress or discomfort lead by unexpected urinary urgencies that patients may experience during day or night.
 	
 	\item[] {\sc \textbf{EDINB}} This $10$-item self-reported questionnaire can be used to assess dominance of a person's right/left hand during daily activities. The items are very straightforward, so \EDINB can be administered in $3$ to $5$ minutes.
 	
@@ -213,7 +212,7 @@ The effect of the data preprocessing on the ordinal input variables is visually 
 	\caption{The effect of the data preprocessing on the input \PCOs. The left panel (a) shows the distribution of the raw collected variables, whereas the right panel (b) shows the distribution of the same variables after the preprocessing step.}\label{fig:ms_boxplots}
 \end{figure}
 
-Furthermore, in order to visually inspect the data we investigate on how to reduce their dimensionality. To this aim, we project the data in a 3D space with linear PCA and Isomap (see Section~\ref{sec:dimred}).
+Furthermore, in order to visually inspect the data we investigate how to reduce their dimensionality. To this aim, we project the data in a 3D space with linear PCA and Isomap (see Section~\ref{sec:dimred}).
 These algorithms are sensitive to outliers, which we expect to affect our dataset. Therefore, we follow a preliminary isolation forests-based anomalies detection and removal as described in~\cite{liu2008isolation, liu2012isolation}.
 The obtained scatter plots are shown in Figure~\ref{fig:ms_3dscatterplot}.
 As we can see, both the obtained projections hint suggest a class separation between \RR and \SP subjects, while the same conclusion cannot be drawn for the other classes. Moreover, considering only the first three principal components, PCA explains only the $37.4\%$ of the variance of the dataset. This suggests that most of the information, which may be useful for classification purposes, is spread across several input variables.
@@ -358,8 +357,8 @@ Conversely, RFE produces a variable ranking. The list of selected variables, in 
 
 \subsection{Learning $g(x)$}
 
-As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated on the use of both linear and nonlinear models.
-% To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated on the use of both linear and nonlinear models.
+As no prior information on the relationship between \PCOs evaluated at different time points was available, to learn $g(\bm{x})$ we investigated the use of both linear and nonlinear models.
+% To learn $g(\bm{x})$ no prior information on the relationship between \PCOs evaluated at different time points was available. To achieve our goal, we investigated  the use of both linear and nonlinear models.
 
 Concerning the linear models, we explored two different solutions: Nuclear Norm Minimization (\ac{NNM}) and Multi-task Elastic-Net (\ac{MTEN}), see Section~\ref{sec:nucelear_norm_minimization} and~\ref{sec:elastic_net}, respectively. The first imposes a low-rank prior on the result. The second is a natural multiple-output extension of Elastic-Net, hence it induces a row-structured sparsity pattern on the solution where collinear variables are more likely to be included in the model together. For nonlinear prediction, we resorted to a Multi-layer Perceptron (\ac{MLP}) approach, see Section~\ref{sec:mlp}.
 
@@ -457,7 +456,7 @@ The proposed temporal model was able to correctly assign the current MS form and
 This demonstrates that \PCOs can effectively be used to build an effective ML-based MS disease course predictor.
 %In the next future, we plan to expand the data collection with respect to the amount of enrolled subjects as well as the number of time points.
 
-In the next future, we plan to further investigate on the predictive capabilities of the proposed model with longer temporal horizons and to compare it with different approaches, such as probabilistic graphical models.
+In the next future, we plan to further investigate the predictive capabilities of the proposed model with longer temporal horizons and to compare it with different approaches, such as probabilistic graphical models.
 %, that allow to explicitly incorporate the temporal nature of the data.}
 
 Given the achieved promising results, the proposed model is soon going to be validated in clinical practice, where it will assist the clinicians involved in this study to foresee possible disease course transition and to take important decisions concerning treatment and therapies that can substantially improve the quality of life of their patients.

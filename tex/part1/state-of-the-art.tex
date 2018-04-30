@@ -836,7 +836,7 @@ As of today ML is the workhorse of data science.
 		\end{figure}
 
 		As we can see, the features that are most relevant for RF are comparable to the ones selected by Elastic-Net (see Figure~\ref{fig:w_enet}).
-		For RF models it is interesting to investigate on the effect of an increasing value for the number of trees in the forest. As shown in Figure~\ref{fig:rf_increasing}, increasing the number of trees in the forest does not lead to overfit. In fact, test error (Figure~\ref{fig:rf_mae}) and explained variance (Figure~\ref{fig:rf_ev}), after approximately $250$ trees, reach a plateau region instead of growing.
+		For RF models it is interesting to investigate the effect of an increasing value for the number of trees in the forest. As shown in Figure~\ref{fig:rf_increasing}, increasing the number of trees in the forest does not lead to overfit. In fact, test error (Figure~\ref{fig:rf_mae}) and explained variance (Figure~\ref{fig:rf_ev}), after approximately $250$ trees, reach a plateau region instead of growing.
 		
 	    \begin{figure}[]
 			\centering
@@ -881,7 +881,7 @@ As of today ML is the workhorse of data science.
 	    \end{figure}
    		
 
-	    As already seen for RF, we shall investigate on the effect of increasing boosting iterations for GB. As shown in Figure~\ref{fig:gb_increasing}, after approximately $50$ boosting iterations the model reaches perfect overfit of the training set, \ie zero training error (Figure~\ref{fig:gb_mae}) and $100\%$ trained explained variance (Figure~\ref{fig:gb_ev}).
+	    As already seen for RF, we shall investigate the effect of increasing boosting iterations for GB. As shown in Figure~\ref{fig:gb_increasing}, after approximately $50$ boosting iterations the model reaches perfect overfit of the training set, \ie zero training error (Figure~\ref{fig:gb_mae}) and $100\%$ trained explained variance (Figure~\ref{fig:gb_ev}).
 
         \begin{figure}[]
     	\centering
