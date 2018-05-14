@@ -238,3 +238,5 @@ TSWLatexianTemp*
 
 # expex forward references with \gathertags
 *-tags.tex
+
+presentation/old_presentations/
