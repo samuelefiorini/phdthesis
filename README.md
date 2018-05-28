@@ -11,11 +11,15 @@ PhD Thesis, Samuele Fiorini, Februrary 2018. Defended on April 25, 2018 at Unive
 
 
 *Contacts*:
+
 `samuele [dot] fiorini [at] dibris.unige.it`
 
-*arXiV link:* [coming soon]()
+*arXiV link:*
+
+[coming soon]()
 
 *BibTex entry*:
+
 `@phdthesis{ - coming soon - }`
 
 ____
