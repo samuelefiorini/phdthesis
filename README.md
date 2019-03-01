@@ -14,13 +14,17 @@ PhD Thesis, Samuele Fiorini, Februrary 2018. Defended on April 25, 2018 at Unive
 
 `samuele [dot] fiorini [at] dibris.unige.it`
 
-*arXiV link:*
-
-[coming soon]()
-
 *BibTex entry*:
 
-`@phdthesis{ - coming soon - }`
+```
+@phdthesis{fiorini2018challenges,
+  title={Challenges in biomedical data science: data-driven solutions to clinical questions},
+  author={Fiorini, Samuele},
+  howpublished="\url{http://hdl.handle.net/11567/930182}"
+  year={2018},
+  school={University of Genoa},
+}
+```
 
 ____
 ### Abstract
